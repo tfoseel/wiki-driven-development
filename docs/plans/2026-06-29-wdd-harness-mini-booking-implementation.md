@@ -970,10 +970,13 @@ git add pilot/app pilot/wiki package-lock.json
 git commit -m "feat: implement mini booking pilot"
 ```
 
-### Task 13: Root AGENTS Cadence
+### Task 13: Agent Workflow Skills And Root Cadence
 
 **Files:**
 - Create: `AGENTS.md`
+- Create: `skills/wiki-first-change/SKILL.md`
+- Create: `skills/implement-wiki-node/SKILL.md`
+- Create: `skills/qa-from-wiki/SKILL.md`
 
 **Step 1: Add WDD working rules**
 
@@ -989,11 +992,74 @@ Document the mandatory cadence:
 
 Infrastructure-only work must use a tooling/process node or a design plan.
 
-**Step 3: Commit**
+**Step 3: Add workflow skills**
+
+Create `skills/wiki-first-change/SKILL.md` to describe the default workflow for any product/domain change:
+
+```markdown
+---
+name: wiki-first-change
+description: Use before changing product behavior, domain logic, UI states, actions, policies, or QA expectations.
+---
+
+# Wiki-First Change
+
+1. Locate or create the relevant wiki node.
+2. Edit the wiki before editing code.
+3. Run `wdd impact <wikiRoot> <nodeId>`.
+4. Read impacted wiki nodes.
+5. Edit only referenced or owned code files.
+6. Run `wdd verify <wikiRoot> <nodeId>` and `wdd drift <wikiRoot>`.
+```
+
+Create `skills/implement-wiki-node/SKILL.md` for implementing a specific node from `wdd session` context:
+
+```markdown
+---
+name: implement-wiki-node
+description: Use when implementing code from a WDD wiki node and its impact/session context.
+---
+
+# Implement Wiki Node
+
+1. Read the selected wiki node.
+2. Read upstream dependencies and downstream dependents from the session context.
+3. Confirm the allowed `implemented_by`, `artifacts`, and `verified_by` files.
+4. Implement code from the wiki body, not from assumptions.
+5. Add or update tests declared by the wiki.
+6. Run the node verification commands.
+```
+
+Create `skills/qa-from-wiki/SKILL.md` for expanding QA from wiki scenarios:
+
+```markdown
+---
+name: qa-from-wiki
+description: Use when converting WDD QA, page states, action failure cases, and policy boundaries into tests.
+---
+
+# QA From Wiki
+
+QA must partition the product input space:
+
+- Happy path.
+- Empty or unavailable states.
+- Policy boundaries.
+- Validation failures.
+- Mutation failure cases.
+- Duplicate or repeated user actions.
+- Stale data or race-like cases.
+- Missing or invalid route/handoff data.
+- Server/network errors.
+
+Write tests only after the wiki-owned scenario exists.
+```
+
+**Step 4: Commit**
 
 ```bash
-git add AGENTS.md
-git commit -m "docs: add wiki-first agent cadence"
+git add AGENTS.md skills
+git commit -m "docs: add WDD workflow skills"
 ```
 
 ### Task 14: Final Verification

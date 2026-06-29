@@ -42,6 +42,10 @@ wiki-driven-development/
 │   └── wdd/
 │       ├── src/
 │       └── package.json
+├── skills/
+│   ├── wiki-first-change/
+│   ├── implement-wiki-node/
+│   └── qa-from-wiki/
 ├── templates/
 │   ├── entity.md
 │   ├── model.md
@@ -55,7 +59,26 @@ wiki-driven-development/
     └── app/
 ```
 
-`packages/wdd` owns the harness. `pilot/wiki` and `pilot/app` are the dogfood project.
+`packages/wdd` owns the lint, graph, impact, session, drift, and verify scripts. `skills/` owns the reusable agent workflows. `templates/` owns the human-readable wiki node shapes. `pilot/wiki` and `pilot/app` are the dogfood project built by using those skills and scripts.
+
+## Harness And Pilot Relationship
+
+This repository has two layers:
+
+1. **WDD harness layer**: workflow skills, wiki templates, lint scripts, graph/index tooling, impact/session/drift/verify commands.
+2. **Pilot app layer**: a small booking app whose wiki and Next.js code are created through the WDD harness.
+
+The pilot should not have special rules that bypass the harness. If the pilot needs to change booking cancellation behavior, the agent should use the same cadence expected of downstream adopters:
+
+```txt
+edit pilot/wiki/actions/cancel-booking.md
+→ run wdd impact pilot/wiki actions/cancel-booking
+→ read impacted wiki pages
+→ edit only referenced pilot/app files
+→ run wdd verify / drift
+```
+
+This makes the pilot both an example application and a regression test for the WDD workflow itself.
 
 ## Wiki Node Model
 
@@ -78,6 +101,23 @@ The important rule:
 > If a concept needs impact tracking, it must become a wiki page.
 
 For example, "cancel a booking" is not just a bullet inside a page. It is an `action` node, because it owns input validation, mutation rules, affected pages, and QA gates.
+
+## Wiki Readability
+
+The wiki must remain a product document, not a YAML database.
+
+Frontmatter is only the quiet machine-readable layer for graph and ownership. The body is the human-readable SSOT for product logic. A planner should be able to fold the frontmatter and still understand the feature, behavior, policy, states, and QA expectations.
+
+Recommended body shape:
+
+- `page`: description, conditions, user actions, visible states/exceptions, navigation/handoff, independent QA.
+- `action`: intent, input, rules, state changes, failure cases, QA.
+- `model`: domain meaning, fields, validation, examples, mapping to entities.
+- `entity`: domain meaning first, then persistence fields, constraints, migration notes.
+- `flow`: start/end, handoff data, cross-page assertions.
+- `qa`: product scenarios in given/when/then form.
+
+Derived information such as impacted pages should be shown by `wdd impact` or a viewer, not authored into the prose.
 
 Initial node types:
 
@@ -300,6 +340,35 @@ Pilot app errors:
 - Invalid customer contact details.
 
 Each app error should have a wiki-owned state and QA assertion.
+
+## QA Coverage Model
+
+QA nodes and page/action QA sections should partition the product input space instead of collecting a loose list of examples.
+
+Every meaningful workflow should cover:
+
+- Happy path.
+- Empty or unavailable states.
+- Policy boundaries.
+- Validation failures.
+- Mutation failure cases.
+- Duplicate or repeated user actions.
+- Stale data or race-like cases.
+- Missing or invalid route/handoff data.
+- Server/network errors.
+
+For the mini booking pilot, this means at least:
+
+- No available slots.
+- Slot becomes booked after the user selected it.
+- Invalid customer contact details.
+- Create/reschedule/cancel button double-click.
+- Booking id missing or unknown.
+- Already cancelled booking is cancelled again.
+- Cancellation is attempted inside the 24-hour policy boundary.
+- Reschedule target slot is unavailable.
+- Service is inactive.
+- Timezone/date boundary around the cancellation cutoff.
 
 ## Verification Strategy
 
