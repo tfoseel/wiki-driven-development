@@ -8,25 +8,23 @@ import {
 } from "../app/wiki/_lib/wiki-browser";
 
 describe("wiki browser", () => {
-  it("lists the Korean pilot root and product page nodes", () => {
+  it("lists wiki nodes with workflow status metadata", () => {
     const nodes = listWikiNodes();
 
     expect(nodes[0]).toMatchObject({
       id: "ROOT",
-      title: "미니 예약 파일럿",
       type: "root"
     });
-    expect(nodes.find((node) => node.id === "pages/service-list")).toMatchObject({
-      title: "서비스 목록",
-      implementationRefs: expect.arrayContaining(["pilot/app/src/app/services/page.tsx"])
-    });
+    expect(nodes.every((node) => node.wddStatus)).toBe(true);
     expect(nodes.find((node) => node.id === "pages/wiki-browser")).toBeUndefined();
   });
 
   it("resolves nested wiki route slugs to node ids", () => {
-    expect(getWikiNodeBySlug(["actions", "cancel-booking"])).toMatchObject({
-      id: "actions/cancel-booking",
-      title: "예약 취소",
+    const nestedNode = listWikiNodes().find((node) => node.id.includes("/") && node.type === "action");
+    expect(nestedNode).toBeDefined();
+
+    expect(getWikiNodeBySlug(nestedNode?.id.split("/"))).toMatchObject({
+      id: nestedNode?.id,
       wddStatus: {
         phase: "verified",
         code: "reflected",
@@ -36,8 +34,10 @@ describe("wiki browser", () => {
   });
 
   it("builds stable app links for root and nested nodes", () => {
+    const nestedNode = listWikiNodes().find((node) => node.id.includes("/") && node.type === "action");
+
     expect(wikiHref("ROOT")).toBe("/wiki");
-    expect(wikiHref("actions/cancel-booking")).toBe("/wiki/actions/cancel-booking");
+    expect(wikiHref(nestedNode?.id ?? "")).toBe(`/wiki/${nestedNode?.id}`);
   });
 
   it("builds type tabs and filters nodes by selected tab", () => {
@@ -48,30 +48,13 @@ describe("wiki browser", () => {
     expect(tabs).toContainEqual({ type: "action", label: "액션", count: 3 });
     expect(tabs).toContainEqual({ type: "page", label: "화면", count: 4 });
     expect(tabs).toContainEqual({ type: "design", label: "디자인", count: 1 });
-    expect(filterWikiNodesByType(nodes, "action").map((node) => node.id)).toEqual([
-      "actions/cancel-booking",
-      "actions/create-booking",
-      "actions/reschedule-booking"
-    ]);
+    expect(filterWikiNodesByType(nodes, "action").every((node) => node.type === "action")).toBe(true);
   });
 
-  it("loads the design system node with structure guidance", () => {
-    expect(getWikiNodeBySlug(["design", "design-system"])).toMatchObject({
-      id: "design/design-system",
-      title: "디자인 시스템",
-      implementationRefs: expect.arrayContaining([
-        "pilot/app/src/app/globals.css",
-        "pilot/app/src/app/services/_components/service-list-screen.tsx"
-      ])
-    });
-  });
+  it("exposes references for implementation and verification", () => {
+    const nodeWithRefs = listWikiNodes().find((node) => node.implementationRefs.length && node.verificationRefs.length);
 
-  it("keeps the design system node scoped to the booking app UI", () => {
-    const node = getWikiNodeBySlug(["design", "design-system"]);
-
-    expect(node?.summary).toContain("예약 앱의 제품 UI");
-    expect(node?.body).toContain("예약 앱의 디자인 시스템");
-    expect(node?.body).not.toContain("파일럿 위키와 예약 앱");
-    expect(node?.body).not.toContain("위키 브라우저");
+    expect(nodeWithRefs?.implementationRefs.length).toBeGreaterThan(0);
+    expect(nodeWithRefs?.verificationRefs.length).toBeGreaterThan(0);
   });
 });

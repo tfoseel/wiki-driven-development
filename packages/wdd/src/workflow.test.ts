@@ -26,7 +26,7 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">
 describe("workflow status", () => {
   it("returns no attention items for verified nodes", () => {
     const index = buildWikiIndex([
-      node({ id: "pages/service-list", type: "page", title: "Service List" })
+      node({ id: "pages/example-page", type: "page", title: "Example Page" })
     ]);
 
     expect(findWorkflowAttention(index)).toEqual([]);
@@ -36,16 +36,16 @@ describe("workflow status", () => {
   it("marks wiki changes that still need coding", () => {
     const index = buildWikiIndex([
       node({
-        id: "pages/booking-new",
+        id: "pages/example-page",
         type: "page",
-        title: "New Booking",
+        title: "Example Page",
         wddStatus: status({ phase: "coding", code: "pending", verification: "pending" })
       })
     ]);
 
     expect(findWorkflowAttention(index)).toEqual([
       {
-        nodeId: "pages/booking-new",
+        nodeId: "pages/example-page",
         phase: "coding",
         severity: "pending",
         message: "Next phase: update referenced code before verification."
@@ -56,16 +56,16 @@ describe("workflow status", () => {
   it("flags inconsistent verified metadata as an error", () => {
     const index = buildWikiIndex([
       node({
-        id: "actions/create-booking",
+        id: "actions/example-action",
         type: "action",
-        title: "Create Booking",
+        title: "Example Action",
         wddStatus: status({ phase: "verified", code: "pending", verification: "passed" })
       })
     ]);
 
     expect(findWorkflowAttention(index)).toEqual([
       {
-        nodeId: "actions/create-booking",
+        nodeId: "actions/example-action",
         phase: "verified",
         severity: "error",
         message: "Verified phase requires code reflected or not_required, and verification passed or not_required."

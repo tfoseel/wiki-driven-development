@@ -23,23 +23,23 @@ describe("getVerifyCommands", () => {
   it("returns commands declared by the node and downstream impacted nodes", () => {
     const index = buildWikiIndex([
       node({
-        id: "actions/cancel-booking",
+        id: "actions/example-action",
         type: "action",
-        title: "Cancel Booking",
-        verifyCommands: ["npm run test -- cancel-booking"]
+        title: "Example Action",
+        verifyCommands: ["npm run test -- example-action"]
       }),
       node({
-        id: "pages/booking-detail",
+        id: "pages/example-page",
         type: "page",
-        title: "Booking Detail",
-        dependsOn: ["actions/cancel-booking"],
-        verifyCommands: ["npm run e2e -- booking-detail"]
+        title: "Example Page",
+        dependsOn: ["actions/example-action"],
+        verifyCommands: ["npm run e2e -- example-page"]
       })
     ]);
 
-    expect(getVerifyCommands(index, "actions/cancel-booking")).toEqual([
-      "npm run test -- cancel-booking",
-      "npm run e2e -- booking-detail"
+    expect(getVerifyCommands(index, "actions/example-action")).toEqual([
+      "npm run test -- example-action",
+      "npm run e2e -- example-page"
     ]);
   });
 });

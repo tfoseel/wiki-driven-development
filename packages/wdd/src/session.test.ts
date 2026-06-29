@@ -23,21 +23,21 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">
 describe("formatSessionContext", () => {
   it("prints an agent-ready wiki-first context pack", () => {
     const index = buildWikiIndex([
-      node({ id: "entities/bookings", type: "entity", title: "Bookings" }),
+      node({ id: "entities/example-entity", type: "entity", title: "Example Entity" }),
       node({
-        id: "models/booking",
+        id: "models/example-model",
         type: "model",
-        title: "Booking",
-        dependsOn: ["entities/bookings"]
+        title: "Example Model",
+        dependsOn: ["entities/example-entity"]
       }),
       node({
-        id: "actions/cancel-booking",
+        id: "actions/example-action",
         type: "action",
-        title: "Cancel Booking",
-        dependsOn: ["models/booking"],
-        implementedBy: ["pilot/app/src/actions/cancel-booking.ts"],
-        verifiedBy: ["pilot/app/tests/e2e/cancel-booking.spec.ts"],
-        verifyCommands: ["npm run test -- cancel-booking"],
+        title: "Example Action",
+        dependsOn: ["models/example-model"],
+        implementedBy: ["app/src/actions/example-action.ts"],
+        verifiedBy: ["app/tests/e2e/example-action.spec.ts"],
+        verifyCommands: ["npm run test -- example-action"],
         wddStatus: {
           phase: "coding",
           code: "pending",
@@ -46,26 +46,26 @@ describe("formatSessionContext", () => {
         }
       }),
       node({
-        id: "pages/booking-detail",
+        id: "pages/example-page",
         type: "page",
-        title: "Booking Detail",
-        dependsOn: ["actions/cancel-booking"],
-        artifacts: ["pilot/app/src/screens/booking-detail/screen.tsx"]
+        title: "Example Page",
+        dependsOn: ["actions/example-action"],
+        artifacts: ["app/src/app/examples/[id]/_components/example-page-screen.tsx"]
       })
     ]);
 
-    const context = formatSessionContext(index, "actions/cancel-booking");
+    const context = formatSessionContext(index, "actions/example-action");
 
-    expect(context).toContain("# WDD Session: Cancel Booking");
+    expect(context).toContain("# WDD Session: Example Action");
     expect(context).toContain("Edit the wiki first, including impacted wiki nodes");
     expect(context).toContain("Run verify, drift, and status before marking nodes as phase: verified.");
     expect(context).toContain("## Workflow Status");
     expect(context).toContain("phase: coding");
     expect(context).toContain("Next phase: update referenced code before verification.");
-    expect(context).toContain("- `models/booking` — Booking");
-    expect(context).toContain("- `pages/booking-detail` — Booking Detail");
-    expect(context).toContain("pilot/app/src/actions/cancel-booking.ts");
-    expect(context).toContain("pilot/app/src/screens/booking-detail/screen.tsx");
-    expect(context).toContain("npm run test -- cancel-booking");
+    expect(context).toContain("- `models/example-model` — Example Model");
+    expect(context).toContain("- `pages/example-page` — Example Page");
+    expect(context).toContain("app/src/actions/example-action.ts");
+    expect(context).toContain("app/src/app/examples/[id]/_components/example-page-screen.tsx");
+    expect(context).toContain("npm run test -- example-action");
   });
 });

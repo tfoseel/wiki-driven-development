@@ -46,17 +46,17 @@ const node = (id: string, dependsOn: string[] = [], code: string[] = []): WikiNo
 describe("calculateImpact", () => {
   it("returns upstream, downstream, and code files", () => {
     const index = buildWikiIndex([
-      node("entities/bookings"),
-      node("models/booking", ["entities/bookings"], ["pilot/app/src/models/booking.ts"]),
-      node("actions/cancel-booking", ["models/booking"], ["pilot/app/src/actions/cancel-booking.ts"]),
-      node("pages/booking-detail", ["actions/cancel-booking"], ["pilot/app/src/app/bookings/[id]/page.tsx"])
+      node("entities/example-entity"),
+      node("models/example-model", ["entities/example-entity"], ["app/src/models/example-model.ts"]),
+      node("actions/example-action", ["models/example-model"], ["app/src/actions/example-action.ts"]),
+      node("pages/example-page", ["actions/example-action"], ["app/src/app/examples/[id]/page.tsx"])
     ]);
 
-    const impact = calculateImpact(index, "actions/cancel-booking");
+    const impact = calculateImpact(index, "actions/example-action");
 
-    expect(impact.upstream).toEqual(["models/booking", "entities/bookings"]);
-    expect(impact.downstream).toEqual(["pages/booking-detail"]);
-    expect(impact.codeFiles).toContain("pilot/app/src/actions/cancel-booking.ts");
-    expect(impact.codeFiles).toContain("pilot/app/src/app/bookings/[id]/page.tsx");
+    expect(impact.upstream).toEqual(["models/example-model", "entities/example-entity"]);
+    expect(impact.downstream).toEqual(["pages/example-page"]);
+    expect(impact.codeFiles).toContain("app/src/actions/example-action.ts");
+    expect(impact.codeFiles).toContain("app/src/app/examples/[id]/page.tsx");
   });
 });

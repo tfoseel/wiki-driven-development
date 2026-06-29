@@ -25,31 +25,31 @@ describe("loadWiki", () => {
 
     writeNode(
       root,
-      "entities/bookings.md",
+      "entities/example-entity.md",
       `---
-id: entities/bookings
+id: entities/example-entity
 type: entity
-title: Bookings
+title: Example Entity
 ---
-# Bookings
+# Example Entity
 `
     );
     writeNode(
       root,
-      "models/booking.md",
+      "models/example-model.md",
       `---
-id: models/booking
+id: models/example-model
 type: model
-title: Booking
-depends_on: [entities/bookings]
+title: Example Model
+depends_on: [entities/example-entity]
 ---
-# Booking
+# Example Model
 `
     );
 
     const index = loadWiki(root);
 
-    expect(index.nodes.map((node) => node.id).sort()).toEqual(["entities/bookings", "models/booking"]);
-    expect(index.dependents.get("entities/bookings")).toEqual(["models/booking"]);
+    expect(index.nodes.map((node) => node.id).sort()).toEqual(["entities/example-entity", "models/example-model"]);
+    expect(index.dependents.get("entities/example-entity")).toEqual(["models/example-model"]);
   });
 });

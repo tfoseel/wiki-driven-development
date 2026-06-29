@@ -34,29 +34,29 @@ describe("findMissingCodeReferences", () => {
   it("reports missing implemented_by files", () => {
     const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "wdd-repo-"));
     tempDirs.push(repoRoot);
-    fs.mkdirSync(path.join(repoRoot, "pilot/app/src/actions"), { recursive: true });
-    fs.writeFileSync(path.join(repoRoot, "pilot/app/src/actions/create-booking.ts"), "");
+    fs.mkdirSync(path.join(repoRoot, "app/src/actions"), { recursive: true });
+    fs.writeFileSync(path.join(repoRoot, "app/src/actions/existing-action.ts"), "");
 
     const index = buildWikiIndex([
       node({
-        id: "actions/create-booking",
+        id: "actions/existing-action",
         type: "action",
-        title: "Create Booking",
-        implementedBy: ["pilot/app/src/actions/create-booking.ts"]
+        title: "Existing Action",
+        implementedBy: ["app/src/actions/existing-action.ts"]
       }),
       node({
-        id: "actions/cancel-booking",
+        id: "actions/missing-action",
         type: "action",
-        title: "Cancel Booking",
-        implementedBy: ["pilot/app/src/actions/cancel-booking.ts"]
+        title: "Missing Action",
+        implementedBy: ["app/src/actions/missing-action.ts"]
       })
     ]);
 
     expect(findMissingCodeReferences(index, repoRoot)).toEqual([
       {
-        nodeId: "actions/cancel-booking",
+        nodeId: "actions/missing-action",
         field: "implemented_by",
-        file: "pilot/app/src/actions/cancel-booking.ts"
+        file: "app/src/actions/missing-action.ts"
       }
     ]);
   });

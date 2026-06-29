@@ -4,33 +4,33 @@ import { parseWikiMarkdown } from "./parse.js";
 describe("parseWikiMarkdown", () => {
   it("parses required node frontmatter and body", () => {
     const node = parseWikiMarkdown(
-      "pilot/wiki/actions/cancel-booking.md",
+      "wiki/actions/example-action.md",
       `---
-id: actions/cancel-booking
+id: actions/example-action
 type: action
-title: Cancel Booking
+title: Example Action
 wdd_status:
   phase: coding
   code: pending
   verification: pending
-depends_on: [models/booking]
-implemented_by: [pilot/app/src/actions/cancel-booking.ts]
-verified_by: [pilot/app/tests/e2e/cancel-booking.spec.ts]
+depends_on: [models/example-model]
+implemented_by: [app/src/actions/example-action.ts]
+verified_by: [app/tests/e2e/example-action.spec.ts]
 ---
-# Cancel Booking
+# Example Action
 `
     );
 
-    expect(node.id).toBe("actions/cancel-booking");
+    expect(node.id).toBe("actions/example-action");
     expect(node.type).toBe("action");
     expect(node.wddStatus).toEqual({
       phase: "coding",
       code: "pending",
       verification: "pending"
     });
-    expect(node.dependsOn).toEqual(["models/booking"]);
-    expect(node.implementedBy).toEqual(["pilot/app/src/actions/cancel-booking.ts"]);
-    expect(node.verifiedBy).toEqual(["pilot/app/tests/e2e/cancel-booking.spec.ts"]);
+    expect(node.dependsOn).toEqual(["models/example-model"]);
+    expect(node.implementedBy).toEqual(["app/src/actions/example-action.ts"]);
+    expect(node.verifiedBy).toEqual(["app/tests/e2e/example-action.spec.ts"]);
   });
 
   it("fails when id or type is missing", () => {

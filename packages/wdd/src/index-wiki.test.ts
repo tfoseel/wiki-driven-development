@@ -5,27 +5,27 @@ describe("buildWikiIndex", () => {
   it("indexes nodes and dependents", () => {
     const index = buildWikiIndex([
       {
-        id: "models/booking",
+        id: "models/example-model",
         type: "model",
-        title: "Booking",
-        filePath: "models/booking.md",
+        title: "Example Model",
+        filePath: "models/example-model.md",
         body: "",
         wddStatus: {
           phase: "verified",
           code: "reflected",
           verification: "passed"
         },
-        dependsOn: ["entities/bookings"],
+        dependsOn: ["entities/example-entity"],
         implementedBy: [],
         verifiedBy: [],
         artifacts: [],
         verifyCommands: []
       },
       {
-        id: "entities/bookings",
+        id: "entities/example-entity",
         type: "entity",
-        title: "Bookings",
-        filePath: "entities/bookings.md",
+        title: "Example Entity",
+        filePath: "entities/example-entity.md",
         body: "",
         wddStatus: {
           phase: "verified",
@@ -40,18 +40,18 @@ describe("buildWikiIndex", () => {
       }
     ]);
 
-    expect(index.byId.get("models/booking")?.id).toBe("models/booking");
-    expect(index.dependents.get("entities/bookings")).toEqual(["models/booking"]);
+    expect(index.byId.get("models/example-model")?.id).toBe("models/example-model");
+    expect(index.dependents.get("entities/example-entity")).toEqual(["models/example-model"]);
   });
 
   it("fails on dangling dependencies", () => {
     expect(() =>
       buildWikiIndex([
         {
-          id: "actions/cancel-booking",
+          id: "actions/example-action",
           type: "action",
-          title: "Cancel",
-          filePath: "actions/cancel-booking.md",
+          title: "Example Action",
+          filePath: "actions/example-action.md",
           body: "",
           wddStatus: {
             phase: "verified",
