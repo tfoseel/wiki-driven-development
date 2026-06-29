@@ -3,6 +3,7 @@ import { loadWiki } from "./load-wiki.js";
 import { formatSessionContext } from "./session.js";
 import { findMissingCodeReferences } from "./drift.js";
 import { getVerifyCommands } from "./verify.js";
+import { resolveCliPath } from "./cli-paths.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -16,13 +17,13 @@ if (command === "help") {
 } else if (command === "index") {
   const [wikiRoot] = args;
   if (!wikiRoot) throw new Error("Usage: wdd index <wikiRoot>");
-  const index = loadWiki(wikiRoot);
+  const index = loadWiki(resolveCliPath(wikiRoot));
   console.log(`nodes: ${index.nodes.length}`);
   for (const node of index.nodes) console.log(`- ${node.id} (${node.type})`);
 } else if (command === "impact") {
   const [wikiRoot, nodeId] = args;
   if (!wikiRoot || !nodeId) throw new Error("Usage: wdd impact <wikiRoot> <nodeId>");
-  const index = loadWiki(wikiRoot);
+  const index = loadWiki(resolveCliPath(wikiRoot));
   const impact = calculateImpact(index, nodeId);
   console.log(impact.nodeId);
   console.log("upstream:");
@@ -34,11 +35,11 @@ if (command === "help") {
 } else if (command === "session") {
   const [wikiRoot, nodeId] = args;
   if (!wikiRoot || !nodeId) throw new Error("Usage: wdd session <wikiRoot> <nodeId>");
-  console.log(formatSessionContext(loadWiki(wikiRoot), nodeId));
+  console.log(formatSessionContext(loadWiki(resolveCliPath(wikiRoot)), nodeId));
 } else if (command === "drift") {
   const [wikiRoot, repoRoot = process.cwd()] = args;
   if (!wikiRoot) throw new Error("Usage: wdd drift <wikiRoot> [repoRoot]");
-  const missing = findMissingCodeReferences(loadWiki(wikiRoot), repoRoot);
+  const missing = findMissingCodeReferences(loadWiki(resolveCliPath(wikiRoot)), resolveCliPath(repoRoot));
   if (!missing.length) {
     console.log("No missing code references.");
   } else {
@@ -50,7 +51,7 @@ if (command === "help") {
 } else if (command === "verify") {
   const [wikiRoot, nodeId] = args;
   if (!wikiRoot || !nodeId) throw new Error("Usage: wdd verify <wikiRoot> <nodeId>");
-  const commands = getVerifyCommands(loadWiki(wikiRoot), nodeId);
+  const commands = getVerifyCommands(loadWiki(resolveCliPath(wikiRoot)), nodeId);
   if (!commands.length) {
     console.log("No verify commands declared.");
   } else {
