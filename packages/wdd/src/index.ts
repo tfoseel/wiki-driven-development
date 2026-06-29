@@ -6,3 +6,5 @@ export * from "./index-wiki.js";
 export * from "./impact.js";
 export * from "./load-wiki.js";
 export * from "./session.js";
+export * from "./drift.js";
+export * from "./verify.js";

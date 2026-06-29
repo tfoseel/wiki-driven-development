@@ -1,6 +1,8 @@
 import { calculateImpact } from "./impact.js";
 import { loadWiki } from "./load-wiki.js";
 import { formatSessionContext } from "./session.js";
+import { findMissingCodeReferences } from "./drift.js";
+import { getVerifyCommands } from "./verify.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -33,6 +35,28 @@ if (command === "help") {
   const [wikiRoot, nodeId] = args;
   if (!wikiRoot || !nodeId) throw new Error("Usage: wdd session <wikiRoot> <nodeId>");
   console.log(formatSessionContext(loadWiki(wikiRoot), nodeId));
+} else if (command === "drift") {
+  const [wikiRoot, repoRoot = process.cwd()] = args;
+  if (!wikiRoot) throw new Error("Usage: wdd drift <wikiRoot> [repoRoot]");
+  const missing = findMissingCodeReferences(loadWiki(wikiRoot), repoRoot);
+  if (!missing.length) {
+    console.log("No missing code references.");
+  } else {
+    console.log("missing code references:");
+    for (const item of missing) {
+      console.log(`  - ${item.nodeId} ${item.field}: ${item.file}`);
+    }
+  }
+} else if (command === "verify") {
+  const [wikiRoot, nodeId] = args;
+  if (!wikiRoot || !nodeId) throw new Error("Usage: wdd verify <wikiRoot> <nodeId>");
+  const commands = getVerifyCommands(loadWiki(wikiRoot), nodeId);
+  if (!commands.length) {
+    console.log("No verify commands declared.");
+  } else {
+    console.log("verify commands:");
+    for (const verifyCommand of commands) console.log(`  - ${verifyCommand}`);
+  }
 } else {
   console.error(`Unknown command: ${command}`);
   process.exitCode = 1;
