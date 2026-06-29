@@ -13,19 +13,19 @@ export function BookingCompleteScreen({ booking, service, slot }: BookingComplet
   if (!booking) {
     return (
       <main>
-        <h1>Booking not found</h1>
-        <Link href="/services">Choose a service</Link>
+        <h1>예약을 찾을 수 없음</h1>
+        <Link href="/services">서비스 선택하기</Link>
       </main>
     );
   }
 
   return (
     <main>
-      <h1>Booking complete</h1>
+      <h1>예약 완료</h1>
       <p data-testid="booking-summary">
-        {service?.name ?? "Service"} at {slot?.startsAt ?? "selected time"}
+        {service?.name ?? "서비스"} / {slot?.startsAt ?? "선택한 시간"}
       </p>
-      <Link href={`/bookings/${booking.id}`}>Manage booking</Link>
+      <Link href={`/bookings/${booking.id}`}>예약 관리</Link>
     </main>
   );
 }

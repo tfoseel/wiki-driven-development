@@ -95,6 +95,39 @@ select {
   padding: 0;
 }
 
+.wiki-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.wiki-tab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid #cdd7d1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #ffffff8f;
+  color: #26302d;
+  text-decoration: none;
+}
+
+.wiki-tab[aria-selected="true"] {
+  border-color: #08605f;
+  background: #e7f2ef;
+  color: #064846;
+}
+
+.wiki-tab strong {
+  min-width: 2ch;
+  color: inherit;
+  text-align: right;
+}
+
 .wiki-node-link {
   display: grid;
   gap: 4px;
@@ -223,6 +256,10 @@ select {
 
   .wiki-index ul {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .wiki-tabs {
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
   }
 
   .wiki-meta,

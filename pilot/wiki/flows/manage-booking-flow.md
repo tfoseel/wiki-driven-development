@@ -1,8 +1,8 @@
 ---
 id: flows/manage-booking-flow
 type: flow
-title: Manage Booking Flow
-summary: Reschedule or cancel an existing booking.
+title: 예약 관리 플로우
+summary: 기존 예약의 일정 변경 또는 취소 흐름.
 depends_on:
   - pages/booking-detail
   - actions/reschedule-booking
@@ -21,25 +21,25 @@ verify:
   - npm run e2e -w pilot-booking-app -- reschedule-booking
   - npm run e2e -w pilot-booking-app -- cancel-booking
 ---
-# Manage Booking Flow
+# 예약 관리 플로우
 
-## Intent
-Let a customer manage an active booking while respecting cancellation policy.
+## 의도
+고객이 취소 정책을 지키면서 활성 예약을 관리할 수 있게 한다.
 
-## Steps
-1. Open [[pages/booking-detail]].
-2. Reschedule with [[actions/reschedule-booking]] or cancel with [[actions/cancel-booking]].
-3. Stay on the detail page and show the updated state.
+## 단계
+1. [[pages/booking-detail]]을 연다.
+2. [[actions/reschedule-booking]]으로 일정을 변경하거나 [[actions/cancel-booking]]으로 취소한다.
+3. 상세 화면에 머물며 갱신된 상태를 보여준다.
 
-## Handoff Contract
+## 전달 계약
 
-| From | To | Data | Assertion |
+| 출발 | 도착 | 데이터 | 검증 |
 |---|---|---|---|
-| Booking detail route | [[pages/booking-detail]] | `bookingId` | Detail page loads matching booking |
-| [[actions/cancel-booking]] | [[pages/booking-detail]] | updated booking status | Detail shows cancelled state |
-| [[actions/reschedule-booking]] | [[pages/booking-detail]] | updated slot id | Detail shows new slot |
+| 예약 상세 라우트 | [[pages/booking-detail]] | `bookingId` | 상세 화면이 일치하는 예약을 로드함 |
+| [[actions/cancel-booking]] | [[pages/booking-detail]] | 갱신된 예약 상태 | 상세 화면이 취소 상태를 보여줌 |
+| [[actions/reschedule-booking]] | [[pages/booking-detail]] | 갱신된 슬롯 id | 상세 화면이 새 슬롯을 보여줌 |
 
-## Flow QA
-- given active booking outside boundary / when cancelled / then detail shows cancelled state
-- given active booking outside boundary / when rescheduled / then detail shows new slot
-- given policy-blocked booking / when mutation is attempted / then no state change occurs
+## 플로우 QA
+- given 정책 경계 밖 활성 예약 / when 취소 / then 상세 화면이 취소 상태를 보여준다
+- given 정책 경계 밖 활성 예약 / when 일정 변경 / then 상세 화면이 새 슬롯을 보여준다
+- given 정책으로 차단된 예약 / when mutation 시도 / then 상태 변화가 없다

@@ -9,7 +9,7 @@ export type PolicyDecision =
 
 export function canModifyBooking(booking: Booking, slot: AvailabilitySlot, now = new Date()): PolicyDecision {
   if (booking.status === "cancelled") {
-    return { allowed: false, code: "already_cancelled", message: "This booking is already cancelled." };
+    return { allowed: false, code: "already_cancelled", message: "이미 취소된 예약입니다." };
   }
 
   const startsAt = new Date(slot.startsAt);
@@ -17,7 +17,7 @@ export function canModifyBooking(booking: Booking, slot: AvailabilitySlot, now =
     return {
       allowed: false,
       code: "inside_policy_boundary",
-      message: "Bookings can only be changed until 24 hours before the slot starts."
+      message: "예약은 시작 24시간 전까지만 변경할 수 있습니다."
     };
   }
 

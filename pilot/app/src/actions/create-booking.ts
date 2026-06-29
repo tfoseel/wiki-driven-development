@@ -19,14 +19,14 @@ export type CreateBookingResult =
 
 export async function createBooking(input: CreateBookingInput): Promise<CreateBookingResult> {
   const parsed = CreateBookingInputSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, code: "invalid_input", message: "Check the booking form fields." };
+  if (!parsed.success) return { ok: false, code: "invalid_input", message: "예약 입력값을 확인하세요." };
 
   const service = getService(parsed.data.serviceId);
-  if (!service?.active) return { ok: false, code: "service_inactive", message: "This service is not bookable." };
+  if (!service?.active) return { ok: false, code: "service_inactive", message: "이 서비스는 예약할 수 없습니다." };
 
   const slot = getSlot(parsed.data.slotId);
   if (!slot || slot.serviceId !== service.id || slot.status !== "available") {
-    return { ok: false, code: "slot_unavailable", message: "This slot is no longer available." };
+    return { ok: false, code: "slot_unavailable", message: "이 시간은 더 이상 예약할 수 없습니다." };
   }
 
   setSlotStatus(slot.id, "booked");

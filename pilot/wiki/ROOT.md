@@ -1,29 +1,29 @@
 ---
 id: ROOT
 type: root
-title: Mini Booking Pilot
-summary: A small consultation booking app used to dogfood the WDD harness.
+title: 미니 예약 파일럿
+summary: WDD 하네스를 실제로 검증하기 위한 작은 상담 예약 앱.
 depends_on:
 implemented_by:
 verified_by:
 artifacts:
 verify:
 ---
-# Mini Booking Pilot
+# 미니 예약 파일럿
 
-## Purpose
-This pilot proves that a small but complete product can be driven from wiki pages as the SSOT.
+## 목적
+이 파일럿은 작지만 완결된 제품을 위키 페이지를 SSOT로 삼아 운영할 수 있는지 검증한다.
 
-## User Journey
-1. View available services.
-2. Start a booking.
-3. Choose a date and time slot.
-4. Enter customer details.
-5. Create the booking.
-6. View booking details.
-7. Reschedule or cancel according to policy.
+## 사용자 여정
+1. 예약 가능한 서비스를 본다.
+2. 예약을 시작한다.
+3. 날짜와 시간 슬롯을 고른다.
+4. 고객 정보를 입력한다.
+5. 예약을 생성한다.
+6. 예약 상세를 확인한다.
+7. 정책에 따라 일정을 변경하거나 취소한다.
 
-## Core Nodes
+## 핵심 노드
 - [[entities/services]]
 - [[entities/availability-slots]]
 - [[entities/bookings]]

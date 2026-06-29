@@ -1,8 +1,8 @@
 ---
 id: models/service
 type: model
-title: Service Model
-summary: Domain validation for bookable services.
+title: 서비스 모델
+summary: 예약 가능한 서비스의 도메인 검증.
 depends_on:
   - entities/services
 implemented_by:
@@ -14,17 +14,17 @@ artifacts:
 verify:
   - npm run test -w pilot-booking-app -- service
 ---
-# Service Model
+# 서비스 모델
 
-## Meaning
-The service model is the customer-facing service shape used by pages and actions.
+## 의미
+서비스 모델은 화면과 액션에서 사용하는 고객-facing 서비스 구조다.
 
-## Validation
-- `id`, `name`, and `durationMinutes` are required.
-- `durationMinutes` must be greater than zero.
-- Inactive services can be shown in existing bookings but cannot start a new booking.
+## 검증
+- `id`, `name`, `durationMinutes`는 필수다.
+- `durationMinutes`는 0보다 커야 한다.
+- 비활성 서비스는 기존 예약에는 표시될 수 있지만 신규 예약은 시작할 수 없다.
 
-## Examples
-- Valid: active 45-minute consultation.
-- Invalid: active service with zero duration.
-- Boundary: inactive service displayed in a cancelled old booking.
+## 예시
+- 유효: 활성 상태의 45분 상담.
+- 무효: 시간이 0분인 활성 서비스.
+- 경계: 취소된 과거 예약에 표시되는 비활성 서비스.

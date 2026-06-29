@@ -1,8 +1,8 @@
 ---
 id: pages/service-list
 type: page
-title: Service List
-summary: Entry page where customers choose a service to book.
+title: 서비스 목록
+summary: 고객이 예약할 서비스를 고르는 진입 화면.
 depends_on:
   - models/service
 implemented_by:
@@ -14,30 +14,30 @@ artifacts:
 verify:
   - npm run e2e -w pilot-booking-app -- service-list
 ---
-# Service List
+# 서비스 목록
 
-## Description
-Shows active services and lets the customer start a new booking.
+## 설명
+활성 서비스를 보여주고 고객이 새 예약을 시작할 수 있게 한다.
 
-## Conditions
-- Inactive services are hidden from new booking entry.
-- If no active services exist, show an empty state.
+## 조건
+- 비활성 서비스는 신규 예약 진입에서 숨긴다.
+- 활성 서비스가 없으면 빈 상태를 보여준다.
 
-## User Actions
-- Select a service.
-- Start [[pages/booking-new]] with selected `serviceId`.
+## 사용자 행동
+- 서비스를 선택한다.
+- 선택한 `serviceId`로 [[pages/booking-new]]를 시작한다.
 
-## Visible States And Exceptions
+## 표시 상태와 예외
 
-| Condition | Rendered State | Seed |
+| 조건 | 표시 상태 | 시드 |
 |---|---|---|
-| Active services exist | Service cards and start buttons | seed-services-normal |
-| No active services | Empty state with support copy | seed-services-empty |
-| Load error | Error message and retry | seed-services-error |
+| 활성 서비스 있음 | 서비스 카드와 시작 버튼 | seed-services-normal |
+| 활성 서비스 없음 | 안내 문구가 있는 빈 상태 | seed-services-empty |
+| 로드 오류 | 오류 메시지와 재시도 | seed-services-error |
 
-## Navigation And Handoff
-- To [[pages/booking-new]]: pass `serviceId`.
+## 내비게이션과 전달
+- [[pages/booking-new]]로 이동할 때 `serviceId`를 전달한다.
 
-## Independent QA
-- given seed-services-normal / when service is selected / then new booking page receives service id
-- given seed-services-empty / when page loads / then no start button is shown
+## 독립 QA
+- given seed-services-normal / when 서비스 선택 / then 새 예약 화면이 service id를 받는다
+- given seed-services-empty / when page loads / then 시작 버튼이 보이지 않는다

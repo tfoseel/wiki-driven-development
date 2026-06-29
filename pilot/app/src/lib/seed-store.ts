@@ -3,9 +3,9 @@ import type { Booking, BookingStatus } from "../models/booking";
 import type { Service } from "../models/service";
 
 const initialServices: Service[] = [
-  { id: "consultation", name: "Initial consultation", durationMinutes: 45, active: true },
-  { id: "follow-up", name: "Follow-up session", durationMinutes: 30, active: true },
-  { id: "legacy-review", name: "Legacy review", durationMinutes: 30, active: false }
+  { id: "consultation", name: "초기 상담", durationMinutes: 45, active: true },
+  { id: "follow-up", name: "후속 상담", durationMinutes: 30, active: true },
+  { id: "legacy-review", name: "이전 리뷰", durationMinutes: 30, active: false }
 ];
 
 const initialSlots: AvailabilitySlot[] = [
@@ -34,7 +34,7 @@ const initialBookings: Booking[] = [
     id: "booking-confirmed-001",
     serviceId: "consultation",
     slotId: "slot-consultation-tomorrow-1100",
-    customerName: "Alex Kim",
+    customerName: "김민준",
     customerEmail: "alex@example.com",
     status: "confirmed"
   }

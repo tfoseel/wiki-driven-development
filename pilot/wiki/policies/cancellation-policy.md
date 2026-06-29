@@ -1,8 +1,8 @@
 ---
 id: policies/cancellation-policy
 type: policy
-title: Cancellation Policy
-summary: Bookings can be cancelled or rescheduled until 24 hours before the slot starts.
+title: 취소 정책
+summary: 예약은 슬롯 시작 24시간 전까지 취소하거나 일정을 변경할 수 있다.
 depends_on:
   - models/booking
   - models/availability-slot
@@ -15,26 +15,26 @@ artifacts:
 verify:
   - npm run test -w pilot-booking-app -- cancellation-policy
 ---
-# Cancellation Policy
+# 취소 정책
 
-## Rule
-A confirmed or rescheduled booking can be cancelled or rescheduled until 24 hours before the slot start time.
+## 규칙
+확정 또는 일정 변경된 예약은 슬롯 시작 시각 24시간 전까지 취소하거나 일정을 변경할 수 있다.
 
-## Applies To
+## 적용 대상
 - [[actions/cancel-booking]]
 - [[actions/reschedule-booking]]
 - [[pages/booking-detail]]
 
-## Boundaries
+## 경계
 
-| Case | Expected Result |
+| 케이스 | 기대 결과 |
 |---|---|
-| More than 24 hours before slot | Allow cancellation and reschedule |
-| Exactly 24 hours before slot | Allow |
-| Less than 24 hours before slot | Block with clear reason |
-| Booking already cancelled | Block as already inactive |
+| 슬롯 시작까지 24시간 초과 | 취소와 일정 변경 허용 |
+| 슬롯 시작까지 정확히 24시간 | 허용 |
+| 슬롯 시작까지 24시간 미만 | 명확한 사유와 함께 차단 |
+| 이미 취소된 예약 | 이미 비활성 상태로 차단 |
 
 ## QA
-- given a booking 25 hours away / when cancellation is requested / then it is allowed
-- given a booking 23 hours away / when cancellation is requested / then it is blocked
-- given a booking exactly 24 hours away / when reschedule is requested / then it is allowed
+- given 25시간 뒤 예약 / when 취소 요청 / then 허용된다
+- given 23시간 뒤 예약 / when 취소 요청 / then 차단된다
+- given 정확히 24시간 뒤 예약 / when 일정 변경 요청 / then 허용된다

@@ -10,8 +10,8 @@ export function BookingNewScreen({ service, slots }: BookingNewScreenProps) {
   if (!service) {
     return (
       <main>
-        <h1>Service unavailable</h1>
-        <p data-testid="invalid-service">Choose an active service before booking.</p>
+        <h1>서비스를 예약할 수 없음</h1>
+        <p data-testid="invalid-service">예약을 시작하기 전에 활성 서비스를 선택하세요.</p>
       </main>
     );
   }
@@ -20,14 +20,14 @@ export function BookingNewScreen({ service, slots }: BookingNewScreenProps) {
 
   return (
     <main>
-      <h1>New booking</h1>
+      <h1>새 예약</h1>
       <p data-testid="selected-service">{service.name}</p>
       {availableSlots.length === 0 ? (
-        <p data-testid="no-slots">No available slots for this service.</p>
+        <p data-testid="no-slots">이 서비스에 예약 가능한 시간이 없습니다.</p>
       ) : (
         <form>
           <label>
-            Slot
+            시간
             <select name="slotId" data-testid="slot-select">
               {availableSlots.map((slot) => (
                 <option key={slot.id} value={slot.id}>
@@ -37,14 +37,14 @@ export function BookingNewScreen({ service, slots }: BookingNewScreenProps) {
             </select>
           </label>
           <label>
-            Name
+            이름
             <input name="customerName" data-testid="customer-name" />
           </label>
           <label>
-            Email
+            이메일
             <input name="customerEmail" type="email" data-testid="customer-email" />
           </label>
-          <button type="submit">Create booking</button>
+          <button type="submit">예약 생성</button>
         </form>
       )}
     </main>

@@ -1,8 +1,8 @@
 ---
 id: pages/booking-complete
 type: page
-title: Booking Complete
-summary: Confirmation page after a booking is created.
+title: 예약 완료
+summary: 예약 생성 뒤 보여주는 확인 화면.
 depends_on:
   - models/booking
 implemented_by:
@@ -14,30 +14,30 @@ artifacts:
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---
-# Booking Complete
+# 예약 완료
 
-## Description
-Shows the created booking summary and a link to manage the booking.
+## 설명
+생성된 예약 요약과 예약 관리 링크를 보여준다.
 
-## Conditions
-- Requires valid `bookingId`.
-- If booking id is missing or unknown, show recoverable error.
+## 조건
+- 유효한 `bookingId`가 필요하다.
+- 예약 id가 없거나 알 수 없으면 복구 가능한 오류를 보여준다.
 
-## User Actions
-- Go to [[pages/booking-detail]].
-- Return to [[pages/service-list]].
+## 사용자 행동
+- [[pages/booking-detail]]로 이동한다.
+- [[pages/service-list]]로 돌아간다.
 
-## Visible States And Exceptions
+## 표시 상태와 예외
 
-| Condition | Rendered State | Seed |
+| 조건 | 표시 상태 | 시드 |
 |---|---|---|
-| Booking exists | Confirmation summary | seed-booking-complete-normal |
-| Missing booking id | Error and service list link | seed-booking-complete-missing-id |
-| Unknown booking id | Error and support copy | seed-booking-complete-unknown-id |
+| 예약 있음 | 확인 요약 | seed-booking-complete-normal |
+| 예약 id 누락 | 오류와 서비스 목록 링크 | seed-booking-complete-missing-id |
+| 알 수 없는 예약 id | 오류와 지원 안내 | seed-booking-complete-unknown-id |
 
-## Navigation And Handoff
-- To [[pages/booking-detail]]: pass `bookingId`.
+## 내비게이션과 전달
+- [[pages/booking-detail]]로 `bookingId`를 전달한다.
 
-## Independent QA
-- given seed-booking-complete-normal / when manage booking is selected / then detail receives booking id
-- given seed-booking-complete-missing-id / when page loads / then error is visible
+## 독립 QA
+- given seed-booking-complete-normal / when 예약 관리 선택 / then 상세 화면이 booking id를 받는다
+- given seed-booking-complete-missing-id / when page loads / then 오류가 보인다

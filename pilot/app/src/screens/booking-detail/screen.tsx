@@ -14,8 +14,8 @@ export function BookingDetailScreen({ booking, service, slot, canModify, policyR
   if (!booking) {
     return (
       <main>
-        <h1>Booking not found</h1>
-        <p data-testid="booking-not-found">Check the booking link and try again.</p>
+        <h1>예약을 찾을 수 없음</h1>
+        <p data-testid="booking-not-found">예약 링크를 확인한 뒤 다시 시도하세요.</p>
       </main>
     );
   }
@@ -24,15 +24,15 @@ export function BookingDetailScreen({ booking, service, slot, canModify, policyR
 
   return (
     <main>
-      <h1>Booking detail</h1>
+      <h1>예약 상세</h1>
       <p data-testid="booking-status">{booking.status}</p>
       <p>{service?.name ?? booking.serviceId}</p>
       <p>{slot?.startsAt ?? booking.slotId}</p>
-      {inactive ? <p data-testid="inactive-booking">This booking is cancelled.</p> : null}
+      {inactive ? <p data-testid="inactive-booking">이 예약은 취소되었습니다.</p> : null}
       {!inactive && canModify ? (
         <div>
-          <button type="button">Reschedule booking</button>
-          <button type="button">Cancel booking</button>
+          <button type="button">일정 변경</button>
+          <button type="button">예약 취소</button>
         </div>
       ) : null}
       {!inactive && !canModify ? <p data-testid="policy-blocked">{policyReason}</p> : null}

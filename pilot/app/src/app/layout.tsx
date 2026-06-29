@@ -3,13 +3,13 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mini Booking Pilot",
-  description: "A Wiki-Driven Development pilot booking app"
+  title: "미니 예약 파일럿",
+  description: "위키 기반 개발 파일럿 예약 앱"
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body>{children}</body>
     </html>
   );

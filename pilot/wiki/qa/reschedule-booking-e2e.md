@@ -1,8 +1,8 @@
 ---
 id: qa/reschedule-booking-e2e
 type: qa
-title: Reschedule Booking E2E
-summary: End-to-end scenarios for rescheduling bookings.
+title: 예약 일정 변경 E2E
+summary: 예약 일정 변경에 대한 end-to-end 시나리오.
 depends_on:
   - flows/manage-booking-flow
   - pages/booking-detail
@@ -17,18 +17,18 @@ artifacts:
 verify:
   - npm run e2e -w pilot-booking-app -- reschedule-booking
 ---
-# Reschedule Booking E2E
+# 예약 일정 변경 E2E
 
-## Coverage Model
-- Happy path.
-- Target slot unavailable.
-- Booking already cancelled.
-- Policy boundary at 24 hours.
-- Missing booking id.
-- Duplicate submit.
+## 커버리지 모델
+- 성공 경로.
+- 대상 슬롯 예약 불가.
+- 이미 취소된 예약.
+- 24시간 정책 경계.
+- 예약 id 누락.
+- 중복 제출.
 
-## Scenarios
-- given booking 25 hours away and target slot available / when rescheduled / then booking shows new slot
-- given target slot unavailable / when rescheduled / then booking remains unchanged
-- given booking 23 hours away / when reschedule is attempted / then policy reason is shown
-- given cancelled booking / when detail loads / then reschedule action is absent
+## 시나리오
+- given 25시간 뒤 예약과 예약 가능한 대상 슬롯 / when 일정 변경 / then 예약이 새 슬롯을 보여준다
+- given 대상 슬롯 예약 불가 / when 일정 변경 / then 예약은 변하지 않는다
+- given 23시간 뒤 예약 / when 일정 변경 시도 / then 정책 사유가 보인다
+- given 취소된 예약 / when 상세 화면 로드 / then 일정 변경 액션이 없다

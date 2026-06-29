@@ -1,8 +1,8 @@
 ---
 id: qa/cancel-booking-e2e
 type: qa
-title: Cancel Booking E2E
-summary: End-to-end scenarios for cancellation.
+title: 예약 취소 E2E
+summary: 예약 취소에 대한 end-to-end 시나리오.
 depends_on:
   - flows/manage-booking-flow
   - pages/booking-detail
@@ -17,20 +17,20 @@ artifacts:
 verify:
   - npm run e2e -w pilot-booking-app -- cancel-booking
 ---
-# Cancel Booking E2E
+# 예약 취소 E2E
 
-## Coverage Model
-- Happy path.
-- Policy boundary.
-- Already cancelled booking.
-- Unknown booking id.
-- Duplicate click.
-- Server error.
-- Timezone/date cutoff.
+## 커버리지 모델
+- 성공 경로.
+- 정책 경계.
+- 이미 취소된 예약.
+- 알 수 없는 예약 id.
+- 중복 클릭.
+- 서버 오류.
+- 타임존/날짜 컷오프.
 
-## Scenarios
-- given booking 25 hours away / when cancel is confirmed / then booking is cancelled and slot is released
-- given booking exactly 24 hours away / when cancel is confirmed / then cancellation is allowed
-- given booking 23 hours away / when cancel is attempted / then policy reason is shown
-- given already cancelled booking / when detail loads / then cancel action is absent
-- given duplicate cancel click / when request is pending / then final state is one cancelled booking
+## 시나리오
+- given 25시간 뒤 예약 / when 취소 확정 / then 예약이 취소되고 슬롯이 해제된다
+- given 정확히 24시간 뒤 예약 / when 취소 확정 / then 취소가 허용된다
+- given 23시간 뒤 예약 / when 취소 시도 / then 정책 사유가 보인다
+- given 이미 취소된 예약 / when 상세 화면 로드 / then 취소 액션이 없다
+- given 중복 취소 클릭 / when 요청 대기 중 / then 최종 상태는 하나의 취소된 예약이다

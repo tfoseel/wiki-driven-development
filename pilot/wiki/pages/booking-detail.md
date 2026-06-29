@@ -1,8 +1,8 @@
 ---
 id: pages/booking-detail
 type: page
-title: Booking Detail
-summary: Manage an existing booking.
+title: 예약 상세
+summary: 기존 예약을 관리한다.
 depends_on:
   - models/booking
   - actions/reschedule-booking
@@ -19,35 +19,35 @@ verify:
   - npm run e2e -w pilot-booking-app -- reschedule-booking
   - npm run e2e -w pilot-booking-app -- cancel-booking
 ---
-# Booking Detail
+# 예약 상세
 
-## Description
-Shows a booking and allows reschedule or cancellation when policy allows.
+## 설명
+예약을 보여주고 정책이 허용할 때 일정 변경 또는 취소를 가능하게 한다.
 
-## Conditions
-- Requires valid `bookingId`.
-- Cancel and reschedule buttons are hidden or disabled when policy blocks them.
-- Cancelled bookings show inactive state and no mutation actions.
+## 조건
+- 유효한 `bookingId`가 필요하다.
+- 정책이 차단하면 취소와 일정 변경 버튼을 숨기거나 비활성화한다.
+- 취소된 예약은 비활성 상태를 보여주고 mutation 액션을 제공하지 않는다.
 
-## User Actions
-- Reschedule through [[actions/reschedule-booking]].
-- Cancel through [[actions/cancel-booking]].
+## 사용자 행동
+- [[actions/reschedule-booking]]으로 일정을 변경한다.
+- [[actions/cancel-booking]]으로 예약을 취소한다.
 
-## Visible States And Exceptions
+## 표시 상태와 예외
 
-| Condition | Rendered State | Seed |
+| 조건 | 표시 상태 | 시드 |
 |---|---|---|
-| Active and outside policy boundary | Details with reschedule and cancel | seed-booking-detail-active |
-| Less than 24 hours before slot | Details with policy-blocked actions | seed-booking-detail-policy-blocked |
-| Cancelled | Inactive state and no action buttons | seed-booking-detail-cancelled |
-| Unknown booking id | Not found state | seed-booking-detail-not-found |
-| Server error | Error and retry | seed-booking-detail-error |
+| 활성이고 정책 경계 밖 | 일정 변경과 취소가 있는 상세 | seed-booking-detail-active |
+| 슬롯 시작까지 24시간 미만 | 정책으로 차단된 액션 표시 | seed-booking-detail-policy-blocked |
+| 취소됨 | 비활성 상태와 액션 버튼 없음 | seed-booking-detail-cancelled |
+| 알 수 없는 예약 id | 찾을 수 없음 상태 | seed-booking-detail-not-found |
+| 서버 오류 | 오류와 재시도 | seed-booking-detail-error |
 
-## Navigation And Handoff
-- Reschedule stays on this page after success and refreshes booking.
-- Cancel stays on this page and shows cancelled state.
+## 내비게이션과 전달
+- 일정 변경 성공 뒤 이 화면에 머물며 예약을 갱신한다.
+- 취소 뒤 이 화면에 머물며 취소 상태를 보여준다.
 
-## Independent QA
-- given seed-booking-detail-active / when cancel is confirmed / then cancelled state is visible
-- given seed-booking-detail-policy-blocked / when cancel is attempted / then policy reason is visible
-- given seed-booking-detail-cancelled / when page loads / then mutation buttons are absent
+## 독립 QA
+- given seed-booking-detail-active / when 취소 확정 / then 취소 상태가 보인다
+- given seed-booking-detail-policy-blocked / when 취소 시도 / then 정책 사유가 보인다
+- given seed-booking-detail-cancelled / when page loads / then mutation 버튼이 없다

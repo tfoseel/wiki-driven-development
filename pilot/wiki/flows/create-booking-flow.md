@@ -1,8 +1,8 @@
 ---
 id: flows/create-booking-flow
 type: flow
-title: Create Booking Flow
-summary: Service selection through booking confirmation.
+title: 예약 생성 플로우
+summary: 서비스 선택부터 예약 확인까지의 흐름.
 depends_on:
   - pages/service-list
   - pages/booking-new
@@ -17,24 +17,24 @@ artifacts:
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---
-# Create Booking Flow
+# 예약 생성 플로우
 
-## Intent
-Guide a customer from choosing a service to seeing a confirmed booking.
+## 의도
+고객이 서비스를 고른 뒤 확정 예약을 확인하기까지 안내한다.
 
-## Steps
-1. Start at [[pages/service-list]].
-2. Choose a service and move to [[pages/booking-new]].
-3. Submit [[actions/create-booking]].
-4. Arrive at [[pages/booking-complete]].
+## 단계
+1. [[pages/service-list]]에서 시작한다.
+2. 서비스를 고르고 [[pages/booking-new]]로 이동한다.
+3. [[actions/create-booking]]을 제출한다.
+4. [[pages/booking-complete]]에 도착한다.
 
-## Handoff Contract
+## 전달 계약
 
-| From | To | Data | Assertion |
+| 출발 | 도착 | 데이터 | 검증 |
 |---|---|---|---|
-| [[pages/service-list]] | [[pages/booking-new]] | `serviceId` | New booking page loads selected service |
-| [[pages/booking-new]] | [[pages/booking-complete]] | `bookingId` | Complete page loads created booking |
+| [[pages/service-list]] | [[pages/booking-new]] | `serviceId` | 새 예약 화면이 선택한 서비스를 로드함 |
+| [[pages/booking-new]] | [[pages/booking-complete]] | `bookingId` | 완료 화면이 생성된 예약을 로드함 |
 
-## Flow QA
-- given active service and available slot / when customer completes form / then confirmation appears
-- given slot becomes booked before submit / when customer submits / then conflict is shown and no confirmation appears
+## 플로우 QA
+- given 활성 서비스와 예약 가능 슬롯 / when 고객이 폼 완료 / then 확인 화면이 나타난다
+- given 제출 전 슬롯이 booked가 됨 / when 고객이 제출 / then 충돌이 보이고 확인 화면은 나타나지 않는다

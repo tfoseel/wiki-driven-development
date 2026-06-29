@@ -1,22 +1,53 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { wikiHref, type WikiBrowserNode } from "../../lib/wiki-browser";
+import {
+  filterWikiNodesByType,
+  listWikiTypeTabs,
+  wikiHref,
+  wikiHrefWithType,
+  type WikiBrowserNode,
+  type WikiTypeTab
+} from "../../lib/wiki-browser";
 
 type WikiBrowserScreenProps = {
   current: WikiBrowserNode;
   nodes: WikiBrowserNode[];
+  selectedType: WikiTypeTab;
 };
 
-export function WikiBrowserScreen({ current, nodes }: WikiBrowserScreenProps) {
+export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserScreenProps) {
+  const tabs = listWikiTypeTabs(nodes);
+  const visibleNodes = filterWikiNodesByType(nodes, selectedType);
+
   return (
     <main className="wiki-shell">
-      <aside className="wiki-index" aria-label="Pilot wiki index">
-        <h2>Wiki Nodes</h2>
-        <ul aria-label="Wiki nodes">
-          {nodes.map((node) => (
+      <aside className="wiki-index" aria-label="파일럿 위키 인덱스">
+        <h2>위키 노드</h2>
+        <nav className="wiki-tabs" aria-label="위키 노드 유형">
+          {tabs.map((tab) => (
+            <Link
+              key={tab.type}
+              className="wiki-tab"
+              href={wikiHrefWithType(current.id, tab.type)}
+              role="tab"
+              aria-selected={selectedType === tab.type}
+            >
+              <span>{tab.label}</span>
+              <strong>{tab.count}</strong>
+            </Link>
+          ))}
+        </nav>
+        <ul aria-label="위키 노드">
+          {visibleNodes.map((node) => (
             <li key={node.id}>
-              <Link className="wiki-node-link" href={node.href} aria-current={node.id === current.id ? "page" : undefined}>
-                <span className="wiki-type">{node.type}</span>
+              <Link
+                className="wiki-node-link"
+                href={wikiHrefWithType(node.id, selectedType)}
+                aria-current={node.id === current.id ? "page" : undefined}
+              >
+                <span className="wiki-type" aria-hidden="true">
+                  {node.type}
+                </span>
                 <strong>{node.title}</strong>
                 <span>{node.id}</span>
               </Link>
@@ -27,7 +58,7 @@ export function WikiBrowserScreen({ current, nodes }: WikiBrowserScreenProps) {
 
       <article className="wiki-article">
         <header>
-          <Link href="/">Mini Booking Pilot</Link>
+          <Link href="/">미니 예약 파일럿</Link>
           <p className="wiki-type">{current.type}</p>
           <h1>{current.title}</h1>
           {current.summary ? <p className="wiki-summary">{current.summary}</p> : null}
@@ -35,19 +66,19 @@ export function WikiBrowserScreen({ current, nodes }: WikiBrowserScreenProps) {
 
         <div className="wiki-meta">
           <section>
-            <h2>Node</h2>
+            <h2>노드</h2>
             <p className="wiki-id">
               <code>{current.id}</code>
             </p>
           </section>
           <section>
-            <h2>Source</h2>
+            <h2>원본</h2>
             <p className="wiki-file">
               <code>{current.filePath}</code>
             </p>
           </section>
           <section>
-            <h2>Depends On</h2>
+            <h2>의존</h2>
             {current.dependencies.length ? (
               <ul className="wiki-dependencies">
                 {current.dependencies.map((id) => (
@@ -57,7 +88,7 @@ export function WikiBrowserScreen({ current, nodes }: WikiBrowserScreenProps) {
                 ))}
               </ul>
             ) : (
-              <p className="wiki-empty">None</p>
+              <p className="wiki-empty">없음</p>
             )}
           </section>
         </div>
@@ -65,8 +96,8 @@ export function WikiBrowserScreen({ current, nodes }: WikiBrowserScreenProps) {
         <WikiMarkdown title={current.title} body={current.body} />
 
         <div className="wiki-refs">
-          <ReferenceList title="Implementation" refs={current.implementationRefs} />
-          <ReferenceList title="Verification" refs={current.verificationRefs} />
+          <ReferenceList title="구현" refs={current.implementationRefs} />
+          <ReferenceList title="검증" refs={current.verificationRefs} />
         </div>
       </article>
     </main>
@@ -86,7 +117,7 @@ function ReferenceList({ title, refs }: { title: string; refs: string[] }) {
           ))}
         </ul>
       ) : (
-        <p className="wiki-empty">None</p>
+        <p className="wiki-empty">없음</p>
       )}
     </section>
   );

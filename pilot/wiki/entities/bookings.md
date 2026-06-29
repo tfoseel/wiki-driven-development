@@ -1,8 +1,8 @@
 ---
 id: entities/bookings
 type: entity
-title: Bookings
-summary: Customer reservations for service slots.
+title: 예약
+summary: 서비스 슬롯에 대한 고객 예약.
 depends_on:
   - entities/services
   - entities/availability-slots
@@ -15,23 +15,23 @@ artifacts:
 verify:
   - npm run test -w pilot-booking-app -- booking
 ---
-# Bookings
+# 예약
 
-## Meaning
-A booking records that a customer reserved a service slot.
+## 의미
+예약은 고객이 특정 서비스 슬롯을 확보했다는 사실을 기록한다.
 
-## Fields
+## 필드
 
-| Field | Type | Meaning | Rules |
+| 필드 | 타입 | 의미 | 규칙 |
 |---|---|---|---|
-| `id` | string | Stable booking identifier | Required |
-| `serviceId` | string | Booked service | Must reference [[entities/services]] |
-| `slotId` | string | Reserved slot | Must reference [[entities/availability-slots]] |
-| `customerName` | string | Customer name | Required |
-| `customerEmail` | string | Contact email | Must be valid email |
-| `status` | enum | `confirmed`, `rescheduled`, or `cancelled` | Drives available actions |
+| `id` | string | 안정적인 예약 식별자 | 필수 |
+| `serviceId` | string | 예약한 서비스 | [[entities/services]]를 참조해야 함 |
+| `slotId` | string | 확보한 슬롯 | [[entities/availability-slots]]를 참조해야 함 |
+| `customerName` | string | 고객 이름 | 필수 |
+| `customerEmail` | string | 연락 이메일 | 유효한 이메일이어야 함 |
+| `status` | enum | `confirmed`, `rescheduled`, `cancelled` | 가능한 행동을 결정함 |
 
-## Lifecycle
-- New bookings start as `confirmed`.
-- Rescheduled bookings keep the same booking id and move to a new slot.
-- Cancelled bookings release their slot and cannot be cancelled again.
+## 생명주기
+- 새 예약은 `confirmed` 상태로 시작한다.
+- 일정 변경된 예약은 같은 예약 id를 유지하고 새 슬롯으로 이동한다.
+- 취소된 예약은 슬롯을 해제하며 다시 취소할 수 없다.

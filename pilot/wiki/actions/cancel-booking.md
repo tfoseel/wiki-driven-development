@@ -1,8 +1,8 @@
 ---
 id: actions/cancel-booking
 type: action
-title: Cancel Booking
-summary: Cancel an active booking and release its slot according to policy.
+title: 예약 취소
+summary: 정책에 따라 활성 예약을 취소하고 슬롯을 해제한다.
 depends_on:
   - models/booking
   - models/availability-slot
@@ -18,35 +18,35 @@ verify:
   - npm run test -w pilot-booking-app -- cancel-booking
   - npm run e2e -w pilot-booking-app -- cancel-booking
 ---
-# Cancel Booking
+# 예약 취소
 
-## Intent
-Cancel a confirmed or rescheduled booking and make the slot available again.
+## 의도
+확정 또는 일정 변경된 예약을 취소하고 해당 슬롯을 다시 예약 가능 상태로 만든다.
 
-## Input
+## 입력
 
-| Field | Type | Required | Meaning |
+| 필드 | 타입 | 필수 | 의미 |
 |---|---|---:|---|
-| `bookingId` | string | yes | Booking to cancel |
+| `bookingId` | string | yes | 취소할 예약 |
 
-## Rules
-- Booking must exist.
-- Booking must not already be cancelled.
-- [[policies/cancellation-policy]] must allow cancellation.
-- Cancellation is idempotent from the user's point of view: duplicate clicks must not create inconsistent state.
+## 규칙
+- 예약은 존재해야 한다.
+- 예약은 이미 취소된 상태가 아니어야 한다.
+- [[policies/cancellation-policy]]가 취소를 허용해야 한다.
+- 사용자의 관점에서 취소는 멱등적이어야 한다. 중복 클릭이 불일치 상태를 만들면 안 된다.
 
-## State Changes
-- Booking status becomes `cancelled`.
-- Slot changes from `booked` to `available`.
+## 상태 변화
+- 예약 상태는 `cancelled`가 된다.
+- 슬롯은 `booked`에서 `available`로 바뀐다.
 
-## Failure Cases
-- Unknown booking id.
-- Already cancelled booking.
-- Less than 24 hours before slot.
-- Duplicate click while request is pending.
-- Server error.
+## 실패 케이스
+- 알 수 없는 예약 id.
+- 이미 취소된 예약.
+- 슬롯 시작까지 24시간 미만.
+- 요청 대기 중 중복 클릭.
+- 서버 오류.
 
 ## QA
-- given booking 25 hours away / when cancelled / then booking is cancelled and slot is available
-- given booking 23 hours away / when cancelled / then cancellation is blocked with policy reason
-- given already cancelled booking / when cancelled again / then state remains cancelled and user sees inactive state
+- given 25시간 뒤 예약 / when 취소 / then 예약이 취소되고 슬롯이 available이 된다
+- given 23시간 뒤 예약 / when 취소 / then 정책 사유와 함께 취소가 차단된다
+- given 이미 취소된 예약 / when 다시 취소 / then 상태는 cancelled로 유지되고 사용자는 비활성 상태를 본다

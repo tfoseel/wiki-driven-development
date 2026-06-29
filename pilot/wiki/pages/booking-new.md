@@ -1,8 +1,8 @@
 ---
 id: pages/booking-new
 type: page
-title: New Booking
-summary: Select a slot and enter customer details.
+title: 새 예약
+summary: 슬롯을 선택하고 고객 정보를 입력한다.
 depends_on:
   - models/service
   - models/availability-slot
@@ -16,34 +16,34 @@ artifacts:
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---
-# New Booking
+# 새 예약
 
-## Description
-Lets the customer choose an available slot for a selected service and enter contact details.
+## 설명
+고객이 선택한 서비스의 예약 가능한 슬롯을 고르고 연락처를 입력하게 한다.
 
-## Conditions
-- Requires a valid active `serviceId`.
-- Only available slots can be selected.
-- Submit uses [[actions/create-booking]].
+## 조건
+- 유효한 활성 `serviceId`가 필요하다.
+- 예약 가능한 슬롯만 선택할 수 있다.
+- 제출은 [[actions/create-booking]]을 사용한다.
 
-## User Actions
-- Select a date and time slot.
-- Enter name and email.
-- Submit booking.
+## 사용자 행동
+- 날짜와 시간 슬롯을 선택한다.
+- 이름과 이메일을 입력한다.
+- 예약을 제출한다.
 
-## Visible States And Exceptions
+## 표시 상태와 예외
 
-| Condition | Rendered State | Seed |
+| 조건 | 표시 상태 | 시드 |
 |---|---|---|
-| Available slots | Slot picker and contact form | seed-booking-new-normal |
-| No slots | No availability message | seed-booking-new-no-slots |
-| Invalid service | Recoverable error and link to services | seed-booking-new-invalid-service |
-| Submit conflict | Conflict message and refreshed slots | seed-booking-new-slot-conflict |
-| Validation error | Field-level errors | seed-booking-new-invalid-contact |
+| 예약 가능한 슬롯 있음 | 슬롯 선택기와 연락처 폼 | seed-booking-new-normal |
+| 슬롯 없음 | 예약 가능 시간이 없다는 메시지 | seed-booking-new-no-slots |
+| 유효하지 않은 서비스 | 복구 가능한 오류와 서비스 목록 링크 | seed-booking-new-invalid-service |
+| 제출 충돌 | 충돌 메시지와 갱신된 슬롯 | seed-booking-new-slot-conflict |
+| 검증 오류 | 필드 단위 오류 | seed-booking-new-invalid-contact |
 
-## Navigation And Handoff
-- To [[pages/booking-complete]]: pass `bookingId` after successful creation.
+## 내비게이션과 전달
+- 생성 성공 뒤 [[pages/booking-complete]]로 `bookingId`를 전달한다.
 
-## Independent QA
-- given seed-booking-new-normal / when valid form is submitted / then complete page receives booking id
-- given seed-booking-new-slot-conflict / when submit returns conflict / then no complete navigation occurs
+## 독립 QA
+- given seed-booking-new-normal / when 유효한 폼 제출 / then 완료 화면이 booking id를 받는다
+- given seed-booking-new-slot-conflict / when 제출이 충돌 반환 / then 완료 화면으로 이동하지 않는다
