@@ -1,0 +1,24 @@
+{
+  "name": "@wdd/harness",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "wdd": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "wdd": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}
