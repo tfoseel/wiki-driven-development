@@ -7,12 +7,13 @@ depends_on:
   - models/service
   - models/availability-slot
   - actions/create-booking
+  - design/design-system
 implemented_by:
   - pilot/app/src/app/bookings/new/page.tsx
 verified_by:
   - pilot/app/tests/e2e/create-booking.spec.ts
 artifacts:
-  - pilot/app/src/screens/booking-new/screen.tsx
+  - pilot/app/src/app/bookings/new/_components/booking-new-screen.tsx
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---

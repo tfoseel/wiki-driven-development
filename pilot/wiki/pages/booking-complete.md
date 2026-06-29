@@ -5,12 +5,13 @@ title: 예약 완료
 summary: 예약 생성 뒤 보여주는 확인 화면.
 depends_on:
   - models/booking
+  - design/design-system
 implemented_by:
   - pilot/app/src/app/bookings/complete/page.tsx
 verified_by:
   - pilot/app/tests/e2e/create-booking.spec.ts
 artifacts:
-  - pilot/app/src/screens/booking-complete/screen.tsx
+  - pilot/app/src/app/bookings/complete/_components/booking-complete-screen.tsx
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---

@@ -1,5 +1,5 @@
 import { getBooking, getService, getSlot } from "../../../lib/seed-store";
-import { BookingCompleteScreen } from "../../../screens/booking-complete/screen";
+import { BookingCompleteScreen } from "./_components/booking-complete-screen";
 
 export default async function BookingCompletePage({
   searchParams

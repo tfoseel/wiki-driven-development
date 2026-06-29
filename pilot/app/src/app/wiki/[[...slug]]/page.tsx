@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { getWikiNodeBySlug, listWikiNodes, parseWikiTypeTab } from "../../../lib/wiki-browser";
-import { WikiBrowserScreen } from "../../../screens/wiki-browser/screen";
+import { getWikiNodeBySlug, listWikiNodes, parseWikiTypeTab } from "../_lib/wiki-browser";
+import { WikiBrowserScreen } from "./_components/wiki-browser-screen";
 
 export const runtime = "nodejs";
 
@@ -16,5 +16,8 @@ export default async function WikiPage({
   const current = getWikiNodeBySlug(slug);
   if (!current) notFound();
 
-  return <WikiBrowserScreen current={current} nodes={listWikiNodes()} selectedType={parseWikiTypeTab(sp.type)} />;
+  const selectedType = parseWikiTypeTab(sp.type);
+  const effectiveSelectedType = selectedType === "all" && current.id !== "ROOT" ? current.type : selectedType;
+
+  return <WikiBrowserScreen current={current} nodes={listWikiNodes()} selectedType={effectiveSelectedType} />;
 }

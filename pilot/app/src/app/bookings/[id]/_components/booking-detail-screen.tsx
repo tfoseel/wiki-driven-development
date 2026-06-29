@@ -1,6 +1,6 @@
-import type { AvailabilitySlot } from "../../models/availability-slot";
-import type { Booking } from "../../models/booking";
-import type { Service } from "../../models/service";
+import type { AvailabilitySlot } from "../../../../models/availability-slot";
+import type { Booking } from "../../../../models/booking";
+import type { Service } from "../../../../models/service";
 
 type BookingDetailScreenProps = {
   booking?: Booking;

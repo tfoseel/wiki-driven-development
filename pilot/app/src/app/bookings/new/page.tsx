@@ -1,5 +1,5 @@
 import { getService, listSlots } from "../../../lib/seed-store";
-import { BookingNewScreen } from "../../../screens/booking-new/screen";
+import { BookingNewScreen } from "./_components/booking-new-screen";
 
 export default async function NewBookingPage({
   searchParams

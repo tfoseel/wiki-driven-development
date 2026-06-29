@@ -1,5 +1,5 @@
-import type { AvailabilitySlot } from "../../models/availability-slot";
-import type { Service } from "../../models/service";
+import type { AvailabilitySlot } from "../../../../models/availability-slot";
+import type { Service } from "../../../../models/service";
 
 type BookingNewScreenProps = {
   service?: Service;

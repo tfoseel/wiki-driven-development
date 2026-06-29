@@ -5,12 +5,13 @@ title: 서비스 목록
 summary: 고객이 예약할 서비스를 고르는 진입 화면.
 depends_on:
   - models/service
+  - design/design-system
 implemented_by:
   - pilot/app/src/app/services/page.tsx
 verified_by:
   - pilot/app/tests/e2e/service-list.spec.ts
 artifacts:
-  - pilot/app/src/screens/service-list/screen.tsx
+  - pilot/app/src/app/services/_components/service-list-screen.tsx
 verify:
   - npm run e2e -w pilot-booking-app -- service-list
 ---

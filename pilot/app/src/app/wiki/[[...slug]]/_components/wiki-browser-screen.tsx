@@ -7,7 +7,7 @@ import {
   wikiHrefWithType,
   type WikiBrowserNode,
   type WikiTypeTab
-} from "../../lib/wiki-browser";
+} from "../../_lib/wiki-browser";
 
 type WikiBrowserScreenProps = {
   current: WikiBrowserNode;
@@ -23,12 +23,13 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
     <main className="wiki-shell">
       <aside className="wiki-index" aria-label="파일럿 위키 인덱스">
         <h2>위키 노드</h2>
-        <nav className="wiki-tabs" aria-label="위키 노드 유형">
+        <nav className="wiki-tabs" aria-label="위키 노드 유형" role="tablist">
           {tabs.map((tab) => (
             <Link
               key={tab.type}
               className="wiki-tab"
               href={wikiHrefWithType(current.id, tab.type)}
+              scroll={false}
               role="tab"
               aria-selected={selectedType === tab.type}
             >
@@ -43,6 +44,7 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
               <Link
                 className="wiki-node-link"
                 href={wikiHrefWithType(node.id, selectedType)}
+                scroll={false}
                 aria-current={node.id === current.id ? "page" : undefined}
               >
                 <span className="wiki-type" aria-hidden="true">

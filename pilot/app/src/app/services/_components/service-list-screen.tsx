@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Service } from "../../models/service";
+import type { Service } from "../../../models/service";
 
 export function ServiceListScreen({ services }: { services: Service[] }) {
   const activeServices = services.filter((service) => service.active);

@@ -1,6 +1,6 @@
 import { canModifyBooking } from "../../../lib/policies/cancellation-policy";
 import { getBooking, getService, getSlot } from "../../../lib/seed-store";
-import { BookingDetailScreen } from "../../../screens/booking-detail/screen";
+import { BookingDetailScreen } from "./_components/booking-detail-screen";
 
 export default async function BookingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -8,13 +8,14 @@ depends_on:
   - actions/reschedule-booking
   - actions/cancel-booking
   - policies/cancellation-policy
+  - design/design-system
 implemented_by:
   - pilot/app/src/app/bookings/[id]/page.tsx
 verified_by:
   - pilot/app/tests/e2e/reschedule-booking.spec.ts
   - pilot/app/tests/e2e/cancel-booking.spec.ts
 artifacts:
-  - pilot/app/src/screens/booking-detail/screen.tsx
+  - pilot/app/src/app/bookings/[id]/_components/booking-detail-screen.tsx
 verify:
   - npm run e2e -w pilot-booking-app -- reschedule-booking
   - npm run e2e -w pilot-booking-app -- cancel-booking
