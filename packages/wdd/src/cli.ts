@@ -1,5 +1,6 @@
 import { calculateImpact } from "./impact.js";
 import { loadWiki } from "./load-wiki.js";
+import { formatSessionContext } from "./session.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -28,6 +29,10 @@ if (command === "help") {
   for (const id of impact.downstream) console.log(`  - ${id}`);
   console.log("code:");
   for (const file of impact.codeFiles) console.log(`  - ${file}`);
+} else if (command === "session") {
+  const [wikiRoot, nodeId] = args;
+  if (!wikiRoot || !nodeId) throw new Error("Usage: wdd session <wikiRoot> <nodeId>");
+  console.log(formatSessionContext(loadWiki(wikiRoot), nodeId));
 } else {
   console.error(`Unknown command: ${command}`);
   process.exitCode = 1;
