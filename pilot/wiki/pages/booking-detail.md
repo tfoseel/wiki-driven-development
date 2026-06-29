@@ -31,7 +31,7 @@ verify:
 # 예약 상세
 
 ## 설명
-예약을 보여주고 정책이 허용할 때 일정 변경 또는 취소를 가능하게 한다.
+예약과 요청사항을 보여주고 정책이 허용할 때 일정 변경 또는 취소를 가능하게 한다.
 
 ## 조건
 - 유효한 `bookingId`가 필요하다.
@@ -47,6 +47,7 @@ verify:
 | 조건 | 표시 상태 | 시드 |
 |---|---|---|
 | 활성이고 정책 경계 밖 | 일정 변경과 취소가 있는 상세 | seed-booking-detail-active |
+| 요청사항 있음 | 상세 정보에 요청사항 표시 | seed-booking-detail-with-note |
 | 슬롯 시작까지 24시간 미만 | 정책으로 차단된 액션 표시 | seed-booking-detail-policy-blocked |
 | 취소됨 | 비활성 상태와 액션 버튼 없음 | seed-booking-detail-cancelled |
 | 알 수 없는 예약 id | 찾을 수 없음 상태 | seed-booking-detail-not-found |
@@ -58,5 +59,6 @@ verify:
 
 ## 독립 QA
 - given seed-booking-detail-active / when 취소 확정 / then 취소 상태가 보인다
+- given seed-booking-detail-with-note / when page loads / then 요청사항이 보인다
 - given seed-booking-detail-policy-blocked / when 취소 시도 / then 정책 사유가 보인다
 - given seed-booking-detail-cancelled / when page loads / then mutation 버튼이 없다

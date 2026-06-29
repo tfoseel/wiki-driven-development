@@ -36,6 +36,7 @@ const initialBookings: Booking[] = [
     slotId: "slot-consultation-tomorrow-1100",
     customerName: "김민준",
     customerEmail: "alex@example.com",
+    customerNote: "자료 검토 후 상담을 진행해 주세요.",
     status: "confirmed"
   }
 ];
@@ -88,7 +89,8 @@ export function addBooking(input: Omit<Booking, "id" | "status"> & { status?: Bo
     serviceId: input.serviceId,
     slotId: input.slotId,
     customerName: input.customerName,
-    customerEmail: input.customerEmail
+    customerEmail: input.customerEmail,
+    customerNote: input.customerNote
   };
   bookings.push(booking);
   return { ...booking };

@@ -33,6 +33,7 @@ verify:
 | `slotId` | string | 확보한 슬롯 | [[entities/availability-slots]]를 참조해야 함 |
 | `customerName` | string | 고객 이름 | 필수 |
 | `customerEmail` | string | 연락 이메일 | 유효한 이메일이어야 함 |
+| `customerNote` | string? | 고객 요청사항 | 선택, 공백만 있으면 저장하지 않음, 500자 이하 |
 | `status` | enum | `confirmed`, `rescheduled`, `cancelled` | 가능한 행동을 결정함 |
 
 ## 생명주기

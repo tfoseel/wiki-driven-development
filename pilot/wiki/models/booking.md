@@ -28,6 +28,8 @@ verify:
 ## 검증
 - `customerName`은 필수다.
 - `customerEmail`은 유효한 이메일 주소여야 한다.
+- `customerNote`는 선택이며, 입력되면 앞뒤 공백을 제거하고 500자 이하로 저장한다.
+- 공백만 있는 `customerNote`는 저장하지 않는다.
 - `status`는 `confirmed`, `rescheduled`, `cancelled` 중 하나여야 한다.
 - 취소된 예약은 표시 목적을 제외하고 읽기 전용이다.
 

@@ -25,6 +25,12 @@ export function BookingCompleteScreen({ booking, service, slot }: BookingComplet
       <p data-testid="booking-summary">
         {service?.name ?? "서비스"} / {slot?.startsAt ?? "선택한 시간"}
       </p>
+      {booking.customerNote ? (
+        <section data-testid="customer-note">
+          <h2>요청사항</h2>
+          <p>{booking.customerNote}</p>
+        </section>
+      ) : null}
       <Link href={`/bookings/${booking.id}`}>예약 관리</Link>
     </main>
   );

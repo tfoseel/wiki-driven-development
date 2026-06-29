@@ -26,7 +26,7 @@ verify:
 # 예약 완료
 
 ## 설명
-생성된 예약 요약과 예약 관리 링크를 보여준다.
+생성된 예약 요약, 요청사항, 예약 관리 링크를 보여준다.
 
 ## 조건
 - 유효한 `bookingId`가 필요하다.
@@ -41,6 +41,7 @@ verify:
 | 조건 | 표시 상태 | 시드 |
 |---|---|---|
 | 예약 있음 | 확인 요약 | seed-booking-complete-normal |
+| 요청사항 있음 | 확인 요약과 요청사항 | seed-booking-complete-with-note |
 | 예약 id 누락 | 오류와 서비스 목록 링크 | seed-booking-complete-missing-id |
 | 알 수 없는 예약 id | 오류와 지원 안내 | seed-booking-complete-unknown-id |
 
@@ -49,4 +50,5 @@ verify:
 
 ## 독립 QA
 - given seed-booking-complete-normal / when 예약 관리 선택 / then 상세 화면이 booking id를 받는다
+- given seed-booking-complete-with-note / when page loads / then 요청사항이 보인다
 - given seed-booking-complete-missing-id / when page loads / then 오류가 보인다

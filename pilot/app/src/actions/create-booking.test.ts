@@ -19,6 +19,21 @@ describe("createBooking", () => {
     expect(getSlot("slot-consultation-tomorrow-0900")?.status).toBe("booked");
   });
 
+  it("stores trimmed customer notes with the booking", async () => {
+    const result = await createBooking({
+      serviceId: "follow-up",
+      slotId: "slot-follow-up-tomorrow-1400",
+      customerName: "Jamie Lee",
+      customerEmail: "jamie@example.com",
+      customerNote: "  지난 상담 자료를 먼저 확인해 주세요.  "
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.booking.customerNote).toBe("지난 상담 자료를 먼저 확인해 주세요.");
+    expect(getBooking(result.booking.id)?.customerNote).toBe("지난 상담 자료를 먼저 확인해 주세요.");
+  });
+
   it("rejects duplicate submit after the slot is booked", async () => {
     await createBooking({
       serviceId: "consultation",

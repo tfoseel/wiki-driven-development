@@ -15,6 +15,20 @@ describe("BookingSchema", () => {
     ).toMatchObject({ status: "confirmed" });
   });
 
+  it("stores trimmed customer notes when provided", () => {
+    expect(
+      BookingSchema.parse({
+        id: "booking-1",
+        serviceId: "consultation",
+        slotId: "slot-1",
+        customerName: "Alex Kim",
+        customerEmail: "alex@example.com",
+        customerNote: "  조용한 상담실을 부탁드립니다.  ",
+        status: "confirmed"
+      })
+    ).toMatchObject({ customerNote: "조용한 상담실을 부탁드립니다." });
+  });
+
   it("rejects invalid emails", () => {
     expect(() =>
       BookingSchema.parse({

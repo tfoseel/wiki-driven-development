@@ -28,6 +28,12 @@ export function BookingDetailScreen({ booking, service, slot, canModify, policyR
       <p data-testid="booking-status">{booking.status}</p>
       <p>{service?.name ?? booking.serviceId}</p>
       <p>{slot?.startsAt ?? booking.slotId}</p>
+      {booking.customerNote ? (
+        <section data-testid="customer-note">
+          <h2>요청사항</h2>
+          <p>{booking.customerNote}</p>
+        </section>
+      ) : null}
       {inactive ? <p data-testid="inactive-booking">이 예약은 취소되었습니다.</p> : null}
       {!inactive && canModify ? (
         <div>

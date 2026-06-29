@@ -38,6 +38,7 @@ verify:
 ## 사용자 행동
 - 날짜와 시간 슬롯을 선택한다.
 - 이름과 이메일을 입력한다.
+- 필요한 요청사항을 선택적으로 입력한다.
 - 예약을 제출한다.
 
 ## 표시 상태와 예외
@@ -49,10 +50,12 @@ verify:
 | 유효하지 않은 서비스 | 복구 가능한 오류와 서비스 목록 링크 | seed-booking-new-invalid-service |
 | 제출 충돌 | 충돌 메시지와 갱신된 슬롯 | seed-booking-new-slot-conflict |
 | 검증 오류 | 필드 단위 오류 | seed-booking-new-invalid-contact |
+| 요청사항 포함 | 요청사항 textarea와 제출 뒤 저장 | seed-booking-new-with-note |
 
 ## 내비게이션과 전달
 - 생성 성공 뒤 [[pages/booking-complete]]로 `bookingId`를 전달한다.
 
 ## 독립 QA
 - given seed-booking-new-normal / when 유효한 폼 제출 / then 완료 화면이 booking id를 받는다
+- given seed-booking-new-with-note / when 요청사항 포함 제출 / then 완료 화면에 요청사항이 보인다
 - given seed-booking-new-slot-conflict / when 제출이 충돌 반환 / then 완료 화면으로 이동하지 않는다

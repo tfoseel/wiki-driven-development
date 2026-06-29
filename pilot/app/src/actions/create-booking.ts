@@ -2,13 +2,14 @@
 
 import { z } from "zod";
 import { addBooking, getService, getSlot, setSlotStatus } from "../lib/seed-store";
-import type { Booking } from "../models/booking";
+import { CustomerNoteSchema, type Booking } from "../models/booking";
 
 const CreateBookingInputSchema = z.object({
   serviceId: z.string().min(1),
   slotId: z.string().min(1),
   customerName: z.string().min(1),
-  customerEmail: z.email()
+  customerEmail: z.email(),
+  customerNote: CustomerNoteSchema
 });
 
 type CreateBookingInput = z.infer<typeof CreateBookingInputSchema>;

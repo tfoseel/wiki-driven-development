@@ -4,9 +4,10 @@ import type { Service } from "../../../../models/service";
 type BookingNewScreenProps = {
   service?: Service;
   slots: AvailabilitySlot[];
+  submitAction?: (formData: FormData) => Promise<void>;
 };
 
-export function BookingNewScreen({ service, slots }: BookingNewScreenProps) {
+export function BookingNewScreen({ service, slots, submitAction }: BookingNewScreenProps) {
   if (!service) {
     return (
       <main>
@@ -25,7 +26,7 @@ export function BookingNewScreen({ service, slots }: BookingNewScreenProps) {
       {availableSlots.length === 0 ? (
         <p data-testid="no-slots">이 서비스에 예약 가능한 시간이 없습니다.</p>
       ) : (
-        <form>
+        <form action={submitAction}>
           <label>
             시간
             <select name="slotId" data-testid="slot-select">
@@ -43,6 +44,10 @@ export function BookingNewScreen({ service, slots }: BookingNewScreenProps) {
           <label>
             이메일
             <input name="customerEmail" type="email" data-testid="customer-email" />
+          </label>
+          <label>
+            요청사항
+            <textarea name="customerNote" data-testid="customer-note" maxLength={500} />
           </label>
           <button type="submit">예약 생성</button>
         </form>
