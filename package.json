@@ -1,0 +1,14 @@
+{
+  "name": "wiki-driven-development",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "pilot/app"
+  ],
+  "scripts": {
+    "test": "npm run test -w @wdd/harness",
+    "wdd": "npm run wdd -w @wdd/harness --",
+    "build": "npm run build -w @wdd/harness"
+  }
+}
