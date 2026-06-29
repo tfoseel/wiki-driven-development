@@ -31,6 +31,7 @@ This pilot proves that a small but complete product can be driven from wiki page
 - [[actions/reschedule-booking]]
 - [[actions/cancel-booking]]
 - [[pages/service-list]]
+- [[pages/wiki-browser]]
 - [[pages/booking-new]]
 - [[pages/booking-detail]]
 - [[pages/booking-complete]]
