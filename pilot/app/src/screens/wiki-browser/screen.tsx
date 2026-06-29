@@ -157,11 +157,8 @@ function WikiMarkdown({ title, body }: { title: string; body: string }) {
         tableLines.push(lines[index]);
         index += 1;
       }
-      blocks.push(
-        <pre className="wiki-table" key={blocks.length}>
-          {tableLines.join("\n")}
-        </pre>
-      );
+      const table = parseMarkdownTable(tableLines);
+      blocks.push(table ? <MarkdownTable key={blocks.length} table={table} /> : <PreformattedTable key={blocks.length} lines={tableLines} />);
       continue;
     }
 
@@ -215,20 +212,89 @@ function WikiMarkdown({ title, body }: { title: string; body: string }) {
   return <div className="wiki-body">{blocks}</div>;
 }
 
+type MarkdownTableData = {
+  headers: string[];
+  rows: string[][];
+};
+
+function MarkdownTable({ table }: { table: MarkdownTableData }) {
+  return (
+    <div className="wiki-table-wrap">
+      <table className="wiki-table">
+        <thead>
+          <tr>
+            {table.headers.map((header, index) => (
+              <th key={`${header}-${index}`} scope="col">
+                {renderInlineWikiLinks(header)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {table.rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {table.headers.map((_, cellIndex) => (
+                <td key={cellIndex}>{renderInlineWikiLinks(row[cellIndex] ?? "")}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function PreformattedTable({ lines }: { lines: string[] }) {
+  return (
+    <pre className="wiki-table-fallback">
+      {lines.join("\n")}
+    </pre>
+  );
+}
+
+function parseMarkdownTable(lines: string[]): MarkdownTableData | undefined {
+  if (lines.length < 2) return undefined;
+  const rows = lines.map(splitMarkdownTableRow);
+  const [headers, separator, ...bodyRows] = rows;
+  if (!headers.length || !separator.every(isMarkdownTableSeparator)) return undefined;
+  return {
+    headers,
+    rows: bodyRows.filter((row) => row.some((cell) => cell.trim()))
+  };
+}
+
+function splitMarkdownTableRow(line: string): string[] {
+  return line
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/\|$/, "")
+    .split("|")
+    .map((cell) => cell.trim());
+}
+
+function isMarkdownTableSeparator(cell: string): boolean {
+  return /^:?-{3,}:?$/.test(cell.replace(/\s/g, ""));
+}
+
 function renderInlineWikiLinks(text: string): ReactNode[] {
   const parts: ReactNode[] = [];
-  const pattern = /\[\[([^\]]+)\]\]/g;
+  const pattern = /(`([^`]+)`|\[\[([^\]]+)\]\])/g;
   let lastIndex = 0;
   let match = pattern.exec(text);
 
   while (match) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
-    const id = match[1];
-    parts.push(
-      <Link href={wikiHref(id)} key={`${id}-${match.index}`}>
-        {id}
-      </Link>
-    );
+    const code = match[2];
+    const id = match[3];
+    if (code) {
+      parts.push(<code key={`${code}-${match.index}`}>{code}</code>);
+    } else if (id) {
+      parts.push(
+        <Link href={wikiHref(id)} key={`${id}-${match.index}`}>
+          {id}
+        </Link>
+      );
+    }
     lastIndex = match.index + match[0].length;
     match = pattern.exec(text);
   }

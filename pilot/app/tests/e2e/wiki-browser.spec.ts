@@ -26,6 +26,17 @@ test("nested wiki nodes show metadata and referenced code", async ({ page }) => 
   await expect(page.getByText("pilot/app/src/actions/cancel-booking.ts")).toBeVisible();
 });
 
+test("wiki markdown tables render as real tables", async ({ page }) => {
+  await page.goto("/wiki/entities/availability-slots");
+
+  await expect(page.getByRole("heading", { name: "예약 가능 슬롯" })).toBeVisible();
+  await expect(page.getByRole("table")).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "필드" })).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "타입" })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "serviceId" })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "이 슬롯에서 제공되는 서비스" })).toBeVisible();
+});
+
 test("home links to the pilot wiki", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "파일럿 위키 열기" }).click();
