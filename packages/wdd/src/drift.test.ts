@@ -18,10 +18,11 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">
   },
   dependsOn: [],
   implementedBy: [],
-  verifiedBy: [],
-  artifacts: [],
-  verifyCommands: [],
-  ...input
+    verifiedBy: [],
+    artifacts: [],
+    screenshots: [],
+    verifyCommands: [],
+    ...input
 });
 
 describe("findMissingCodeReferences", () => {
@@ -57,6 +58,36 @@ describe("findMissingCodeReferences", () => {
         nodeId: "actions/missing-action",
         field: "implemented_by",
         file: "app/src/actions/missing-action.ts"
+      }
+    ]);
+  });
+
+  it("reports missing screenshot evidence files", () => {
+    const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "wdd-repo-"));
+    tempDirs.push(repoRoot);
+    fs.mkdirSync(path.join(repoRoot, "wiki/assets/screenshots/pages"), { recursive: true });
+    fs.writeFileSync(path.join(repoRoot, "wiki/assets/screenshots/pages/existing-page.png"), "");
+
+    const index = buildWikiIndex([
+      node({
+        id: "pages/existing-page",
+        type: "page",
+        title: "Existing Page",
+        screenshots: [{ path: "wiki/assets/screenshots/pages/existing-page.png" }]
+      }),
+      node({
+        id: "pages/missing-page",
+        type: "page",
+        title: "Missing Page",
+        screenshots: [{ path: "wiki/assets/screenshots/pages/missing-page.png" }]
+      })
+    ]);
+
+    expect(findMissingCodeReferences(index, repoRoot)).toEqual([
+      {
+        nodeId: "pages/missing-page",
+        field: "screenshots",
+        file: "wiki/assets/screenshots/pages/missing-page.png"
       }
     ]);
   });

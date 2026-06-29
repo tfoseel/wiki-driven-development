@@ -52,6 +52,14 @@ test("wiki markdown tables render as real tables", async ({ page }) => {
   await expect(page.getByRole("columnheader", { name: "타입" })).toBeVisible();
 });
 
+test("page wiki nodes render QA screenshots", async ({ page }) => {
+  await page.goto("/wiki?type=page");
+  await page.locator(".wiki-node-link").first().click();
+
+  await expect(page.getByRole("heading", { name: "QA 화면" })).toBeVisible();
+  await expect(page.locator(".wiki-screenshot img")).toBeVisible();
+});
+
 test("home links to the wiki", async ({ page }) => {
   await page.goto("/");
   await page.locator('a[href="/wiki"]').click();

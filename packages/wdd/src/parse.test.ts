@@ -16,6 +16,10 @@ wdd_status:
 depends_on: [models/example-model]
 implemented_by: [app/src/actions/example-action.ts]
 verified_by: [app/tests/e2e/example-action.spec.ts]
+screenshots:
+  - path: wiki/assets/screenshots/pages/example-page.png
+    alt: Example page after QA
+    route: /examples/1
 ---
 # Example Action
 `
@@ -31,6 +35,13 @@ verified_by: [app/tests/e2e/example-action.spec.ts]
     expect(node.dependsOn).toEqual(["models/example-model"]);
     expect(node.implementedBy).toEqual(["app/src/actions/example-action.ts"]);
     expect(node.verifiedBy).toEqual(["app/tests/e2e/example-action.spec.ts"]);
+    expect(node.screenshots).toEqual([
+      {
+        path: "wiki/assets/screenshots/pages/example-page.png",
+        alt: "Example page after QA",
+        route: "/examples/1"
+      }
+    ]);
   });
 
   it("fails when id or type is missing", () => {

@@ -16,6 +16,10 @@ verified_by:
   - pilot/app/tests/e2e/service-list.spec.ts
 artifacts:
   - pilot/app/src/app/services/_components/service-list-screen.tsx
+screenshots:
+  - path: pilot/wiki/assets/screenshots/pages/service-list.png
+    alt: 서비스 목록 QA 통과 화면
+    route: /services
 verify:
   - npm run e2e -w pilot-booking-app -- service-list
 ---

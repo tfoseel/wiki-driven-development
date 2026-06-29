@@ -19,6 +19,7 @@ describe("buildWikiIndex", () => {
         implementedBy: [],
         verifiedBy: [],
         artifacts: [],
+        screenshots: [],
         verifyCommands: []
       },
       {
@@ -36,6 +37,7 @@ describe("buildWikiIndex", () => {
         implementedBy: [],
         verifiedBy: [],
         artifacts: [],
+        screenshots: [],
         verifyCommands: []
       }
     ]);
@@ -62,6 +64,7 @@ describe("buildWikiIndex", () => {
           implementedBy: [],
           verifiedBy: [],
           artifacts: [],
+          screenshots: [],
           verifyCommands: []
         }
       ])

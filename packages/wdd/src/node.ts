@@ -21,6 +21,13 @@ export interface WddStatus {
   note?: string;
 }
 
+export interface WikiScreenshot {
+  path: string;
+  alt?: string;
+  route?: string;
+  capturedAt?: string;
+}
+
 export interface WikiNode {
   id: string;
   type: WikiNodeType;
@@ -33,5 +40,6 @@ export interface WikiNode {
   implementedBy: string[];
   verifiedBy: string[];
   artifacts: string[];
+  screenshots: WikiScreenshot[];
   verifyCommands: string[];
 }

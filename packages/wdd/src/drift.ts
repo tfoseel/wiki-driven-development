@@ -3,7 +3,7 @@ import path from "node:path";
 import type { WikiIndex } from "./index-wiki.js";
 import type { WikiNode } from "./node.js";
 
-export type CodeReferenceField = "implemented_by" | "verified_by" | "artifacts";
+export type CodeReferenceField = "implemented_by" | "verified_by" | "artifacts" | "screenshots";
 
 export interface MissingCodeReference {
   nodeId: string;
@@ -14,7 +14,8 @@ export interface MissingCodeReference {
 const referencesFor = (node: WikiNode): Array<{ field: CodeReferenceField; file: string }> => [
   ...node.implementedBy.map((file) => ({ field: "implemented_by" as const, file })),
   ...node.verifiedBy.map((file) => ({ field: "verified_by" as const, file })),
-  ...node.artifacts.map((file) => ({ field: "artifacts" as const, file }))
+  ...node.artifacts.map((file) => ({ field: "artifacts" as const, file })),
+  ...node.screenshots.map((screenshot) => ({ field: "screenshots" as const, file: screenshot.path }))
 ];
 
 export function findMissingCodeReferences(index: WikiIndex, repoRoot: string): MissingCodeReference[] {

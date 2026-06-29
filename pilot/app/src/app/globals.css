@@ -263,6 +263,40 @@ select {
   max-width: 78ch;
 }
 
+.wiki-screenshots {
+  margin: 24px 0;
+}
+
+.wiki-screenshots h2 {
+  margin: 0 0 12px;
+}
+
+.wiki-screenshots > div {
+  display: grid;
+  gap: 16px;
+}
+
+.wiki-screenshot {
+  margin: 0;
+}
+
+.wiki-screenshot img {
+  display: block;
+  width: min(100%, 920px);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.wiki-screenshot figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .wiki-body h2,
 .wiki-body h3,
 .wiki-body h4 {

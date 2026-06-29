@@ -1,5 +1,6 @@
+import fs from "node:fs";
 import path from "node:path";
-import { loadWiki, type WddStatus, type WikiNode, type WikiNodeType } from "@wdd/harness";
+import { loadWiki, type WddStatus, type WikiNode, type WikiNodeType, type WikiScreenshot } from "@wdd/harness";
 
 const TYPE_ORDER: WikiNodeType[] = ["root", "entity", "model", "action", "page", "flow", "policy", "qa", "term", "design"];
 const TYPE_LABELS: Record<WikiNodeType, string> = {
@@ -36,6 +37,11 @@ export type WikiBrowserNode = {
   implementationRefs: string[];
   verificationRefs: string[];
   artifactRefs: string[];
+  screenshots: WikiBrowserScreenshot[];
+};
+
+export type WikiBrowserScreenshot = WikiScreenshot & {
+  src?: string;
 };
 
 function repoRoot(): string {
@@ -44,6 +50,18 @@ function repoRoot(): string {
 
 function wikiRoot(): string {
   return path.resolve(process.cwd(), "../wiki");
+}
+
+function screenshotSrc(screenshotPath: string): string | undefined {
+  const screenshotRoot = path.resolve(process.cwd(), "../wiki/assets/screenshots");
+  const prefix = "pilot/wiki/assets/screenshots/";
+  if (!screenshotPath.startsWith(prefix)) return undefined;
+  const relativePath = screenshotPath.slice(prefix.length);
+  const fullPath = path.resolve(screenshotRoot, relativePath);
+  if (!fullPath.startsWith(`${screenshotRoot}${path.sep}`)) return undefined;
+  if (!fs.existsSync(fullPath)) return undefined;
+  const buffer = fs.readFileSync(fullPath);
+  return `data:image/png;base64,${buffer.toString("base64")}`;
 }
 
 export function wikiHref(id: string): string {
@@ -70,7 +88,11 @@ function toBrowserNode(node: WikiNode): WikiBrowserNode {
     dependencies: node.dependsOn,
     implementationRefs: node.implementedBy,
     verificationRefs: node.verifiedBy,
-    artifactRefs: node.artifacts
+    artifactRefs: node.artifacts,
+    screenshots: node.screenshots.map((screenshot) => ({
+      ...screenshot,
+      src: screenshotSrc(screenshot.path)
+    }))
   };
 }
 

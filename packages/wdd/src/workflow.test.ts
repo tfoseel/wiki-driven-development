@@ -18,6 +18,7 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">
   implementedBy: [],
   verifiedBy: [],
   artifacts: [],
+  screenshots: [],
   verifyCommands: [],
   wddStatus: status({}),
   ...input

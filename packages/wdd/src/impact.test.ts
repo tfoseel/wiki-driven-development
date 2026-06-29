@@ -40,6 +40,7 @@ const node = (id: string, dependsOn: string[] = [], code: string[] = []): WikiNo
   implementedBy: code,
   verifiedBy: [],
   artifacts: [],
+  screenshots: [],
   verifyCommands: []
 });
 

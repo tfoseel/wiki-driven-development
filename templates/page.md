@@ -16,6 +16,7 @@ verified_by:
   - pilot/app/tests/e2e/example-page.spec.ts
 artifacts:
   - pilot/app/src/app/examples/[id]/_components/example-page-screen.tsx
+screenshots:
 verify:
   - npm run e2e -- example-page
 ---

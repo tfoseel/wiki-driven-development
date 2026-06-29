@@ -18,6 +18,10 @@ verified_by:
   - pilot/app/tests/e2e/create-booking.spec.ts
 artifacts:
   - pilot/app/src/app/bookings/new/_components/booking-new-screen.tsx
+screenshots:
+  - path: pilot/wiki/assets/screenshots/pages/booking-new.png
+    alt: 새 예약 QA 통과 화면
+    route: /bookings/new?serviceId=consultation
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---

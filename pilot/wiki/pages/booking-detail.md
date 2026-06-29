@@ -20,6 +20,10 @@ verified_by:
   - pilot/app/tests/e2e/cancel-booking.spec.ts
 artifacts:
   - pilot/app/src/app/bookings/[id]/_components/booking-detail-screen.tsx
+screenshots:
+  - path: pilot/wiki/assets/screenshots/pages/booking-detail.png
+    alt: 예약 상세 QA 통과 화면
+    route: /bookings/booking-confirmed-001
 verify:
   - npm run e2e -w pilot-booking-app -- reschedule-booking
   - npm run e2e -w pilot-booking-app -- cancel-booking

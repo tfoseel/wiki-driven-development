@@ -1,5 +1,5 @@
 import matter from "gray-matter";
-import type { WddCodeStatus, WddStatus, WddVerificationStatus, WddWorkflowPhase, WikiNode, WikiNodeType } from "./node.js";
+import type { WddCodeStatus, WddStatus, WddVerificationStatus, WddWorkflowPhase, WikiNode, WikiNodeType, WikiScreenshot } from "./node.js";
 
 const NODE_TYPES = new Set<WikiNodeType>([
   "entity",
@@ -56,6 +56,23 @@ function parseWddStatus(filePath: string, value: unknown): WddStatus {
   };
 }
 
+function parseScreenshots(filePath: string, value: unknown): WikiScreenshot[] {
+  if (!value) return [];
+  const items = Array.isArray(value) ? value : [value];
+
+  return items.map((item) => {
+    if (typeof item === "string") return { path: item };
+    const screenshot = asRecord(item);
+    if (!screenshot?.path) throw new Error(`${filePath}: screenshot entry missing path`);
+    return {
+      path: String(screenshot.path),
+      alt: screenshot.alt ? String(screenshot.alt) : undefined,
+      route: screenshot.route ? String(screenshot.route) : undefined,
+      capturedAt: screenshot.captured_at ? String(screenshot.captured_at) : screenshot.capturedAt ? String(screenshot.capturedAt) : undefined
+    };
+  });
+}
+
 export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
   const parsed = matter(raw);
   const data = parsed.data;
@@ -76,6 +93,7 @@ export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
     implementedBy: asList(data.implemented_by),
     verifiedBy: asList(data.verified_by),
     artifacts: asList(data.artifacts),
+    screenshots: parseScreenshots(filePath, data.screenshots),
     verifyCommands: asList(data.verify)
   };
 }

@@ -16,6 +16,10 @@ verified_by:
   - pilot/app/tests/e2e/create-booking.spec.ts
 artifacts:
   - pilot/app/src/app/bookings/complete/_components/booking-complete-screen.tsx
+screenshots:
+  - path: pilot/wiki/assets/screenshots/pages/booking-complete.png
+    alt: 예약 완료 QA 통과 화면
+    route: /bookings/complete?bookingId=booking-confirmed-001
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---

@@ -97,6 +97,8 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
           <WorkflowStatus status={current.wddStatus} />
         </div>
 
+        <ScreenshotGallery screenshots={current.screenshots} />
+
         <WikiMarkdown title={current.title} body={current.body} />
 
         <div className="wiki-refs">
@@ -105,6 +107,27 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
         </div>
       </article>
     </main>
+  );
+}
+
+function ScreenshotGallery({ screenshots }: { screenshots: WikiBrowserNode["screenshots"] }) {
+  if (!screenshots.length) return null;
+
+  return (
+    <section className="wiki-screenshots" aria-label="QA 화면">
+      <h2>QA 화면</h2>
+      <div>
+        {screenshots.map((screenshot) => (
+          <figure className="wiki-screenshot" key={screenshot.path}>
+            {screenshot.src ? <img src={screenshot.src} alt={screenshot.alt ?? screenshot.path} /> : <p className="wiki-empty">이미지 파일 없음: {screenshot.path}</p>}
+            <figcaption>
+              <code>{screenshot.path}</code>
+              {screenshot.route ? <span>{screenshot.route}</span> : null}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
   );
 }
 

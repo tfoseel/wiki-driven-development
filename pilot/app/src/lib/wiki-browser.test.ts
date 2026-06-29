@@ -57,4 +57,13 @@ describe("wiki browser", () => {
     expect(nodeWithRefs?.implementationRefs.length).toBeGreaterThan(0);
     expect(nodeWithRefs?.verificationRefs.length).toBeGreaterThan(0);
   });
+
+  it("exposes QA screenshots declared by page nodes", () => {
+    const pageNode = filterWikiNodesByType(listWikiNodes(), "page").find((node) => node.screenshots.length);
+
+    expect(pageNode?.screenshots[0]).toMatchObject({
+      path: expect.stringContaining("wiki/assets/screenshots/pages/"),
+      src: expect.stringContaining("data:image/png;base64,")
+    });
+  });
 });
