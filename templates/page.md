@@ -17,6 +17,9 @@ verified_by:
 artifacts:
   - pilot/app/src/app/examples/[id]/_components/example-page-screen.tsx
 screenshots:
+  - path: pilot/wiki/assets/screenshots/pages/example-page.png
+    alt: Example page after QA passes
+    route: /examples/example-id
 verify:
   - npm run e2e -- example-page
 ---
@@ -46,6 +49,8 @@ Describe what the user sees and why this page exists.
 
 ## Independent QA
 **Preconditions:** State the minimum account, data, and policy context.
+
+**QA screenshot:** After E2E passes, refresh every `screenshots.route` capture so the page wiki shows the verified screen, not a stale mock.
 
 **Seeds:**
 - seed-example-normal:

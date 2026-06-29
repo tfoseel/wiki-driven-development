@@ -9,3 +9,4 @@ export * from "./session.js";
 export * from "./drift.js";
 export * from "./verify.js";
 export * from "./workflow.js";
+export * from "./screenshots.js";

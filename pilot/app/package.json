@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "prewiki:screenshots": "npm run build -w @wdd/harness",
+    "wiki:screenshots": "node scripts/capture-wiki-screenshots.mjs",
+    "qa": "npm run e2e && npm run wiki:screenshots"
   },
   "dependencies": {
     "@wdd/harness": "0.1.0",

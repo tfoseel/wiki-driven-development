@@ -5,6 +5,7 @@ import { findMissingCodeReferences } from "./drift.js";
 import { getVerifyCommands } from "./verify.js";
 import { resolveCliPath } from "./cli-paths.js";
 import { findWorkflowAttention, formatWorkflowStatus } from "./workflow.js";
+import { collectScreenshotTargets } from "./screenshots.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -15,7 +16,8 @@ if (command === "help") {
   session <wikiRoot> <nodeId>
   drift <wikiRoot>
   verify <wikiRoot> <nodeId>
-  status <wikiRoot> [nodeId]`);
+  status <wikiRoot> [nodeId]
+  screenshots <wikiRoot> [--json]`);
 } else if (command === "index") {
   const [wikiRoot] = args;
   if (!wikiRoot) throw new Error("Usage: wdd index <wikiRoot>");
@@ -66,6 +68,18 @@ if (command === "help") {
   const index = loadWiki(resolveCliPath(wikiRoot));
   console.log(formatWorkflowStatus(index, nodeId));
   if (findWorkflowAttention(index, nodeId).length) process.exitCode = 1;
+} else if (command === "screenshots") {
+  const [wikiRoot, format] = args;
+  if (!wikiRoot) throw new Error("Usage: wdd screenshots <wikiRoot> [--json]");
+  const targets = collectScreenshotTargets(loadWiki(resolveCliPath(wikiRoot)));
+  if (format === "--json") {
+    console.log(JSON.stringify(targets, null, 2));
+  } else if (!targets.length) {
+    console.log("No screenshot targets declared.");
+  } else {
+    console.log("screenshot targets:");
+    for (const target of targets) console.log(`  - ${target.nodeId} ${target.route} -> ${target.path}`);
+  }
 } else {
   console.error(`Unknown command: ${command}`);
   process.exitCode = 1;
