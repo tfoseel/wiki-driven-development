@@ -3,6 +3,10 @@ id: models/example-model
 type: model
 title: Example Model
 summary: Domain shape and validation rules.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - entities/example-entity
 implemented_by:

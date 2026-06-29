@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import type { WddStatus } from "@wdd/harness";
 import {
   filterWikiNodesByType,
   listWikiTypeTabs,
@@ -93,6 +94,7 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
               <p className="wiki-empty">없음</p>
             )}
           </section>
+          <WorkflowStatus status={current.wddStatus} />
         </div>
 
         <WikiMarkdown title={current.title} body={current.body} />
@@ -103,6 +105,39 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
         </div>
       </article>
     </main>
+  );
+}
+
+const PHASE_LABELS: Record<WddStatus["phase"], string> = {
+  wiki: "위키 수정 중",
+  coding: "코딩 필요",
+  verification: "검증 필요",
+  verified: "검증 완료",
+  blocked: "차단됨"
+};
+
+const CODE_LABELS: Record<WddStatus["code"], string> = {
+  pending: "코드 미반영",
+  reflected: "코드 반영됨",
+  not_required: "코드 불필요"
+};
+
+const VERIFICATION_LABELS: Record<WddStatus["verification"], string> = {
+  pending: "검증 대기",
+  passed: "검증 통과",
+  failed: "검증 실패",
+  not_required: "검증 불필요"
+};
+
+function WorkflowStatus({ status }: { status: WddStatus }) {
+  return (
+    <section className={`wiki-status wiki-status-${status.phase}`}>
+      <h2>작업 정합성</h2>
+      <p>현재 phase: {PHASE_LABELS[status.phase]}</p>
+      <p>{CODE_LABELS[status.code]}</p>
+      <p>{VERIFICATION_LABELS[status.verification]}</p>
+      {status.note ? <p>{status.note}</p> : null}
+    </section>
   );
 }
 

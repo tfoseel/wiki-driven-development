@@ -3,6 +3,10 @@ id: pages/booking-complete
 type: page
 title: 예약 완료
 summary: 예약 생성 뒤 보여주는 확인 화면.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/booking
   - design/design-system

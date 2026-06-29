@@ -1,6 +1,7 @@
 import { calculateImpact } from "./impact.js";
 import type { WikiIndex } from "./index-wiki.js";
 import type { WikiNode } from "./node.js";
+import { nextWorkflowMessage } from "./workflow.js";
 
 const nodeLine = (node: WikiNode): string => `- \`${node.id}\` — ${node.title}`;
 
@@ -21,14 +22,22 @@ export function formatSessionContext(index: WikiIndex, nodeId: string): string {
     "",
     "## Cadence",
     "",
-    "1. Edit the wiki first.",
-    "2. Run impact and read impacted wiki nodes.",
-    "3. Edit only referenced or owned code files.",
-    "4. Run verify and drift before claiming completion.",
+    "1. Edit the wiki first, including impacted wiki nodes, then mark changed nodes as phase: coding.",
+    "2. Run impact and read impacted wiki nodes before touching code.",
+    "3. Edit only referenced or owned code files, then mark changed nodes as phase: verification.",
+    "4. Run verify, drift, and status before marking nodes as phase: verified.",
     "",
     "## Selected Node",
     "",
     nodeLine(node),
+    "",
+    "## Workflow Status",
+    "",
+    `- phase: ${node.wddStatus.phase}`,
+    `- code: ${node.wddStatus.code}`,
+    `- verification: ${node.wddStatus.verification}`,
+    ...(node.wddStatus.note ? [`- note: ${node.wddStatus.note}`] : []),
+    `- ${nextWorkflowMessage(node)}`,
     "",
     "## Upstream Dependencies",
     "",

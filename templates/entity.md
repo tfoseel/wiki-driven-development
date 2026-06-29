@@ -3,6 +3,10 @@ id: entities/example-entity
 type: entity
 title: Example Entity
 summary: Persistent domain data owned by the product.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - policies/example-policy
 implemented_by:

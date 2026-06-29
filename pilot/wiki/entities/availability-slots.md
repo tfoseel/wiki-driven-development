@@ -3,6 +3,10 @@ id: entities/availability-slots
 type: entity
 title: 예약 가능 슬롯
 summary: 고객이 예약할 수 있는 시간 슬롯.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - entities/services
 implemented_by:

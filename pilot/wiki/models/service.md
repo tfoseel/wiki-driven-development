@@ -3,6 +3,10 @@ id: models/service
 type: model
 title: 서비스 모델
 summary: 예약 가능한 서비스의 도메인 검증.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - entities/services
 implemented_by:

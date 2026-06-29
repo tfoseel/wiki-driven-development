@@ -3,6 +3,10 @@ id: entities/services
 type: entity
 title: 서비스
 summary: 고객이 예약할 수 있는 상담 서비스.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
 implemented_by:
   - pilot/app/src/lib/seed-store.ts

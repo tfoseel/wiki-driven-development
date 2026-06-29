@@ -3,6 +3,10 @@ id: pages/example-page
 type: page
 title: Example Page
 summary: User-facing route and visible states.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - models/example-model
   - actions/example-action
@@ -11,7 +15,7 @@ implemented_by:
 verified_by:
   - pilot/app/tests/e2e/example-page.spec.ts
 artifacts:
-  - pilot/app/src/screens/example-page/screen.tsx
+  - pilot/app/src/app/examples/[id]/_components/example-page-screen.tsx
 verify:
   - npm run e2e -- example-page
 ---

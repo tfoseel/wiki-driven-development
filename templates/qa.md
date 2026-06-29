@@ -3,6 +3,10 @@ id: qa/example-e2e
 type: qa
 title: Example E2E
 summary: Executable product scenarios derived from wiki behavior.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - pages/example-page
   - actions/example-action

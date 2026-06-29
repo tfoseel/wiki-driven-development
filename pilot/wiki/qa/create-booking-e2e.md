@@ -3,6 +3,10 @@ id: qa/create-booking-e2e
 type: qa
 title: 예약 생성 E2E
 summary: 예약 생성에 대한 end-to-end 시나리오.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - flows/create-booking-flow
   - pages/service-list

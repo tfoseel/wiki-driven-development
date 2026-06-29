@@ -3,6 +3,10 @@ id: actions/create-booking
 type: action
 title: 예약 생성
 summary: 예약 가능한 슬롯을 확보하고 확정 예약을 만든다.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/booking
   - models/service

@@ -3,6 +3,10 @@ id: flows/example-flow
 type: flow
 title: Example Flow
 summary: Multi-page user journey and handoff contract.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - pages/example-page
   - pages/other-page

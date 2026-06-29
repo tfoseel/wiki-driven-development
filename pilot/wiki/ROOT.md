@@ -3,6 +3,10 @@ id: ROOT
 type: root
 title: 미니 예약 파일럿
 summary: WDD 하네스를 실제로 검증하기 위한 작은 상담 예약 앱.
+wdd_status:
+  phase: verified
+  code: not_required
+  verification: not_required
 depends_on:
 implemented_by:
 verified_by:

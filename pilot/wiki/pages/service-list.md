@@ -3,6 +3,10 @@ id: pages/service-list
 type: page
 title: 서비스 목록
 summary: 고객이 예약할 서비스를 고르는 진입 화면.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/service
   - design/design-system

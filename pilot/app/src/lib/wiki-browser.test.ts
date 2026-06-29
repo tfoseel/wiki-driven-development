@@ -26,7 +26,12 @@ describe("wiki browser", () => {
   it("resolves nested wiki route slugs to node ids", () => {
     expect(getWikiNodeBySlug(["actions", "cancel-booking"])).toMatchObject({
       id: "actions/cancel-booking",
-      title: "예약 취소"
+      title: "예약 취소",
+      wddStatus: {
+        phase: "verified",
+        code: "reflected",
+        verification: "passed"
+      }
     });
   });
 

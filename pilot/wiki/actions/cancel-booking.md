@@ -3,6 +3,10 @@ id: actions/cancel-booking
 type: action
 title: 예약 취소
 summary: 정책에 따라 활성 예약을 취소하고 슬롯을 해제한다.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/booking
   - models/availability-slot

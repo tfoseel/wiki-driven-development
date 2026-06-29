@@ -3,6 +3,10 @@ id: actions/reschedule-booking
 type: action
 title: 예약 일정 변경
 summary: 활성 예약을 다른 예약 가능 슬롯으로 옮긴다.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/booking
   - models/availability-slot

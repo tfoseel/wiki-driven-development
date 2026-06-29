@@ -3,6 +3,10 @@ id: flows/create-booking-flow
 type: flow
 title: 예약 생성 플로우
 summary: 서비스 선택부터 예약 확인까지의 흐름.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - pages/service-list
   - pages/booking-new

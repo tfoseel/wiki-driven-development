@@ -1,5 +1,5 @@
 import path from "node:path";
-import { loadWiki, type WikiNode, type WikiNodeType } from "@wdd/harness";
+import { loadWiki, type WddStatus, type WikiNode, type WikiNodeType } from "@wdd/harness";
 
 const TYPE_ORDER: WikiNodeType[] = ["root", "entity", "model", "action", "page", "flow", "policy", "qa", "term", "design"];
 const TYPE_LABELS: Record<WikiNodeType, string> = {
@@ -31,6 +31,7 @@ export type WikiBrowserNode = {
   body: string;
   href: string;
   filePath: string;
+  wddStatus: WddStatus;
   dependencies: string[];
   implementationRefs: string[];
   verificationRefs: string[];
@@ -65,6 +66,7 @@ function toBrowserNode(node: WikiNode): WikiBrowserNode {
     body: node.body.trim(),
     href: wikiHref(node.id),
     filePath: path.relative(repoRoot(), node.filePath),
+    wddStatus: node.wddStatus,
     dependencies: node.dependsOn,
     implementationRefs: node.implementedBy,
     verificationRefs: node.verifiedBy,

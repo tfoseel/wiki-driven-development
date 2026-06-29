@@ -3,6 +3,10 @@ id: design/design-system
 type: design
 title: 디자인 시스템
 summary: 예약 앱의 제품 UI 토큰, 화면 패턴, 예약 상태 표현을 정의한다.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - ROOT
 implemented_by:

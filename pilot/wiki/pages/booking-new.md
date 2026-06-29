@@ -3,6 +3,10 @@ id: pages/booking-new
 type: page
 title: 새 예약
 summary: 슬롯을 선택하고 고객 정보를 입력한다.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/service
   - models/availability-slot

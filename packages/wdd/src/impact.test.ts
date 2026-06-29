@@ -31,6 +31,11 @@ const node = (id: string, dependsOn: string[] = [], code: string[] = []): WikiNo
   title: id,
   filePath: `${id}.md`,
   body: "",
+  wddStatus: {
+    phase: "verified",
+    code: code.length ? "reflected" : "not_required",
+    verification: "passed"
+  },
   dependsOn,
   implementedBy: code,
   verifiedBy: [],

@@ -6,6 +6,11 @@ import { getVerifyCommands } from "./verify.js";
 const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">): WikiNode => ({
   filePath: `${input.id}.md`,
   body: "",
+  wddStatus: {
+    phase: "verified",
+    code: "reflected",
+    verification: "passed"
+  },
   dependsOn: [],
   implementedBy: [],
   verifiedBy: [],

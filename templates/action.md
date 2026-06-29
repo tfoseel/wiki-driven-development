@@ -3,6 +3,10 @@ id: actions/example-action
 type: action
 title: Example Action
 summary: A user or system mutation contract.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - models/example-model
   - entities/example-entity

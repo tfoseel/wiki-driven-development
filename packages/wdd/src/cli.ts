@@ -4,6 +4,7 @@ import { formatSessionContext } from "./session.js";
 import { findMissingCodeReferences } from "./drift.js";
 import { getVerifyCommands } from "./verify.js";
 import { resolveCliPath } from "./cli-paths.js";
+import { findWorkflowAttention, formatWorkflowStatus } from "./workflow.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -13,7 +14,8 @@ if (command === "help") {
   impact <wikiRoot> <nodeId>
   session <wikiRoot> <nodeId>
   drift <wikiRoot>
-  verify <wikiRoot> <nodeId>`);
+  verify <wikiRoot> <nodeId>
+  status <wikiRoot> [nodeId]`);
 } else if (command === "index") {
   const [wikiRoot] = args;
   if (!wikiRoot) throw new Error("Usage: wdd index <wikiRoot>");
@@ -58,6 +60,12 @@ if (command === "help") {
     console.log("verify commands:");
     for (const verifyCommand of commands) console.log(`  - ${verifyCommand}`);
   }
+} else if (command === "status") {
+  const [wikiRoot, nodeId] = args;
+  if (!wikiRoot) throw new Error("Usage: wdd status <wikiRoot> [nodeId]");
+  const index = loadWiki(resolveCliPath(wikiRoot));
+  console.log(formatWorkflowStatus(index, nodeId));
+  if (findWorkflowAttention(index, nodeId).length) process.exitCode = 1;
 } else {
   console.error(`Unknown command: ${command}`);
   process.exitCode = 1;

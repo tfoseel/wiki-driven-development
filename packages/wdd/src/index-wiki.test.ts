@@ -10,6 +10,11 @@ describe("buildWikiIndex", () => {
         title: "Booking",
         filePath: "models/booking.md",
         body: "",
+        wddStatus: {
+          phase: "verified",
+          code: "reflected",
+          verification: "passed"
+        },
         dependsOn: ["entities/bookings"],
         implementedBy: [],
         verifiedBy: [],
@@ -22,6 +27,11 @@ describe("buildWikiIndex", () => {
         title: "Bookings",
         filePath: "entities/bookings.md",
         body: "",
+        wddStatus: {
+          phase: "verified",
+          code: "reflected",
+          verification: "passed"
+        },
         dependsOn: [],
         implementedBy: [],
         verifiedBy: [],
@@ -43,6 +53,11 @@ describe("buildWikiIndex", () => {
           title: "Cancel",
           filePath: "actions/cancel-booking.md",
           body: "",
+          wddStatus: {
+            phase: "verified",
+            code: "reflected",
+            verification: "passed"
+          },
           dependsOn: ["models/missing"],
           implementedBy: [],
           verifiedBy: [],

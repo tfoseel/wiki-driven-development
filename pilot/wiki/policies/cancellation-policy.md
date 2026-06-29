@@ -3,6 +3,10 @@ id: policies/cancellation-policy
 type: policy
 title: 취소 정책
 summary: 예약은 슬롯 시작 24시간 전까지 취소하거나 일정을 변경할 수 있다.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/booking
   - models/availability-slot

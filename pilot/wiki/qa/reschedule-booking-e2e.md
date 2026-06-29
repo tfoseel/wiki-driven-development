@@ -3,6 +3,10 @@ id: qa/reschedule-booking-e2e
 type: qa
 title: 예약 일정 변경 E2E
 summary: 예약 일정 변경에 대한 end-to-end 시나리오.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - flows/manage-booking-flow
   - pages/booking-detail

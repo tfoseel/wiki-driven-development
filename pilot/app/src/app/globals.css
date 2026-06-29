@@ -220,7 +220,7 @@ select {
 .wiki-meta {
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 20px 0;
 }
 
@@ -234,6 +234,29 @@ select {
 .wiki-table,
 .wiki-table-fallback {
   overflow-wrap: anywhere;
+}
+
+.wiki-status {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+}
+
+.wiki-status p {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.wiki-status-verified p:first-of-type {
+  color: var(--accent);
+  font-weight: 750;
+}
+
+.wiki-status-coding,
+.wiki-status-verification,
+.wiki-status-wiki,
+.wiki-status-blocked {
+  border-left-color: #8a3f2b;
 }
 
 .wiki-body {

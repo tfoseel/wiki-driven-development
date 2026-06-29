@@ -3,6 +3,10 @@ id: flows/manage-booking-flow
 type: flow
 title: 예약 관리 플로우
 summary: 기존 예약의 일정 변경 또는 취소 흐름.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - pages/booking-detail
   - actions/reschedule-booking

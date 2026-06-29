@@ -3,6 +3,10 @@ id: models/availability-slot
 type: model
 title: 예약 가능 슬롯 모델
 summary: 예약 가능한 시간 슬롯의 도메인 검증.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - entities/availability-slots
   - models/service

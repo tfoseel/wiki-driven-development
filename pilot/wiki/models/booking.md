@@ -3,6 +3,10 @@ id: models/booking
 type: model
 title: 예약 모델
 summary: 예약의 도메인 검증과 상태 모델.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - entities/bookings
   - models/service

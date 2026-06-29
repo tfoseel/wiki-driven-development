@@ -3,6 +3,10 @@ id: policies/example-policy
 type: policy
 title: Example Policy
 summary: Cross-cutting business rule.
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - terms/example-term
 implemented_by:

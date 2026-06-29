@@ -9,6 +9,10 @@ describe("parseWikiMarkdown", () => {
 id: actions/cancel-booking
 type: action
 title: Cancel Booking
+wdd_status:
+  phase: coding
+  code: pending
+  verification: pending
 depends_on: [models/booking]
 implemented_by: [pilot/app/src/actions/cancel-booking.ts]
 verified_by: [pilot/app/tests/e2e/cancel-booking.spec.ts]
@@ -19,6 +23,11 @@ verified_by: [pilot/app/tests/e2e/cancel-booking.spec.ts]
 
     expect(node.id).toBe("actions/cancel-booking");
     expect(node.type).toBe("action");
+    expect(node.wddStatus).toEqual({
+      phase: "coding",
+      code: "pending",
+      verification: "pending"
+    });
     expect(node.dependsOn).toEqual(["models/booking"]);
     expect(node.implementedBy).toEqual(["pilot/app/src/actions/cancel-booking.ts"]);
     expect(node.verifiedBy).toEqual(["pilot/app/tests/e2e/cancel-booking.spec.ts"]);

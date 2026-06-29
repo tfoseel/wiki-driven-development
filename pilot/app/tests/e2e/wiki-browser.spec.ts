@@ -46,6 +46,10 @@ test("nested wiki nodes show metadata and referenced code", async ({ page }) => 
   await page.goto("/wiki/actions/cancel-booking");
 
   await expect(page.getByRole("heading", { name: "예약 취소" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "작업 정합성" })).toBeVisible();
+  await expect(page.getByText("현재 phase: 검증 완료")).toBeVisible();
+  await expect(page.getByText("코드 반영됨")).toBeVisible();
+  await expect(page.getByText("검증 통과")).toBeVisible();
   await expect(page.getByText("확정 또는 일정 변경된 예약을 취소하고 해당 슬롯을 다시 예약 가능 상태로 만든다.")).toBeVisible();
   await expect(page.getByText("pilot/app/src/actions/cancel-booking.ts")).toBeVisible();
 });

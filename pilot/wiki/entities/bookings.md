@@ -3,6 +3,10 @@ id: entities/bookings
 type: entity
 title: 예약
 summary: 서비스 슬롯에 대한 고객 예약.
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - entities/services
   - entities/availability-slots
