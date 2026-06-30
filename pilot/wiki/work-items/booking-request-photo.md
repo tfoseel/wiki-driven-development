@@ -4,9 +4,9 @@ type: work_item
 title: 예약 요청사항 사진 첨부
 summary: 새 예약 요청사항에 시연용 사진 1장을 첨부하고 완료와 상세 화면에서 조회한다.
 work_status:
-  phase: product_wiki_patch
-  digest: pending
-  verification: pending
+  phase: completed
+  digest: reflected
+  verification: passed
 patches:
   - target: entities/bookings
     status: applied

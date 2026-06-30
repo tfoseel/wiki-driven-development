@@ -4,9 +4,9 @@ type: page
 title: 예약 상세
 summary: 기존 예약을 관리한다.
 wdd_status:
-  phase: coding
-  code: pending
-  verification: pending
+  phase: verified
+  code: reflected
+  verification: passed
 depends_on:
   - models/booking
   - actions/reschedule-booking
