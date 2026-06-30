@@ -67,4 +67,24 @@ describe("checkReady", () => {
       message: "Page screenshots must declare route: wiki/assets/screenshots/pages/example.png"
     });
   });
+
+  it("fails when a reflected page has no screenshot evidence", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "pages/reflected-without-screenshot",
+        type: "page",
+        wddStatus: { phase: "verified", code: "reflected", verification: "passed" },
+        screenshots: []
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "screenshot",
+      nodeId: "pages/reflected-without-screenshot",
+      message: "Reflected page nodes must declare at least one screenshot."
+    });
+  });
 });

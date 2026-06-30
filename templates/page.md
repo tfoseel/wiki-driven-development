@@ -50,7 +50,7 @@ Describe what the user sees and why this page exists.
 ## Independent QA
 **Preconditions:** State the minimum account, data, and policy context.
 
-**QA screenshot:** After E2E passes, refresh every `screenshots.route` capture so the page wiki shows the verified screen, not a stale mock.
+**QA screenshot:** Once this page is `code: reflected` or `verification: passed`, keep at least one route-backed screenshot here. After E2E passes, refresh every `screenshots.route` capture so the page wiki shows the verified screen, not a stale mock.
 
 **Seeds:**
 - seed-example-normal:

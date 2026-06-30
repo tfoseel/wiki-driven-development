@@ -33,7 +33,7 @@ Do not leave a wiki change as verified when code or verification is still pendin
 
 ## Visual Evidence
 
-- Page nodes may declare `screenshots`.
+- Reflected page nodes must declare `screenshots`.
 - A screenshot is QA evidence, not decoration.
 - After E2E passes, refresh page screenshots through the project QA command.
 - `wdd drift` and `wdd ready` should catch missing screenshot files.

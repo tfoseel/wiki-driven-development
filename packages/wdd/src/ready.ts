@@ -55,6 +55,14 @@ export function checkReady(
     }
 
     if (node.type === "page") {
+      if ((node.wddStatus.code === "reflected" || node.wddStatus.verification === "passed") && !node.screenshots.length) {
+        issues.push({
+          kind: "screenshot",
+          nodeId: node.id,
+          message: "Reflected page nodes must declare at least one screenshot."
+        });
+      }
+
       for (const screenshot of node.screenshots) {
         if (!screenshot.route) {
           issues.push({

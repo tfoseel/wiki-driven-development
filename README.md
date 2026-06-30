@@ -37,6 +37,8 @@ Product users should not need to learn `wdd` commands. Their interface is the wi
 
 The `wdd` CLI exists for agents, developers, and CI. Agents run the commands, then reflect the result back into wiki metadata and screenshots.
 
+For `page` nodes, screenshots are required once the node is reflected in code or verified. A reflected screen without a screenshot is not ready, because the wiki reader cannot confirm what actually shipped.
+
 ## Node Types
 
 - `entity`: persistence contract, columns, lifecycle, constraints.
@@ -100,7 +102,7 @@ These commands are not the product-user interface. They are the harness controls
 1. Copy the templates under `templates/` into your project's wiki.
 2. Create `wdd.config.json` with your `wikiRoot`, `repoRoot`, and `appRoot`.
 3. Keep project code paths in wiki frontmatter using real paths for that project.
-4. Add screenshots to page nodes only after QA passes.
+4. Add screenshots to reflected page nodes after QA passes; reflected page nodes without screenshots fail the ready gate.
 5. Teach agents through `AGENTS.md` to obey the wiki → coding → verification cadence.
 
 The harness can guide and verify the workflow, but the agent still writes product code by reading the wiki.
