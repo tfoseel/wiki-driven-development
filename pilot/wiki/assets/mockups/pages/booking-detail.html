@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>예약 상세 목업</title>
+    <style>
+      body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #f5f3ed; color: #18211f; }
+      main { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+      .panel { background: #fffefa; border: 1px solid #ccd7d1; border-radius: 8px; padding: 24px; }
+      .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .badge { background: #e7f2ef; color: #08605f; border-radius: 999px; padding: 6px 10px; font-weight: 800; }
+      h1 { margin: 10px 0 16px; font-size: 40px; }
+      dl { display: grid; grid-template-columns: 120px 1fr; gap: 12px; }
+      dt { color: #66736f; }
+      dd { margin: 0; font-weight: 700; }
+      button { min-height: 44px; border-radius: 8px; border: 1px solid #08605f; padding: 0 14px; font-weight: 800; }
+      .primary { background: #08605f; color: white; }
+    </style>
+  </head>
+  <body>
+    <main class="panel">
+      <div class="row"><span class="badge">confirmed</span><div><button>일정 변경</button> <button class="primary">예약 취소</button></div></div>
+      <h1>예약 상세</h1>
+      <dl>
+        <dt>서비스</dt><dd>초기 상담</dd>
+        <dt>시간</dt><dd>2026-07-01T11:00:00+09:00</dd>
+        <dt>요청사항</dt><dd>자료 검토 후 상담을 진행해 주세요.</dd>
+      </dl>
+    </main>
+  </body>
+</html>

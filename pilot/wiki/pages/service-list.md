@@ -20,6 +20,10 @@ screenshots:
   - path: pilot/wiki/assets/screenshots/pages/service-list.png
     alt: 서비스 목록 QA 통과 화면
     route: /services
+mockups:
+  - path: pilot/wiki/assets/mockups/pages/service-list.html
+    alt: 서비스 목록 기획 목업
+    status: implemented
 verify:
   - npm run e2e -w pilot-booking-app -- service-list
 ---
@@ -31,10 +35,18 @@ verify:
 ## 조건
 - 비활성 서비스는 신규 예약 진입에서 숨긴다.
 - 활성 서비스가 없으면 빈 상태를 보여준다.
+- 화면 상단에는 예약 흐름의 시작점임을 설명하는 `app-hero` 컨텍스트 블록이 있어야 한다.
+- 활성 서비스 영역은 `service-grid`로 구분되어야 한다.
+- 각 서비스 카드는 이름, 소요 시간, 설명, `예약 시작` 주요 행동을 보여준다.
 
 ## 사용자 행동
 - 서비스를 선택한다.
 - 선택한 `serviceId`로 [[pages/booking-new]]를 시작한다.
+
+## 기획 목업
+- `pilot/wiki/assets/mockups/pages/service-list.html`
+- 목업은 제품 화면 계약이며 위키 브라우저 디자인과 무관하다.
+- 구현은 완료되었고 QA 스크린샷이 최신 실제 화면 증거다.
 
 ## 표시 상태와 예외
 
@@ -48,5 +60,6 @@ verify:
 - [[pages/booking-new]]로 이동할 때 `serviceId`를 전달한다.
 
 ## 독립 QA
+- given seed-services-normal / when page loads / then 앱 컨텍스트 블록과 서비스 그리드가 보인다
 - given seed-services-normal / when 서비스 선택 / then 새 예약 화면이 service id를 받는다
 - given seed-services-empty / when page loads / then 시작 버튼이 보이지 않는다

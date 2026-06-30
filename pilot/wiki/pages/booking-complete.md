@@ -20,6 +20,10 @@ screenshots:
   - path: pilot/wiki/assets/screenshots/pages/booking-complete.png
     alt: 예약 완료 QA 통과 화면
     route: /bookings/complete?bookingId=booking-confirmed-001
+mockups:
+  - path: pilot/wiki/assets/mockups/pages/booking-complete.html
+    alt: 예약 완료 기획 목업
+    status: implemented
 verify:
   - npm run e2e -w pilot-booking-app -- create-booking
 ---
@@ -31,10 +35,18 @@ verify:
 ## 조건
 - 유효한 `bookingId`가 필요하다.
 - 예약 id가 없거나 알 수 없으면 복구 가능한 오류를 보여준다.
+- 화면 상단에는 생성 완료 상태를 설명하는 `app-hero` 컨텍스트 블록이 있어야 한다.
+- 완료 상태는 `status-badge`로 보여준다.
+- 예약 핵심 정보는 `booking-summary-panel` 안에서 서비스, 시간, 고객, 이메일, 요청사항 순서로 보여준다.
 
 ## 사용자 행동
 - [[pages/booking-detail]]로 이동한다.
 - [[pages/service-list]]로 돌아간다.
+
+## 기획 목업
+- `pilot/wiki/assets/mockups/pages/booking-complete.html`
+- 목업은 완료 상태와 다음 행동의 우선순위를 정의한다.
+- 구현은 완료되었고 QA 스크린샷이 최신 실제 화면 증거다.
 
 ## 표시 상태와 예외
 
@@ -49,6 +61,7 @@ verify:
 - [[pages/booking-detail]]로 `bookingId`를 전달한다.
 
 ## 독립 QA
+- given seed-booking-complete-normal / when page loads / then 완료 상태 배지와 예약 요약 패널이 보인다
 - given seed-booking-complete-normal / when 예약 관리 선택 / then 상세 화면이 booking id를 받는다
 - given seed-booking-complete-with-note / when page loads / then 요청사항이 보인다
 - given seed-booking-complete-missing-id / when page loads / then 오류가 보인다

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>서비스 목록 목업</title>
+    <style>
+      body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #f5f3ed; color: #18211f; }
+      main { max-width: 1120px; margin: 0 auto; padding: 40px 24px; }
+      .hero { display: grid; gap: 12px; border-bottom: 1px solid #ccd7d1; padding-bottom: 24px; }
+      .eyebrow { color: #8a4b2f; font-weight: 750; }
+      h1 { margin: 0; font-size: 44px; letter-spacing: 0; }
+      .summary { max-width: 680px; color: #53605c; line-height: 1.6; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+      article { background: #fffefa; border: 1px solid #ccd7d1; border-radius: 8px; padding: 20px; }
+      .meta { color: #66736f; }
+      .cta { display: inline-block; margin-top: 20px; background: #08605f; color: white; padding: 12px 16px; border-radius: 8px; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">상담 예약</div>
+        <h1>필요한 상담을 고르고 바로 예약하세요</h1>
+        <p class="summary">서비스별 소요 시간과 예약 가능 여부를 먼저 확인한다. 주요 행동은 “예약 시작” 하나로 유지한다.</p>
+      </section>
+      <section class="grid">
+        <article>
+          <h2>초기 상담</h2>
+          <p class="meta">45분 · 신규 상담</p>
+          <p>첫 상담에 필요한 현황 파악과 다음 단계를 정리한다.</p>
+          <a class="cta" href="#">예약 시작</a>
+        </article>
+        <article>
+          <h2>후속 상담</h2>
+          <p class="meta">30분 · 진행 상담</p>
+          <p>이전 상담 이후의 진행 상황을 점검하고 조정한다.</p>
+          <a class="cta" href="#">예약 시작</a>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
