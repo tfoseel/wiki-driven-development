@@ -7,10 +7,12 @@
 **Scope:**
 - Clarify README, AGENTS, and pilot root docs so commands are described as agent/CI tools.
 - Add permanent wiki-browser tests for user-facing status and impact visibility.
+- Serve the browser from `apps/wiki-browser` as a static export target instead of from the product app.
 - Enhance the browser detail page with a status summary, next-step copy, impacted wiki/code lists, and verification evidence.
 - Keep the harness project-neutral and avoid adding booking-domain assumptions.
 
 **Verification:**
 - `npm run test -w pilot-booking-app`
-- `npm run e2e -w pilot-booking-app -- wiki-browser`
+- `npm run test -w wdd-wiki-browser`
+- `npm run e2e -w wdd-wiki-browser -- wiki-browser`
 - `npm run ready`

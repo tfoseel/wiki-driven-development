@@ -87,4 +87,20 @@ describe("checkReady", () => {
       message: "Reflected page nodes must declare at least one screenshot."
     });
   });
+
+  it("keeps readiness scoped to product wiki contracts", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "policies/example",
+        type: "policy",
+        wddStatus: { phase: "verified", code: "not_required", verification: "passed" },
+        verifyCommands: ["npm test"]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(true);
+    expect(result.issues.map((issue) => issue.kind)).not.toContain("patch");
+  });
 });

@@ -32,7 +32,7 @@ Excluded:
 
 ## Product Wiki Impact
 
-The change should be captured through a new `work_item` and then reflected into these product nodes:
+The change should be captured through a GitHub issue and then reflected into these product nodes on the implementation branch:
 
 - `entities/bookings`
 - `models/booking`

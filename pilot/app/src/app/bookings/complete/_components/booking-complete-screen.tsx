@@ -18,6 +18,41 @@ function formatSlot(startsAt?: string) {
   }).format(new Date(startsAt));
 }
 
+function formatIcsDate(date: Date) {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+}
+
+function escapeIcsText(value: string) {
+  return value.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+
+function calendarDownload(booking: Booking, service: Service, slot: AvailabilitySlot) {
+  const startsAt = new Date(slot.startsAt);
+  const endsAt = new Date(startsAt.getTime() + service.durationMinutes * 60_000);
+  const descriptionParts = [`예약 id: ${booking.id}`, `고객: ${booking.customerName}`];
+  if (booking.customerNote) descriptionParts.push(`요청사항: ${booking.customerNote}`);
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//WDD Pilot//Mini Booking//KO",
+    "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT",
+    `UID:${booking.id}@wdd-pilot.local`,
+    `DTSTAMP:${formatIcsDate(new Date())}`,
+    `DTSTART:${formatIcsDate(startsAt)}`,
+    `DTEND:${formatIcsDate(endsAt)}`,
+    `SUMMARY:${escapeIcsText(service.name)}`,
+    `DESCRIPTION:${escapeIcsText(descriptionParts.join("\n"))}`,
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].join("\r\n");
+
+  return {
+    filename: `${booking.id}.ics`,
+    href: `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`
+  };
+}
+
 export function BookingCompleteScreen({ booking, service, slot }: BookingCompleteScreenProps) {
   if (!booking) {
     return (
@@ -33,6 +68,8 @@ export function BookingCompleteScreen({ booking, service, slot }: BookingComplet
       </main>
     );
   }
+
+  const calendar = service && slot ? calendarDownload(booking, service, slot) : undefined;
 
   return (
     <main className="product-shell product-shell-narrow">
@@ -84,6 +121,11 @@ export function BookingCompleteScreen({ booking, service, slot }: BookingComplet
         <Link className="button-primary" href={`/bookings/${booking.id}`}>
           예약 관리
         </Link>
+        {calendar ? (
+          <a className="button-secondary" download={calendar.filename} href={calendar.href}>
+            캘린더에 추가
+          </a>
+        ) : null}
         <Link className="button-secondary" href="/services">
           다른 예약 보기
         </Link>

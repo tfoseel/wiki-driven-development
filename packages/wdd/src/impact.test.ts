@@ -41,7 +41,7 @@ const node = (id: string, dependsOn: string[] = [], code: string[] = []): WikiNo
   verifiedBy: [],
   artifacts: [],
   screenshots: [],
-  verifyCommands: []
+  verifyCommands: [],
 });
 
 describe("calculateImpact", () => {

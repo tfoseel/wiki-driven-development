@@ -10,10 +10,10 @@
 
 ---
 
-### Task 1: Add Work Wiki And Product Wiki Contract
+### Task 1: Add GitHub Issue And Product Wiki Contract
 
 **Files:**
-- Create: `pilot/wiki/work-items/booking-request-photo.md`
+- Create: GitHub issue from `.github/ISSUE_TEMPLATE/wdd-change.md`
 - Modify: `pilot/wiki/entities/bookings.md`
 - Modify: `pilot/wiki/models/booking.md`
 - Modify: `pilot/wiki/actions/create-booking.md`
@@ -23,11 +23,11 @@
 - Modify: `pilot/wiki/flows/create-booking-flow.md`
 - Modify: `pilot/wiki/qa/create-booking-e2e.md`
 
-**Step 1: Create the work item**
+**Step 1: Create or update the GitHub issue**
 
-Create `pilot/wiki/work-items/booking-request-photo.md` with `work_status.phase: wiki` and proposed patches for the affected nodes.
+Create a WDD change issue with the target product wiki nodes and proposed patches for the affected nodes.
 
-The work item should state:
+The issue should state:
 
 - One optional photo can be attached on the new booking page.
 - Supported types are PNG, JPEG, and WebP.
@@ -55,7 +55,8 @@ Use these product contract changes:
 Run:
 
 ```bash
-npm run wdd -- impact pilot/wiki work-items/booking-request-photo
+npm run wdd -- impact pilot/wiki actions/create-booking
+npm run wdd -- impact pilot/wiki pages/booking-new
 ```
 
 Expected: the output includes the affected wiki nodes and the model/action/page/E2E code files for booking creation.
@@ -63,7 +64,7 @@ Expected: the output includes the affected wiki nodes and the model/action/page/
 **Step 4: Commit the wiki contract**
 
 ```bash
-git add pilot/wiki/work-items/booking-request-photo.md pilot/wiki/entities/bookings.md pilot/wiki/models/booking.md pilot/wiki/actions/create-booking.md pilot/wiki/pages/booking-new.md pilot/wiki/pages/booking-complete.md pilot/wiki/pages/booking-detail.md pilot/wiki/flows/create-booking-flow.md pilot/wiki/qa/create-booking-e2e.md
+git add pilot/wiki/entities/bookings.md pilot/wiki/models/booking.md pilot/wiki/actions/create-booking.md pilot/wiki/pages/booking-new.md pilot/wiki/pages/booking-complete.md pilot/wiki/pages/booking-detail.md pilot/wiki/flows/create-booking-flow.md pilot/wiki/qa/create-booking-e2e.md
 git commit -m "docs: specify booking request photo attachment"
 ```
 
@@ -398,7 +399,7 @@ git commit -m "feat: show booking request photos"
 **Files:**
 - Modify: impacted `pilot/wiki/assets/screenshots/pages/*.png`
 - Modify: impacted wiki node statuses after verification
-- Modify: `pilot/wiki/work-items/booking-request-photo.md`
+- Modify: linked GitHub issue/PR evidence
 
 **Step 1: Run focused unit tests**
 
@@ -453,14 +454,7 @@ wdd_status:
   verification: passed
 ```
 
-Set the work item to:
-
-```yaml
-work_status:
-  phase: verified
-  digest: reflected
-  verification: passed
-```
+Update the linked GitHub issue/PR with the verification commands and screenshot evidence.
 
 **Step 6: Commit verification state**
 

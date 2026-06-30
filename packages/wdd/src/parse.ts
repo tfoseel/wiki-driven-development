@@ -1,5 +1,13 @@
 import matter from "gray-matter";
-import type { WddCodeStatus, WddStatus, WddVerificationStatus, WddWorkflowPhase, WikiNode, WikiNodeType, WikiScreenshot } from "./node.js";
+import type {
+  WddCodeStatus,
+  WddStatus,
+  WddVerificationStatus,
+  WddWorkflowPhase,
+  WikiNode,
+  WikiNodeType,
+  WikiScreenshot
+} from "./node.js";
 
 const NODE_TYPES = new Set<WikiNodeType>([
   "entity",
@@ -56,6 +64,15 @@ function parseWddStatus(filePath: string, value: unknown): WddStatus {
   };
 }
 
+function defaultWddStatus(): WddStatus {
+  return {
+    phase: "wiki",
+    code: "pending",
+    verification: "pending",
+    note: "missing wdd_status"
+  };
+}
+
 function parseScreenshots(filePath: string, value: unknown): WikiScreenshot[] {
   if (!value) return [];
   const items = Array.isArray(value) ? value : [value];
@@ -80,13 +97,14 @@ export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
   if (!data.type) throw new Error(`${filePath}: missing type`);
   if (!NODE_TYPES.has(data.type)) throw new Error(`${filePath}: invalid type ${data.type}`);
   if (!data.title) throw new Error(`${filePath}: missing title`);
+  const type = data.type as WikiNodeType;
 
   return {
     id: String(data.id),
-    type: data.type,
+    type,
     title: String(data.title),
     summary: data.summary ? String(data.summary) : undefined,
-    wddStatus: parseWddStatus(filePath, data.wdd_status),
+    wddStatus: data.wdd_status ? parseWddStatus(filePath, data.wdd_status) : defaultWddStatus(),
     filePath,
     body: parsed.content,
     dependsOn: asList(data.depends_on),

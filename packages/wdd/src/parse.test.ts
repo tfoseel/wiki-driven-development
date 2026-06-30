@@ -47,4 +47,19 @@ screenshots:
   it("fails when id or type is missing", () => {
     expect(() => parseWikiMarkdown("x.md", "---\ntitle: Missing\n---\n")).toThrow(/id/);
   });
+
+  it("rejects work tracking as product wiki node types", () => {
+    expect(() =>
+      parseWikiMarkdown(
+        "wiki/work-items/add-calendar-button.md",
+        `---
+id: work-items/add-calendar-button
+type: work_item
+title: Add Calendar Button
+---
+# Add Calendar Button
+`
+      )
+    ).toThrow(/invalid type work_item/);
+  });
 });

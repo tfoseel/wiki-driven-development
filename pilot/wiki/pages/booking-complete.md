@@ -30,7 +30,7 @@ verify:
 # 예약 완료
 
 ## 설명
-생성된 예약 요약, 요청사항, 예약 관리 링크를 보여준다.
+생성된 예약 요약, 요청사항, 예약 관리 링크, 캘린더 추가 링크를 보여준다.
 
 ## 조건
 - 유효한 `bookingId`가 필요하다.
@@ -40,10 +40,14 @@ verify:
 - 예약 핵심 정보는 `booking-summary-panel` 안에서 서비스, 시간, 고객, 이메일, 요청사항 순서로 보여준다.
 - 예약에 요청 사진이 있으면 `attached-photo` 첨부 사진 섹션을 보여준다.
 - 예약에 요청 사진이 없으면 첨부 사진 섹션을 숨긴다.
+- 캘린더 링크는 예약, 서비스, 시간 슬롯을 모두 조회한 상태에서만 보여준다.
+- 캘린더 링크는 외부 계정 연결 없이 `.ics` 파일 다운로드로 동작한다.
+- 오류 상태에서는 캘린더 링크를 숨긴다.
 
 ## 사용자 행동
 - [[pages/booking-detail]]로 이동한다.
 - [[pages/service-list]]로 돌아간다.
+- 예약 내용을 `.ics` 파일로 내려받아 캘린더에 추가한다.
 
 ## 기획 목업
 - `pilot/wiki/assets/mockups/pages/booking-complete.html`
@@ -65,7 +69,10 @@ verify:
 
 ## 독립 QA
 - given seed-booking-complete-normal / when page loads / then 완료 상태 배지와 예약 요약 패널이 보인다
+- given seed-booking-complete-normal / when page loads / then 캘린더에 추가 링크가 보인다
+- given seed-booking-complete-normal / when 캘린더 링크를 확인 / then 링크는 `.ics` 다운로드 속성을 가진다
 - given seed-booking-complete-normal / when 예약 관리 선택 / then 상세 화면이 booking id를 받는다
 - given seed-booking-complete-with-note / when page loads / then 요청사항이 보인다
 - given seed-booking-complete-with-photo / when page loads / then 첨부 사진이 보인다
 - given seed-booking-complete-missing-id / when page loads / then 오류가 보인다
+- given seed-booking-complete-missing-id / when page loads / then 캘린더에 추가 링크가 보이지 않는다

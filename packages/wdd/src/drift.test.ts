@@ -18,11 +18,11 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">
   },
   dependsOn: [],
   implementedBy: [],
-    verifiedBy: [],
-    artifacts: [],
-    screenshots: [],
-    verifyCommands: [],
-    ...input
+  verifiedBy: [],
+  artifacts: [],
+  screenshots: [],
+  verifyCommands: [],
+  ...input
 });
 
 describe("findMissingCodeReferences", () => {

@@ -32,6 +32,15 @@ verify:
 3. 연락처, 선택적 요청사항, 선택적 요청 사진으로 [[actions/create-booking]]을 제출한다.
 4. [[pages/booking-complete]]에 도착한다.
 
+## 플로우 다이어그램
+```mermaid
+flowchart TD
+  serviceList[서비스 목록] --> bookingNew[새 예약]
+  bookingNew --> createBooking[예약 생성 액션]
+  createBooking --> bookingComplete[예약 완료]
+  createBooking --> conflict[충돌 또는 입력 오류]
+```
+
 ## 전달 계약
 
 | 출발 | 도착 | 데이터 | 검증 |

@@ -1,8 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
-import { calculateImpact, loadWiki, type WddStatus, type WikiIndex, type WikiNode, type WikiNodeType, type WikiScreenshot } from "@wdd/harness";
+import {
+  calculateImpact,
+  loadWiki,
+  type WddStatus,
+  type WikiIndex,
+  type WikiNode,
+  type WikiNodeType,
+  type WikiScreenshot
+} from "@wdd/harness";
 
-const TYPE_ORDER: WikiNodeType[] = ["root", "entity", "model", "action", "page", "flow", "policy", "qa", "term", "design"];
+const PRODUCT_TYPE_ORDER: WikiNodeType[] = ["root", "entity", "model", "action", "page", "flow", "policy", "qa", "term", "design"];
+const TYPE_ORDER: WikiNodeType[] = PRODUCT_TYPE_ORDER;
 const TYPE_LABELS: Record<WikiNodeType, string> = {
   root: "개요",
   entity: "엔티티",
@@ -36,6 +45,7 @@ export type WikiBrowserNode = {
   dependencies: string[];
   implementationRefs: string[];
   verificationRefs: string[];
+  verifyCommands: string[];
   artifactRefs: string[];
   screenshots: WikiBrowserScreenshot[];
   impact: WikiBrowserImpact;
@@ -54,15 +64,17 @@ export type WikiBrowserImpact = {
 };
 
 function repoRoot(): string {
-  return path.resolve(process.cwd(), "../..");
+  const configured = process.env.WDD_REPO_ROOT?.trim();
+  return path.resolve(/* turbopackIgnore: true */ process.cwd(), configured || "../..");
 }
 
 function wikiRoot(): string {
-  return path.resolve(process.cwd(), "../wiki");
+  const configured = process.env.WDD_WIKI_ROOT?.trim();
+  return configured ? path.resolve(/* turbopackIgnore: true */ process.cwd(), configured) : path.join(repoRoot(), "pilot/wiki");
 }
 
 function screenshotSrc(screenshotPath: string): string | undefined {
-  const screenshotRoot = path.resolve(process.cwd(), "../wiki/assets/screenshots");
+  const screenshotRoot = path.join(wikiRoot(), "assets/screenshots");
   const prefix = "pilot/wiki/assets/screenshots/";
   if (!screenshotPath.startsWith(prefix)) return undefined;
   const relativePath = screenshotPath.slice(prefix.length);
@@ -79,9 +91,8 @@ export function wikiHref(id: string): string {
 }
 
 export function wikiHrefWithType(id: string, type: WikiTypeTab): string {
-  const href = wikiHref(id);
-  if (type === "all") return href;
-  return `${href}?type=${type}`;
+  void id;
+  return type === "all" ? "/wiki" : `/wiki/type/${type}`;
 }
 
 function nextActionLabel(status: WddStatus): string {
@@ -108,6 +119,7 @@ function toBrowserNode(index: WikiIndex, node: WikiNode): WikiBrowserNode {
     dependencies: node.dependsOn,
     implementationRefs: node.implementedBy,
     verificationRefs: node.verifiedBy,
+    verifyCommands: node.verifyCommands,
     artifactRefs: node.artifacts,
     screenshots: node.screenshots.map((screenshot) => ({
       ...screenshot,
@@ -141,7 +153,7 @@ export function listWikiTypeTabs(nodes: WikiBrowserNode[]): WikiNodeTypeTab[] {
 
   return [
     { type: "all", label: "전체", count: nodes.length },
-    ...TYPE_ORDER.flatMap((type) => {
+    ...PRODUCT_TYPE_ORDER.flatMap((type) => {
       const count = counts.get(type) ?? 0;
       return count ? [{ type, label: TYPE_LABELS[type], count }] : [];
     })
@@ -157,6 +169,21 @@ export function parseWikiTypeTab(value: string | string[] | undefined): WikiType
   const type = Array.isArray(value) ? value[0] : value;
   if (!type || type === "all") return "all";
   return TYPE_ORDER.includes(type as WikiNodeType) ? (type as WikiNodeType) : "all";
+}
+
+export function parseWikiNodeType(value: string | undefined): WikiNodeType | undefined {
+  return value && TYPE_ORDER.includes(value as WikiNodeType) ? (value as WikiNodeType) : undefined;
+}
+
+export function listStaticWikiTypes(): WikiNodeType[] {
+  const availableTypes = new Set(listWikiNodes().map((node) => node.type));
+  return PRODUCT_TYPE_ORDER.filter((type) => availableTypes.has(type));
+}
+
+export function listStaticWikiParams(): Array<{ slug?: string[] }> {
+  return listWikiNodes().map((node) => ({
+    slug: node.id === "ROOT" ? [] : node.id.split("/")
+  }));
 }
 
 export function getWikiNode(id: string): WikiBrowserNode | undefined {

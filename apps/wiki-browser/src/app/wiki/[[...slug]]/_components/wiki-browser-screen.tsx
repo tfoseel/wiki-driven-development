@@ -9,6 +9,7 @@ import {
   type WikiBrowserNode,
   type WikiTypeTab
 } from "../../_lib/wiki-browser";
+import { MermaidDiagram } from "./mermaid-diagram";
 
 type WikiBrowserScreenProps = {
   current: WikiBrowserNode;
@@ -23,36 +24,29 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
   return (
     <main className="wiki-shell">
       <aside className="wiki-index" aria-label="파일럿 위키 인덱스">
-        <h2>위키 노드</h2>
-        <nav className="wiki-tabs" aria-label="위키 노드 유형" role="tablist">
-          {tabs.map((tab) => (
-            <Link
-              key={tab.type}
-              className="wiki-tab"
-              href={wikiHrefWithType(current.id, tab.type)}
-              scroll={false}
-              role="tab"
-              aria-selected={selectedType === tab.type}
-            >
-              <span>{tab.label}</span>
-              <strong>{tab.count}</strong>
-            </Link>
-          ))}
-        </nav>
+        <h2>제품 위키</h2>
+        {tabs.length ? (
+          <nav className="wiki-tabs" aria-label="위키 노드 유형" role="tablist">
+            {tabs.map((tab) => (
+              <Link
+                key={tab.type}
+                className="wiki-tab"
+                href={wikiHrefWithType(current.id, tab.type)}
+                scroll={false}
+                role="tab"
+                aria-selected={selectedType === tab.type}
+              >
+                <span>{tab.label}</span>
+                <strong>{tab.count}</strong>
+              </Link>
+            ))}
+          </nav>
+        ) : null}
         <ul aria-label="위키 노드">
           {visibleNodes.map((node) => (
             <li key={node.id}>
-              <Link
-                className="wiki-node-link"
-                href={wikiHrefWithType(node.id, selectedType)}
-                scroll={false}
-                aria-current={node.id === current.id ? "page" : undefined}
-              >
-                <span className="wiki-type" aria-hidden="true">
-                  {node.type}
-                </span>
+              <Link className="wiki-node-link" href={wikiHref(node.id)} scroll={false} aria-current={node.id === current.id ? "page" : undefined}>
                 <strong>{node.title}</strong>
-                <span>{node.id}</span>
               </Link>
             </li>
           ))}
@@ -61,13 +55,69 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
 
       <article className="wiki-article">
         <header>
-          <Link href="/">미니 예약 파일럿</Link>
-          <p className="wiki-type">{current.type}</p>
           <h1>{current.title}</h1>
           {current.summary ? <p className="wiki-summary">{current.summary}</p> : null}
         </header>
 
-        <HumanWorkflowSummary current={current} />
+        <StatusBadgeStrip current={current} />
+
+        <ScreenshotGallery screenshots={current.screenshots} />
+
+        <WikiMarkdown title={current.title} body={current.body} />
+
+        <TechnicalDetails current={current} />
+      </article>
+    </main>
+  );
+}
+
+function StatusBadgeStrip({ current }: { current: WikiBrowserNode }) {
+  return (
+    <section className="wiki-status-strip" aria-label="위키 상태">
+      <span className={`wiki-status-chip wiki-status-chip-${current.wddStatus.phase}`}>{PHASE_LABELS[current.wddStatus.phase]}</span>
+      <span className="wiki-status-chip">{CODE_LABELS[current.wddStatus.code]}</span>
+      <span className="wiki-status-chip">{VERIFICATION_LABELS[current.wddStatus.verification]}</span>
+      <strong className="wiki-status-chip">다음: {current.nextActionLabel === "변경 없음" ? "없음" : current.nextActionLabel}</strong>
+    </section>
+  );
+}
+
+function ImpactPanel({ current }: { current: WikiBrowserNode }) {
+  return (
+    <section className="wiki-impact" aria-label="영향 범위">
+      <h2>영향 범위</h2>
+      <p>이 노드를 바꾸면 에이전트가 함께 확인해야 하는 위키 노드와 코드 파일입니다.</p>
+      <div>
+        <ReferenceList title="영향받는 위키 노드" refs={current.impact.impactedNodeIds} />
+        <ReferenceList title="상위 의존 노드" refs={current.impact.upstreamNodeIds} />
+        <ReferenceList title="하위 참조 노드" refs={current.impact.downstreamNodeIds} />
+        <ReferenceList title="영향받는 코드와 테스트" refs={current.impact.codeFiles} />
+      </div>
+    </section>
+  );
+}
+
+function EvidencePanel({ refs, commands }: { refs: string[]; commands: string[] }) {
+  return (
+    <section className="wiki-evidence" aria-label="검증 근거">
+      <h2>검증 근거</h2>
+      <div className="wiki-evidence-grid">
+        <ReferenceList title="테스트 파일" refs={refs} />
+        <ReferenceList title="실행 명령" refs={commands} />
+      </div>
+    </section>
+  );
+}
+
+function TechnicalDetails({ current }: { current: WikiBrowserNode }) {
+  return (
+    <details className="wiki-technical-details">
+      <summary>
+        <span>영향 범위와 구현 메타</span>
+        <small>검증 근거, 의존 노드, 영향 노드, 구현 파일</small>
+      </summary>
+      <div className="wiki-technical-content">
+        <EvidencePanel refs={current.verificationRefs} commands={current.verifyCommands} />
 
         <div className="wiki-meta">
           <section>
@@ -96,58 +146,15 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
               <p className="wiki-empty">없음</p>
             )}
           </section>
-          <WorkflowStatus status={current.wddStatus} />
         </div>
 
         <ImpactPanel current={current} />
 
-        <ScreenshotGallery screenshots={current.screenshots} />
-
-        <WikiMarkdown title={current.title} body={current.body} />
-
         <div className="wiki-refs">
           <ReferenceList title="구현" refs={current.implementationRefs} />
-          <ReferenceList title="검증" refs={current.verificationRefs} />
         </div>
-      </article>
-    </main>
-  );
-}
-
-function HumanWorkflowSummary({ current }: { current: WikiBrowserNode }) {
-  return (
-    <section className="wiki-human-status" aria-label="사람이 보는 작업 상태">
-      <div>
-        <h2>사람이 보는 상태</h2>
-        <p>{humanStatusText(current.wddStatus)}</p>
-        <p className="wiki-command-note">명령어를 몰라도 됩니다. 에이전트와 CI가 하네스를 실행하고 이 페이지에 결과를 반영합니다.</p>
       </div>
-      <strong>다음 단계: {current.nextActionLabel}</strong>
-    </section>
-  );
-}
-
-function humanStatusText(status: WddStatus) {
-  if (status.phase === "blocked") return "이 페이지는 차단 상태입니다. 먼저 차단 사유를 풀어야 합니다.";
-  if (status.phase === "wiki") return "위키가 수정 중입니다. 아직 코드 반영 여부를 판단하기 전입니다.";
-  if (status.phase === "coding" || status.code === "pending") return "위키 변경이 코드에 아직 반영되지 않았습니다.";
-  if (status.phase === "verification" || status.verification === "pending") return "코드는 반영됐고 검증 증거를 기다리는 상태입니다.";
-  if (status.verification === "failed") return "검증이 실패했습니다. 실패 원인을 반영한 뒤 다시 검증해야 합니다.";
-  return "이 페이지는 코드와 검증 증거가 반영된 상태입니다.";
-}
-
-function ImpactPanel({ current }: { current: WikiBrowserNode }) {
-  return (
-    <section className="wiki-impact" aria-label="영향 범위">
-      <h2>영향 범위</h2>
-      <p>이 노드를 바꾸면 에이전트가 함께 확인해야 하는 위키 노드와 코드 파일입니다.</p>
-      <div>
-        <ReferenceList title="영향받는 위키 노드" refs={current.impact.impactedNodeIds} />
-        <ReferenceList title="상위 의존 노드" refs={current.impact.upstreamNodeIds} />
-        <ReferenceList title="하위 참조 노드" refs={current.impact.downstreamNodeIds} />
-        <ReferenceList title="영향받는 코드와 테스트" refs={current.impact.codeFiles} />
-      </div>
-    </section>
+    </details>
   );
 }
 
@@ -193,18 +200,6 @@ const VERIFICATION_LABELS: Record<WddStatus["verification"], string> = {
   not_required: "검증 불필요"
 };
 
-function WorkflowStatus({ status }: { status: WddStatus }) {
-  return (
-    <section className={`wiki-status wiki-status-${status.phase}`}>
-      <h2>작업 정합성</h2>
-      <p>현재 phase: {PHASE_LABELS[status.phase]}</p>
-      <p>{CODE_LABELS[status.code]}</p>
-      <p>{VERIFICATION_LABELS[status.verification]}</p>
-      {status.note ? <p>{status.note}</p> : null}
-    </section>
-  );
-}
-
 function ReferenceList({ title, refs }: { title: string; refs: string[] }) {
   return (
     <section>
@@ -239,6 +234,20 @@ function WikiMarkdown({ title, body }: { title: string; body: string }) {
     const trimmed = line.trim();
     if (!trimmed) {
       index += 1;
+      continue;
+    }
+
+    if (trimmed.startsWith("```")) {
+      const language = trimmed.slice(3).trim();
+      const codeLines: string[] = [];
+      index += 1;
+      while (index < lines.length && !lines[index]?.trim().startsWith("```")) {
+        codeLines.push(lines[index] ?? "");
+        index += 1;
+      }
+      if (lines[index]?.trim().startsWith("```")) index += 1;
+      const code = codeLines.join("\n");
+      blocks.push(language === "mermaid" ? <MermaidDiagram code={code} key={blocks.length} /> : <CodeBlock code={code} key={blocks.length} language={language} />);
       continue;
     }
 
@@ -300,6 +309,7 @@ function WikiMarkdown({ title, body }: { title: string; body: string }) {
       lines[index] &&
       lines[index].trim() &&
       !/^(#{2,4})\s+/.test(lines[index].trim()) &&
+      !lines[index].trim().startsWith("```") &&
       !lines[index].trim().startsWith("|") &&
       !lines[index].trim().startsWith("- ") &&
       !/^\d+\.\s+/.test(lines[index].trim())
@@ -311,6 +321,14 @@ function WikiMarkdown({ title, body }: { title: string; body: string }) {
   }
 
   return <div className="wiki-body">{blocks}</div>;
+}
+
+function CodeBlock({ code, language }: { code: string; language: string }) {
+  return (
+    <pre className="wiki-code-block" data-language={language || undefined}>
+      <code>{code}</code>
+    </pre>
+  );
 }
 
 type MarkdownTableData = {

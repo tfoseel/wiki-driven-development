@@ -23,6 +23,12 @@ test("creating a booking with a customer note shows the note on completion and d
   await expect(page.getByTestId("status-badge")).toContainText("confirmed");
   await expect(page.getByTestId("booking-summary-panel")).toBeVisible();
   await expect(page.getByTestId("customer-note")).toContainText(note);
+  const calendarLink = page.getByRole("link", { name: "캘린더에 추가" });
+  await expect(calendarLink).toBeVisible();
+  await expect(calendarLink).toHaveAttribute("download", /booking-\d+\.ics/);
+  await expect(calendarLink).toHaveAttribute("href", /data:text\/calendar/);
+  const calendarHref = await calendarLink.getAttribute("href");
+  expect(decodeURIComponent(calendarHref ?? "")).toContain("SUMMARY:후속 상담");
 
   await page.getByRole("link", { name: "예약 관리" }).click();
   await expect(page.getByRole("heading", { name: "예약 상세" })).toBeVisible();
@@ -53,4 +59,11 @@ test("creating a booking with a request photo shows the photo on completion and 
   await expect(page.getByRole("heading", { name: "예약 상세" })).toBeVisible();
   await expect(page.getByTestId("attached-photo")).toBeVisible();
   await expect(page.getByRole("img", { name: "request-room.png 첨부 사진" })).toBeVisible();
+});
+
+test("booking complete error state does not show calendar download", async ({ page }) => {
+  await page.goto("/bookings/complete");
+
+  await expect(page.getByRole("heading", { name: "예약을 찾을 수 없음" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "캘린더에 추가" })).toHaveCount(0);
 });

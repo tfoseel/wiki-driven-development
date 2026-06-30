@@ -21,12 +21,24 @@ Do not leave a wiki change as verified when code or verification is still pendin
 
 - Do not require product users to know or run `wdd` commands.
 - Treat `wdd` commands as agent/CI harness tools.
+- Treat `apps/wiki-browser` as the user-facing wiki reader. It is a static Next.js export target and should remain product-domain agnostic.
+- Do not add `/wiki` routes back into `pilot/app`; the product app and wiki browser are separate apps and should use separate dev ports.
 - When reporting work, translate command results into wiki-visible status: current phase, code reflection, verification state, impacted wiki pages, impacted code files, and QA screenshots.
 - If a user asks what to do next, point them to the wiki page status and screenshots first; mention commands only for developers or CI maintainers.
+
+## GitHub Issue Entry Point
+
+- Treat product wiki nodes as the current product SSOT, not as an active task board.
+- For user-requested changes, capture the request in a GitHub issue using `.github/ISSUE_TEMPLATE/wdd-change.md`.
+- If the user points at a product wiki page and asks to modify it, the issue should name the target wiki nodes and proposed wiki patch before product wiki files change.
+- When picking up an issue, assign it or mark it in GitHub, create a branch/worktree, then follow the required cadence: product wiki patch -> coding -> verification -> PR.
+- The PR must contain the product wiki changes, code changes, verification evidence, and refreshed screenshots for reflected page nodes.
+- For large requests, split the issue into dependency-aware child issues or checklist items. Parallel work happens on independent branches/worktrees and merges through PRs.
 
 ## Project-Neutral Harness Rules
 
 - `packages/wdd` must not depend on the booking domain.
+- `apps/wiki-browser` must read wiki content through configurable roots and avoid booking-only assumptions in the browser shell.
 - `templates/` must use placeholders such as `<appRoot>` and `<wikiRoot>`, not pilot-specific paths.
 - The pilot app is a dogfood project, not a special case.
 - Temporary debugging tests or routes should not be committed. Permanent tests must verify wiki-backed behavior.
