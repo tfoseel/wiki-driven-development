@@ -4,9 +4,9 @@ type: entity
 title: 예약
 summary: 서비스 슬롯에 대한 고객 예약.
 wdd_status:
-  phase: verified
-  code: reflected
-  verification: passed
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - entities/services
   - entities/availability-slots
@@ -34,6 +34,7 @@ verify:
 | `customerName` | string | 고객 이름 | 필수 |
 | `customerEmail` | string | 연락 이메일 | 유효한 이메일이어야 함 |
 | `customerNote` | string? | 고객 요청사항 | 선택, 공백만 있으면 저장하지 않음, 500자 이하 |
+| `requestPhoto` | object? | 요청사항 참고 사진 | 선택, 1장, PNG/JPEG/WebP data URL |
 | `status` | enum | `confirmed`, `rescheduled`, `cancelled` | 가능한 행동을 결정함 |
 
 ## 생명주기

@@ -38,6 +38,8 @@ verify:
 - 화면 상단에는 생성 완료 상태를 설명하는 `app-hero` 컨텍스트 블록이 있어야 한다.
 - 완료 상태는 `status-badge`로 보여준다.
 - 예약 핵심 정보는 `booking-summary-panel` 안에서 서비스, 시간, 고객, 이메일, 요청사항 순서로 보여준다.
+- 예약에 요청 사진이 있으면 `attached-photo` 첨부 사진 섹션을 보여준다.
+- 예약에 요청 사진이 없으면 첨부 사진 섹션을 숨긴다.
 
 ## 사용자 행동
 - [[pages/booking-detail]]로 이동한다.
@@ -54,6 +56,7 @@ verify:
 |---|---|---|
 | 예약 있음 | 확인 요약 | seed-booking-complete-normal |
 | 요청사항 있음 | 확인 요약과 요청사항 | seed-booking-complete-with-note |
+| 요청사항 사진 있음 | 확인 요약과 첨부 사진 | seed-booking-complete-with-photo |
 | 예약 id 누락 | 오류와 서비스 목록 링크 | seed-booking-complete-missing-id |
 | 알 수 없는 예약 id | 오류와 지원 안내 | seed-booking-complete-unknown-id |
 
@@ -64,4 +67,5 @@ verify:
 - given seed-booking-complete-normal / when page loads / then 완료 상태 배지와 예약 요약 패널이 보인다
 - given seed-booking-complete-normal / when 예약 관리 선택 / then 상세 화면이 booking id를 받는다
 - given seed-booking-complete-with-note / when page loads / then 요청사항이 보인다
+- given seed-booking-complete-with-photo / when page loads / then 첨부 사진이 보인다
 - given seed-booking-complete-missing-id / when page loads / then 오류가 보인다

@@ -4,9 +4,9 @@ type: model
 title: 예약 모델
 summary: 예약의 도메인 검증과 상태 모델.
 wdd_status:
-  phase: verified
-  code: reflected
-  verification: passed
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - entities/bookings
   - models/service
@@ -30,6 +30,9 @@ verify:
 - `customerEmail`은 유효한 이메일 주소여야 한다.
 - `customerNote`는 선택이며, 입력되면 앞뒤 공백을 제거하고 500자 이하로 저장한다.
 - 공백만 있는 `customerNote`는 저장하지 않는다.
+- `requestPhoto`는 선택이며, 있으면 파일명, MIME 타입, data URL을 가진다.
+- `requestPhoto.type`은 `image/png`, `image/jpeg`, `image/webp` 중 하나여야 한다.
+- `requestPhoto.dataUrl`은 `requestPhoto.type`과 일치하는 `data:<type>;base64,` 형식이어야 한다.
 - `status`는 `confirmed`, `rescheduled`, `cancelled` 중 하나여야 한다.
 - 취소된 예약은 표시 목적을 제외하고 읽기 전용이다.
 

@@ -4,9 +4,9 @@ type: page
 title: 새 예약
 summary: 슬롯을 선택하고 고객 정보를 입력한다.
 wdd_status:
-  phase: verified
-  code: reflected
-  verification: passed
+  phase: coding
+  code: pending
+  verification: pending
 depends_on:
   - models/service
   - models/availability-slot
@@ -46,6 +46,7 @@ verify:
 - 날짜와 시간 슬롯을 선택한다.
 - 이름과 이메일을 입력한다.
 - 필요한 요청사항을 선택적으로 입력한다.
+- 요청사항을 보완할 사진 1장을 선택적으로 첨부한다.
 - 예약을 제출한다.
 
 ## 기획 목업
@@ -63,6 +64,7 @@ verify:
 | 제출 충돌 | 충돌 메시지와 갱신된 슬롯 | seed-booking-new-slot-conflict |
 | 검증 오류 | 필드 단위 오류 | seed-booking-new-invalid-contact |
 | 요청사항 포함 | 요청사항 textarea와 제출 뒤 저장 | seed-booking-new-with-note |
+| 요청사항 사진 포함 | 사진 첨부 입력과 제출 뒤 조회 | seed-booking-new-with-photo |
 
 ## 내비게이션과 전달
 - 생성 성공 뒤 [[pages/booking-complete]]로 `bookingId`를 전달한다.
@@ -71,4 +73,5 @@ verify:
 - given seed-booking-new-normal / when page loads / then 진행 상태와 예약 폼 패널이 보인다
 - given seed-booking-new-normal / when 유효한 폼 제출 / then 완료 화면이 booking id를 받는다
 - given seed-booking-new-with-note / when 요청사항 포함 제출 / then 완료 화면에 요청사항이 보인다
+- given seed-booking-new-with-photo / when 사진 포함 제출 / then 완료 화면과 상세 화면에 첨부 사진이 보인다
 - given seed-booking-new-slot-conflict / when 제출이 충돌 반환 / then 완료 화면으로 이동하지 않는다
