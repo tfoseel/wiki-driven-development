@@ -73,6 +73,13 @@ export function BookingCompleteScreen({ booking, service, slot }: BookingComplet
         </section>
       ) : null}
 
+      {booking.requestPhoto ? (
+        <section className="photo-panel" data-testid="attached-photo">
+          <h2>첨부 사진</h2>
+          <img src={booking.requestPhoto.dataUrl} alt={`${booking.requestPhoto.name} 첨부 사진`} />
+        </section>
+      ) : null}
+
       <div className="action-row">
         <Link className="button-primary" href={`/bookings/${booking.id}`}>
           예약 관리

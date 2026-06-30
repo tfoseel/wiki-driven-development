@@ -28,3 +28,29 @@ test("creating a booking with a customer note shows the note on completion and d
   await expect(page.getByRole("heading", { name: "예약 상세" })).toBeVisible();
   await expect(page.getByTestId("customer-note")).toContainText(note);
 });
+
+test("creating a booking with a request photo shows the photo on completion and detail", async ({ page }) => {
+  const tinyPng = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
+    "base64"
+  );
+
+  await page.goto("/bookings/new?serviceId=follow-up&wddSeed=reset");
+  await page.getByTestId("customer-name").fill("Jamie Lee");
+  await page.getByTestId("customer-email").fill("jamie@example.com");
+  await page.setInputFiles("[data-testid='request-photo-input']", {
+    name: "request-room.png",
+    mimeType: "image/png",
+    buffer: tinyPng
+  });
+  await page.getByRole("button", { name: "예약 생성" }).click();
+
+  await expect(page).toHaveURL(/\/bookings\/complete\?bookingId=booking-\d+$/);
+  await expect(page.getByTestId("attached-photo")).toBeVisible();
+  await expect(page.getByRole("img", { name: "request-room.png 첨부 사진" })).toBeVisible();
+
+  await page.getByRole("link", { name: "예약 관리" }).click();
+  await expect(page.getByRole("heading", { name: "예약 상세" })).toBeVisible();
+  await expect(page.getByTestId("attached-photo")).toBeVisible();
+  await expect(page.getByRole("img", { name: "request-room.png 첨부 사진" })).toBeVisible();
+});

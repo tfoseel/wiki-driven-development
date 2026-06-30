@@ -58,7 +58,7 @@ export function BookingNewScreen({ service, slots, submitAction }: BookingNewScr
           <p>다른 서비스를 선택하거나 새 시간이 열릴 때 다시 확인하세요.</p>
         </section>
       ) : (
-        <form className="form-panel" action={submitAction} data-testid="booking-form-panel">
+        <form className="form-panel" action={submitAction} data-testid="booking-form-panel" encType="multipart/form-data">
           <label className="field">
             <span>시간</span>
             <select name="slotId" data-testid="slot-select">
@@ -85,6 +85,15 @@ export function BookingNewScreen({ service, slots, submitAction }: BookingNewScr
               maxLength={500}
               rows={5}
               placeholder="상담 전에 알아야 할 내용이 있으면 적어 주세요."
+            />
+          </label>
+          <label className="field">
+            <span>사진 첨부</span>
+            <input
+              name="requestPhoto"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              data-testid="request-photo-input"
             />
           </label>
           <button className="button-primary full-width" type="submit">

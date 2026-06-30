@@ -82,6 +82,13 @@ export function BookingDetailScreen({ booking, service, slot, canModify, policyR
         </section>
       ) : null}
 
+      {booking.requestPhoto ? (
+        <section className="photo-panel" data-testid="attached-photo">
+          <h2>첨부 사진</h2>
+          <img src={booking.requestPhoto.dataUrl} alt={`${booking.requestPhoto.name} 첨부 사진`} />
+        </section>
+      ) : null}
+
       <section className="action-panel" aria-label="예약 관리 행동">
         <h2>예약 관리</h2>
         {inactive ? <p data-testid="inactive-booking">이 예약은 취소되었습니다.</p> : null}

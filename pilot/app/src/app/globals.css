@@ -501,6 +501,7 @@ textarea {
 .service-card,
 .summary-panel,
 .note-panel,
+.photo-panel,
 .action-panel,
 .progress-panel,
 .form-panel,
@@ -522,7 +523,8 @@ textarea {
 .service-card h2,
 .empty-state h2,
 .action-panel h2,
-.note-panel h2 {
+.note-panel h2,
+.photo-panel h2 {
   margin: 6px 0 8px;
   font-size: 1.2rem;
   line-height: 1.25;
@@ -531,7 +533,8 @@ textarea {
 .service-card p,
 .empty-state p,
 .action-panel p,
-.note-panel p {
+.note-panel p,
+.photo-panel p {
   margin: 0;
   color: #53605c;
   line-height: 1.6;
@@ -591,6 +594,7 @@ button.button-secondary {
 .form-panel,
 .summary-panel,
 .note-panel,
+.photo-panel,
 .action-panel,
 .empty-state {
   padding: 22px;
@@ -708,10 +712,20 @@ button.button-secondary {
 }
 
 .note-panel,
+.photo-panel,
 .action-panel,
 .empty-state {
   display: grid;
   gap: 12px;
+}
+
+.photo-panel img {
+  display: block;
+  width: min(100%, 520px);
+  max-height: 360px;
+  border-radius: 8px;
+  background: var(--surface-muted);
+  object-fit: contain;
 }
 
 .detail-layout {
