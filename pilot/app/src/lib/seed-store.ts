@@ -90,7 +90,8 @@ export function addBooking(input: Omit<Booking, "id" | "status"> & { status?: Bo
     slotId: input.slotId,
     customerName: input.customerName,
     customerEmail: input.customerEmail,
-    customerNote: input.customerNote
+    customerNote: input.customerNote,
+    requestPhoto: input.requestPhoto
   };
   bookings.push(booking);
   return { ...booking };
