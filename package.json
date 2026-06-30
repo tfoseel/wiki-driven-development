@@ -9,6 +9,7 @@
   "scripts": {
     "test": "npm run test -w @wdd/harness",
     "wdd": "npm run wdd -w @wdd/harness --",
-    "build": "npm run build -w @wdd/harness"
+    "build": "npm run build -w @wdd/harness",
+    "ready": "npm run test -w @wdd/harness && npm run test -w pilot-booking-app && npm run build -w @wdd/harness && npm run build -w pilot-booking-app && npm run qa -w pilot-booking-app && npm run wdd -- ready"
   }
 }

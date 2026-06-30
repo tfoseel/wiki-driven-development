@@ -10,11 +10,11 @@ wdd_status:
 depends_on:
   - terms/example-term
 implemented_by:
-  - pilot/app/src/lib/policies/example-policy.ts
+  - <appRoot>/src/lib/policies/example-policy.ts
 verified_by:
-  - pilot/app/src/lib/policies/example-policy.test.ts
+  - <appRoot>/src/lib/policies/example-policy.test.ts
 artifacts:
-  - pilot/app/src/lib/policies/example-policy.ts
+  - <appRoot>/src/lib/policies/example-policy.ts
 verify:
   - npm run test -- example-policy
 ---

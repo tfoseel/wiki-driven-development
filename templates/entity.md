@@ -10,11 +10,11 @@ wdd_status:
 depends_on:
   - policies/example-policy
 implemented_by:
-  - pilot/app/supabase/migrations/00000000000000_example.sql
+  - <appRoot>/supabase/migrations/00000000000000_example.sql
 verified_by:
-  - pilot/app/tests/models/example-entity.test.ts
+  - <appRoot>/tests/models/example-entity.test.ts
 artifacts:
-  - pilot/app/src/lib/example-repository.ts
+  - <appRoot>/src/lib/example-repository.ts
 verify:
   - npm run test -- example-entity
 ---

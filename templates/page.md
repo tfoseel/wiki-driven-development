@@ -11,13 +11,13 @@ depends_on:
   - models/example-model
   - actions/example-action
 implemented_by:
-  - pilot/app/src/app/examples/[id]/page.tsx
+  - <appRoot>/src/app/examples/[id]/page.tsx
 verified_by:
-  - pilot/app/tests/e2e/example-page.spec.ts
+  - <appRoot>/tests/e2e/example-page.spec.ts
 artifacts:
-  - pilot/app/src/app/examples/[id]/_components/example-page-screen.tsx
+  - <appRoot>/src/app/examples/[id]/_components/example-page-screen.tsx
 screenshots:
-  - path: pilot/wiki/assets/screenshots/pages/example-page.png
+  - path: <wikiRoot>/assets/screenshots/pages/example-page.png
     alt: Example page after QA passes
     route: /examples/example-id
 verify:

@@ -10,11 +10,11 @@ wdd_status:
 depends_on:
   - entities/example-entity
 implemented_by:
-  - pilot/app/src/models/example-model.ts
+  - <appRoot>/src/models/example-model.ts
 verified_by:
-  - pilot/app/src/models/example-model.test.ts
+  - <appRoot>/src/models/example-model.test.ts
 artifacts:
-  - pilot/app/src/models/example-model.ts
+  - <appRoot>/src/models/example-model.ts
 verify:
   - npm run test -- example-model
 ---

@@ -12,11 +12,11 @@ depends_on:
   - actions/example-action
   - policies/example-policy
 implemented_by:
-  - pilot/app/tests/e2e/example-e2e.spec.ts
+  - <appRoot>/tests/e2e/example-e2e.spec.ts
 verified_by:
-  - pilot/app/tests/e2e/example-e2e.spec.ts
+  - <appRoot>/tests/e2e/example-e2e.spec.ts
 artifacts:
-  - pilot/app/tests/e2e/example-e2e.spec.ts
+  - <appRoot>/tests/e2e/example-e2e.spec.ts
 verify:
   - npm run e2e -- example-e2e
 ---

@@ -12,12 +12,12 @@ depends_on:
   - entities/example-entity
   - policies/example-policy
 implemented_by:
-  - pilot/app/src/actions/example-action.ts
+  - <appRoot>/src/actions/example-action.ts
 verified_by:
-  - pilot/app/src/actions/example-action.test.ts
-  - pilot/app/tests/e2e/example-action.spec.ts
+  - <appRoot>/src/actions/example-action.test.ts
+  - <appRoot>/tests/e2e/example-action.spec.ts
 artifacts:
-  - pilot/app/src/actions/example-action.ts
+  - <appRoot>/src/actions/example-action.ts
 verify:
   - npm run test -- example-action
 ---

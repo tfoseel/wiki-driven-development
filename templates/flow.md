@@ -12,11 +12,11 @@ depends_on:
   - pages/other-page
   - actions/example-action
 implemented_by:
-  - pilot/app/tests/e2e/example-flow.spec.ts
+  - <appRoot>/tests/e2e/example-flow.spec.ts
 verified_by:
-  - pilot/app/tests/e2e/example-flow.spec.ts
+  - <appRoot>/tests/e2e/example-flow.spec.ts
 artifacts:
-  - pilot/app/tests/e2e/example-flow.spec.ts
+  - <appRoot>/tests/e2e/example-flow.spec.ts
 verify:
   - npm run e2e -- example-flow
 ---

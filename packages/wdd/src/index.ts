@@ -10,3 +10,5 @@ export * from "./drift.js";
 export * from "./verify.js";
 export * from "./workflow.js";
 export * from "./screenshots.js";
+export * from "./config.js";
+export * from "./ready.js";

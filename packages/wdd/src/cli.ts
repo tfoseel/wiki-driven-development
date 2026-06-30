@@ -6,6 +6,8 @@ import { getVerifyCommands } from "./verify.js";
 import { resolveCliPath } from "./cli-paths.js";
 import { findWorkflowAttention, formatWorkflowStatus } from "./workflow.js";
 import { collectScreenshotTargets } from "./screenshots.js";
+import { findWddConfig, resolveWddProject } from "./config.js";
+import { checkReady, formatReadyReport } from "./ready.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -17,7 +19,8 @@ if (command === "help") {
   drift <wikiRoot>
   verify <wikiRoot> <nodeId>
   status <wikiRoot> [nodeId]
-  screenshots <wikiRoot> [--json]`);
+  screenshots <wikiRoot> [--json]
+  ready [wikiRoot] [repoRoot]`);
 } else if (command === "index") {
   const [wikiRoot] = args;
   if (!wikiRoot) throw new Error("Usage: wdd index <wikiRoot>");
@@ -80,6 +83,16 @@ if (command === "help") {
     console.log("screenshot targets:");
     for (const target of targets) console.log(`  - ${target.nodeId} ${target.route} -> ${target.path}`);
   }
+} else if (command === "ready") {
+  const [wikiRootArg, repoRootArg] = args;
+  const configPath = !wikiRootArg ? findWddConfig() : undefined;
+  const project = configPath ? resolveWddProject(configPath) : undefined;
+  const wikiRoot = wikiRootArg ? resolveCliPath(wikiRootArg) : project?.wikiRoot;
+  const repoRoot = repoRootArg ? resolveCliPath(repoRootArg) : project?.repoRoot ?? process.cwd();
+  if (!wikiRoot) throw new Error("Usage: wdd ready [wikiRoot] [repoRoot]");
+  const result = checkReady(loadWiki(wikiRoot), repoRoot);
+  console.log(formatReadyReport(result));
+  if (!result.ok) process.exitCode = 1;
 } else {
   console.error(`Unknown command: ${command}`);
   process.exitCode = 1;
