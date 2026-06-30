@@ -1,0 +1,14 @@
+{
+  "wikiRoot": "../wiki",
+  "repoRoot": "..",
+  "appRoot": "..",
+  "ready": {
+    "commands": [
+      "npm run harness:test",
+      "npm run test",
+      "npm run harness:build",
+      "npm run build",
+      "npm run qa"
+    ]
+  }
+}

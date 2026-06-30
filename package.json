@@ -3,14 +3,40 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "apps/*",
-    "packages/*",
-    "pilot/app"
+    "harness"
   ],
   "scripts": {
-    "test": "npm run test -w @wdd/harness",
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "prewiki:screenshots": "npm run harness:build",
+    "wiki:screenshots": "node scripts/capture-wiki-screenshots.mjs",
+    "qa": "npm run e2e && npm run wiki:screenshots",
     "wdd": "npm run wdd -w @wdd/harness --",
-    "build": "npm run build -w @wdd/harness",
-    "ready": "npm run test -w @wdd/harness && npm run test -w pilot-booking-app && npm run test -w wdd-wiki-browser && npm run build -w @wdd/harness && npm run build -w pilot-booking-app && npm run build -w wdd-wiki-browser && npm run qa -w pilot-booking-app && npm run e2e -w wdd-wiki-browser && npm run wdd -- ready"
+    "harness:test": "npm run test -w @wdd/harness",
+    "harness:build": "npm run build -w @wdd/harness",
+    "ready": "npm run harness:test && npm run test && npm run harness:build && npm run build && npm run qa && npm run wdd -- ready"
+  },
+  "dependencies": {
+    "@wdd/harness": "0.1.0",
+    "next": "^16.2.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.10"
+    }
   }
 }

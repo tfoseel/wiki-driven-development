@@ -5,22 +5,19 @@ Wiki-Driven Development (WDD) treats the product wiki as the SSOT. The Next.js a
 ## Repository Shape
 
 ```txt
-apps/wiki-browser  static Next.js wiki browser for GitHub Pages-style hosting
-packages/wdd/       reusable WDD harness CLI and graph checks
-templates/          project-neutral wiki node templates
-pilot/wiki/         dogfood wiki for the mini booking app
-pilot/app/          dogfood Next.js App Router product app
-wdd.config.json     project wiring for the current dogfood app
+wiki/        product SSOT Markdown in downstream projects
+harness/     WDD lint, impact, workflow, screenshot, and ready checks
+AGENTS.md    agent entry point that forces the wiki-first cadence
 ```
 
-The pilot is intentionally inside this repository so the harness can prove that a real app can be changed by following the same workflow downstream projects should use.
+This repository currently dogfoods the harness with the mini booking pilot, but the durable target shape for downstream Next.js projects is "default Next.js app plus `wiki/`, `harness/`, and `AGENTS.md`." The wiki is read as Markdown in GitHub, local editors, Obsidian, Codex, Claude, or any other Markdown-aware tool.
 
 ## Core Cadence
 
 Every product change follows the same order:
 
 1. **Wiki phase:** update the wiki node that owns the behavior, plus impacted wiki nodes.
-2. **Impact phase:** run `wdd impact` or read dependencies to find affected pages and files.
+2. **Impact phase:** run `wdd impact` or read dependencies to find affected screens and files.
 3. **Coding phase:** edit only the referenced code or update the wiki if ownership metadata was wrong.
 4. **Verification phase:** run declared tests, E2E, QA screenshots, `wdd status`, and `wdd drift`.
 5. **Verified state:** mark impacted nodes as `phase: verified`, `code: reflected`, `verification: passed`.
@@ -29,22 +26,22 @@ If work stops mid-cadence, leave `wdd_status` in the current phase. A reader sho
 
 ## User Experience
 
-Product users should not need to learn `wdd` commands. Their interface is the wiki browser:
+Product users should not need to learn `wdd` commands. Their interface is the Markdown wiki itself:
 
-- the wiki browser is a separate static Next.js app, not a route served by the product app;
-- the wiki browser shows the current product wiki SSOT only;
-- status shows whether the wiki is still being edited, needs code, needs verification, or is verified;
-- impact shows which wiki pages and code files are affected;
-- evidence shows referenced tests and QA screenshots;
-- the next action tells the agent what phase should happen next.
+- `wiki/*.md` is the SSOT and GitHub Markdown is the primary reading surface;
+- HTML renderers are optional derived artifacts, not the source of truth;
+- `wdd_status` in frontmatter is the machine-readable status truth;
+- the `## 상태` line is the human-readable status summary and must match `wdd_status`;
+- impact, implementation metadata, verification files, and commands live in collapsible Markdown `<details>` sections;
+- evidence remains in wiki metadata and screen screenshots.
 
-The `wdd` CLI exists for agents, developers, and CI. Agents run the commands, then reflect the result back into wiki metadata and screenshots.
+The harness exists for agents, developers, and CI. Agents run the commands, then reflect the result back into wiki metadata and screenshots.
 
-For `page` nodes, screenshots are required once the node is reflected in code or verified. A reflected screen without a screenshot is not ready, because the wiki reader cannot confirm what actually shipped.
+For screen-owning nodes, screenshots are required once the node is reflected in code or verified. A reflected screen without a screenshot is not ready, because the wiki reader cannot confirm what actually shipped.
 
-For user changes, the product wiki should be read-mostly until work is picked up. New requests enter through GitHub Issues, not through product wiki nodes. An issue names the target product wiki pages and proposed patch; after an agent applies the patch, updates code, verifies, and refreshes screenshots, the product wiki becomes the final SSOT again through the PR.
+For user changes, the product wiki should be read-mostly until work is picked up. New requests enter through GitHub Issues, not through product wiki nodes. An issue names the target product wiki nodes and proposed patch; after an agent applies the patch, updates code, verifies, and refreshes screenshots, the product wiki becomes the final SSOT again through the PR.
 
-A request like "change this wiki page like this" should create or update a GitHub issue first, not edit the product page directly. The issue can include the exact intended product wiki wording or section replacement, then the implementation branch moves that content into the product wiki and continues through coding, verification, screenshots, and PR review.
+A request like "change this wiki node like this" should create or update a GitHub issue first, not edit the product node directly. The issue can include the exact intended product wiki wording or section replacement, then the implementation branch moves that content into the product wiki and continues through coding, verification, screenshots, and PR review.
 
 ## GitHub Work Layer
 
@@ -71,8 +68,8 @@ gh pr create --fill
 - `entity`: persistence contract, columns, lifecycle, constraints.
 - `model`: domain validation and typed shape.
 - `action`: mutation/write API contract.
-- `page`: route, visible states, user actions, screenshots.
-- `flow`: cross-page handoff contract.
+- `screen`: route, visible states, user actions, screenshots.
+- `flow`: cross-screen handoff contract.
 - `policy`: cross-cutting business rule.
 - `qa`: executable scenarios and edge cases.
 - `design`: product UI tokens and state expression.
@@ -81,9 +78,9 @@ gh pr create --fill
 ## Frontmatter Contract
 
 ```yaml
-id: pages/example-page
-type: page
-title: Example Page
+id: screens/example-screen
+type: screen
+title: Example Screen
 wdd_status:
   phase: coding
   code: pending
@@ -93,48 +90,103 @@ depends_on:
 implemented_by:
   - <appRoot>/src/app/examples/[id]/page.tsx
 verified_by:
-  - <appRoot>/tests/e2e/example-page.spec.ts
+  - <appRoot>/tests/e2e/example-screen.spec.ts
 artifacts:
-  - <appRoot>/src/app/examples/[id]/_components/example-page-screen.tsx
+  - <appRoot>/src/app/examples/[id]/_components/example-screen.tsx
 screenshots:
-  - path: <wikiRoot>/assets/screenshots/pages/example-page.png
-    alt: Example page after QA passes
+  - path: <wikiRoot>/자료/스크린샷/화면/example.png
+    alt: Example screen after QA passes
     route: /examples/example-id
 verify:
-  - npm run e2e -- example-page
+  - npm run e2e -- example-screen
 ```
 
 Use YAML block lists for paths containing brackets, such as `bookings/[id]/page.tsx`. Inline YAML arrays can misread `[id]`.
 
+Every wiki Markdown file also exposes a canonical human status line:
+
+```md
+## 상태
+
+상태: 🛠️ 코드 반영 필요 · 코드 대기 · 검증 대기
+```
+
+That line is not free text. The harness derives the exact allowed line from `wdd_status` and `wdd ready` fails when the Markdown line drifts.
+
+Implementation metadata should stay readable but out of the main narrative:
+
+```md
+<details>
+<summary>영향 범위와 구현 메타</summary>
+
+- 노드: `screens/example-screen`
+- 의존: [[models/example-model]]
+- 구현: `<appRoot>/src/app/examples/[id]/page.tsx`
+- 검증 파일: `<appRoot>/tests/e2e/example-screen.spec.ts`
+- 검증 명령: `npm run e2e -- example-screen`
+
+</details>
+```
+
 ## Agent/CI Commands
 
 ```bash
-npm run dev -w pilot-booking-app        # product app on http://127.0.0.1:3001
-npm run dev -w wdd-wiki-browser         # static wiki browser on http://127.0.0.1:3002
-npm run wdd -- index pilot/wiki
-npm run wdd -- impact pilot/wiki actions/create-booking
-npm run wdd -- session pilot/wiki actions/create-booking
-npm run wdd -- status pilot/wiki
-npm run wdd -- drift pilot/wiki .
-npm run wdd -- screenshots pilot/wiki
+npm run dev        # product app on http://127.0.0.1:3001
+npm run wdd -- index wiki
+npm run wdd -- impact wiki actions/create-booking
+npm run wdd -- session wiki actions/create-booking
+npm run wdd -- status wiki
+npm run wdd -- drift wiki .
+npm run wdd -- screenshots wiki
 npm run wdd -- ready
 ```
 
 These commands are not the product-user interface. They are the harness controls that agents and CI use to keep the wiki, code, and verification evidence aligned.
 
-`npm run build -w wdd-wiki-browser` creates a static export in `apps/wiki-browser/out`. Set `WIKI_BASE_PATH=/your-repo-name` when deploying to a GitHub Pages project site that is served from a subpath.
+`wdd ready` is the project-neutral static gate. It checks workflow status, canonical Markdown status summaries, referenced files, screenshot contracts, and verify-command declarations.
 
-`wdd ready` is the project-neutral static gate. It checks workflow status, referenced files, screenshot contracts, and verify-command declarations.
+`npm run ready` is this repository's full dogfood gate. It runs harness tests, product app tests, builds, product QA, screenshot capture, and then `wdd ready`.
 
-`npm run ready` is this repository's full dogfood gate. It runs harness tests, product app tests, static wiki browser tests, builds, product QA, screenshot capture, wiki browser E2E, and then `wdd ready`.
+## Starting Another Next.js App
 
-## Starting Another App
+Use the pilot as a dogfood reference, not as a required shape. For an existing Next.js boilerplate, add WDD as a project layer instead of reshaping the whole app.
 
-1. Copy the templates under `templates/` into your project's wiki.
-2. Create `wdd.config.json` with your `wikiRoot`, `repoRoot`, and `appRoot`.
-3. Keep project code paths in wiki frontmatter using real paths for that project.
-4. Add screenshots to reflected page nodes after QA passes; reflected page nodes without screenshots fail the ready gate.
-5. Route user changes through GitHub Issues and PRs unless the project intentionally allows direct product wiki edits.
-6. Teach agents through `AGENTS.md` to obey the issue pickup -> product wiki patch -> coding -> verification -> PR cadence.
+```txt
+app/ or src/app/         existing Next.js App Router product app
+public/                  existing Next.js assets, if present
+wiki/                    product SSOT Markdown
+harness/                 WDD rules, scripts, templates, and evidence conventions
+.github/ISSUE_TEMPLATE/  WDD change intake
+.github/PULL_REQUEST_TEMPLATE.md
+AGENTS.md                thin pointer that forces agents to follow harness/ first
+```
+
+Minimum setup:
+
+1. Start from a normal Next.js project. Keep its `app/` or `src/app/` choice.
+2. Create `wiki/` and copy `harness/templates/*.md` into it. Rename each template file to real product nodes.
+3. Keep the WDD tool package, runbooks, and templates in `harness/`.
+4. Copy `harness/templates/AGENTS.md` to the repo root and keep `harness/AGENTS.md` inside the harness folder.
+5. Add harness configuration under `harness/` or wire it through package scripts, setting `wikiRoot`, `repoRoot`, and `appRoot`.
+6. Put real repo-relative paths in wiki frontmatter. Use block YAML lists for paths with brackets such as `app/src/app/items/[id]/page.tsx`.
+7. Keep `## 상태` lines generated from frontmatter. Do not invent custom status prose.
+8. For screen-owning nodes, keep screenshot paths repo-relative, for example `wiki/자료/스크린샷/화면/example.png`, and set `screenshots.route` to a route the product app can render during QA.
+9. Route user changes through GitHub Issues and PRs. Issues hold work-in-progress intent; merged product wiki nodes hold truth.
+10. Keep historical plans out of the repo unless they are active issues or PR notes. Durable decisions belong in `wiki/`, `harness/`, templates, tests, or README.
+
+Recommended Next.js scripts:
+
+```json
+{
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "wiki:screenshots": "node scripts/capture-wiki-screenshots.mjs",
+    "qa": "npm run e2e && npm run wiki:screenshots"
+  }
+}
+```
 
 The harness can guide and verify the workflow, but the agent still writes product code by reading the wiki.

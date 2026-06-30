@@ -1,0 +1,13 @@
+{
+  "wikiRoot": "wiki",
+  "repoRoot": ".",
+  "appRoot": "app",
+  "ready": {
+    "commands": [
+      "npm run test",
+      "npm run build",
+      "npm run e2e",
+      "npm run wiki:screenshots"
+    ]
+  }
+}
