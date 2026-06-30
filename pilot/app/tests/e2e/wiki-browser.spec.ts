@@ -30,15 +30,20 @@ test("wiki design tab filters the index by design nodes", async ({ page }) => {
 });
 
 test("detail pages show workflow status and references", async ({ page }) => {
-  await page.goto("/wiki?type=action");
-  await page.locator(".wiki-node-link").first().click();
+  await page.goto("/wiki/actions/create-booking?type=action");
 
   await expect(page).toHaveURL(/\/wiki\/actions\//);
   await expect(page.locator(".wiki-article h1")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "사람이 보는 상태" })).toBeVisible();
+  await expect(page.getByText("명령어를 몰라도 됩니다")).toBeVisible();
+  await expect(page.getByText("다음 단계: 변경 없음")).toBeVisible();
   await expect(page.getByRole("heading", { name: "작업 정합성" })).toBeVisible();
   await expect(page.getByText("현재 phase: 검증 완료")).toBeVisible();
   await expect(page.getByText("코드 반영됨")).toBeVisible();
   await expect(page.getByText("검증 통과")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "영향 범위" })).toBeVisible();
+  await expect(page.getByText("pages/booking-new").first()).toBeVisible();
+  await expect(page.getByText("pilot/app/src/actions/create-booking.ts").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "구현" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "검증" })).toBeVisible();
 });

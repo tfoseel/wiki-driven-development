@@ -67,6 +67,8 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
           {current.summary ? <p className="wiki-summary">{current.summary}</p> : null}
         </header>
 
+        <HumanWorkflowSummary current={current} />
+
         <div className="wiki-meta">
           <section>
             <h2>노드</h2>
@@ -97,6 +99,8 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
           <WorkflowStatus status={current.wddStatus} />
         </div>
 
+        <ImpactPanel current={current} />
+
         <ScreenshotGallery screenshots={current.screenshots} />
 
         <WikiMarkdown title={current.title} body={current.body} />
@@ -107,6 +111,43 @@ export function WikiBrowserScreen({ current, nodes, selectedType }: WikiBrowserS
         </div>
       </article>
     </main>
+  );
+}
+
+function HumanWorkflowSummary({ current }: { current: WikiBrowserNode }) {
+  return (
+    <section className="wiki-human-status" aria-label="사람이 보는 작업 상태">
+      <div>
+        <h2>사람이 보는 상태</h2>
+        <p>{humanStatusText(current.wddStatus)}</p>
+        <p className="wiki-command-note">명령어를 몰라도 됩니다. 에이전트와 CI가 하네스를 실행하고 이 페이지에 결과를 반영합니다.</p>
+      </div>
+      <strong>다음 단계: {current.nextActionLabel}</strong>
+    </section>
+  );
+}
+
+function humanStatusText(status: WddStatus) {
+  if (status.phase === "blocked") return "이 페이지는 차단 상태입니다. 먼저 차단 사유를 풀어야 합니다.";
+  if (status.phase === "wiki") return "위키가 수정 중입니다. 아직 코드 반영 여부를 판단하기 전입니다.";
+  if (status.phase === "coding" || status.code === "pending") return "위키 변경이 코드에 아직 반영되지 않았습니다.";
+  if (status.phase === "verification" || status.verification === "pending") return "코드는 반영됐고 검증 증거를 기다리는 상태입니다.";
+  if (status.verification === "failed") return "검증이 실패했습니다. 실패 원인을 반영한 뒤 다시 검증해야 합니다.";
+  return "이 페이지는 코드와 검증 증거가 반영된 상태입니다.";
+}
+
+function ImpactPanel({ current }: { current: WikiBrowserNode }) {
+  return (
+    <section className="wiki-impact" aria-label="영향 범위">
+      <h2>영향 범위</h2>
+      <p>이 노드를 바꾸면 에이전트가 함께 확인해야 하는 위키 노드와 코드 파일입니다.</p>
+      <div>
+        <ReferenceList title="영향받는 위키 노드" refs={current.impact.impactedNodeIds} />
+        <ReferenceList title="상위 의존 노드" refs={current.impact.upstreamNodeIds} />
+        <ReferenceList title="하위 참조 노드" refs={current.impact.downstreamNodeIds} />
+        <ReferenceList title="영향받는 코드와 테스트" refs={current.impact.codeFiles} />
+      </div>
+    </section>
   );
 }
 

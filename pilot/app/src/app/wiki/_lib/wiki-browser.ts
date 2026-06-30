@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { loadWiki, type WddStatus, type WikiNode, type WikiNodeType, type WikiScreenshot } from "@wdd/harness";
+import { calculateImpact, loadWiki, type WddStatus, type WikiIndex, type WikiNode, type WikiNodeType, type WikiScreenshot } from "@wdd/harness";
 
 const TYPE_ORDER: WikiNodeType[] = ["root", "entity", "model", "action", "page", "flow", "policy", "qa", "term", "design"];
 const TYPE_LABELS: Record<WikiNodeType, string> = {
@@ -38,10 +38,19 @@ export type WikiBrowserNode = {
   verificationRefs: string[];
   artifactRefs: string[];
   screenshots: WikiBrowserScreenshot[];
+  impact: WikiBrowserImpact;
+  nextActionLabel: string;
 };
 
 export type WikiBrowserScreenshot = WikiScreenshot & {
   src?: string;
+};
+
+export type WikiBrowserImpact = {
+  upstreamNodeIds: string[];
+  downstreamNodeIds: string[];
+  impactedNodeIds: string[];
+  codeFiles: string[];
 };
 
 function repoRoot(): string {
@@ -75,7 +84,18 @@ export function wikiHrefWithType(id: string, type: WikiTypeTab): string {
   return `${href}?type=${type}`;
 }
 
-function toBrowserNode(node: WikiNode): WikiBrowserNode {
+function nextActionLabel(status: WddStatus): string {
+  if (status.phase === "blocked") return "차단 해소";
+  if (status.phase === "wiki") return "위키 수정";
+  if (status.phase === "coding" || status.code === "pending") return "코드 반영";
+  if (status.phase === "verification" || status.verification === "pending") return "검증";
+  if (status.verification === "failed") return "검증 실패 해결";
+  return "변경 없음";
+}
+
+function toBrowserNode(index: WikiIndex, node: WikiNode): WikiBrowserNode {
+  const impact = calculateImpact(index, node.id);
+
   return {
     id: node.id,
     type: node.type,
@@ -92,7 +112,14 @@ function toBrowserNode(node: WikiNode): WikiBrowserNode {
     screenshots: node.screenshots.map((screenshot) => ({
       ...screenshot,
       src: screenshotSrc(screenshot.path)
-    }))
+    })),
+    impact: {
+      upstreamNodeIds: impact.upstream,
+      downstreamNodeIds: impact.downstream,
+      impactedNodeIds: impact.impactedNodes,
+      codeFiles: impact.codeFiles
+    },
+    nextActionLabel: nextActionLabel(node.wddStatus)
   };
 }
 
@@ -104,7 +131,8 @@ function compareNodes(a: WikiBrowserNode, b: WikiBrowserNode): number {
 }
 
 export function listWikiNodes(): WikiBrowserNode[] {
-  return loadWiki(wikiRoot()).nodes.map(toBrowserNode).sort(compareNodes);
+  const index = loadWiki(wikiRoot());
+  return index.nodes.map((node) => toBrowserNode(index, node)).sort(compareNodes);
 }
 
 export function listWikiTypeTabs(nodes: WikiBrowserNode[]): WikiNodeTypeTab[] {
@@ -132,8 +160,9 @@ export function parseWikiTypeTab(value: string | string[] | undefined): WikiType
 }
 
 export function getWikiNode(id: string): WikiBrowserNode | undefined {
-  const node = loadWiki(wikiRoot()).byId.get(id);
-  return node ? toBrowserNode(node) : undefined;
+  const index = loadWiki(wikiRoot());
+  const node = index.byId.get(id);
+  return node ? toBrowserNode(index, node) : undefined;
 }
 
 export function getWikiNodeBySlug(slug?: string[]): WikiBrowserNode | undefined {

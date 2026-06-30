@@ -58,6 +58,15 @@ describe("wiki browser", () => {
     expect(nodeWithRefs?.verificationRefs.length).toBeGreaterThan(0);
   });
 
+  it("exposes impact context for user-facing workflow guidance", () => {
+    const createBooking = listWikiNodes().find((node) => node.id === "actions/create-booking");
+
+    expect(createBooking?.impact.impactedNodeIds).toContain("actions/create-booking");
+    expect(createBooking?.impact.impactedNodeIds).toContain("pages/booking-new");
+    expect(createBooking?.impact.codeFiles).toContain("pilot/app/src/actions/create-booking.ts");
+    expect(createBooking?.nextActionLabel).toBe("변경 없음");
+  });
+
   it("exposes QA screenshots declared by page nodes", () => {
     const pageNode = filterWikiNodesByType(listWikiNodes(), "page").find((node) => node.screenshots.length);
 
