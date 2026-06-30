@@ -29,6 +29,42 @@ describe("BookingSchema", () => {
     ).toMatchObject({ customerNote: "조용한 상담실을 부탁드립니다." });
   });
 
+  it("accepts one valid request photo", () => {
+    expect(
+      BookingSchema.parse({
+        id: "booking-1",
+        serviceId: "consultation",
+        slotId: "slot-1",
+        customerName: "Alex Kim",
+        customerEmail: "alex@example.com",
+        requestPhoto: {
+          name: "room.png",
+          type: "image/png",
+          dataUrl: "data:image/png;base64,aGVsbG8="
+        },
+        status: "confirmed"
+      })
+    ).toMatchObject({ requestPhoto: { name: "room.png", type: "image/png" } });
+  });
+
+  it("rejects unsupported request photo types", () => {
+    expect(() =>
+      BookingSchema.parse({
+        id: "booking-1",
+        serviceId: "consultation",
+        slotId: "slot-1",
+        customerName: "Alex Kim",
+        customerEmail: "alex@example.com",
+        requestPhoto: {
+          name: "notes.txt",
+          type: "text/plain",
+          dataUrl: "data:text/plain;base64,aGVsbG8="
+        },
+        status: "confirmed"
+      })
+    ).toThrow();
+  });
+
   it("rejects invalid emails", () => {
     expect(() =>
       BookingSchema.parse({
