@@ -1,40 +1,52 @@
 # WDD Harness
 
-The harness is the reusable operating system for Wiki-Driven Development. It is not just scripts: it contains the agent prompts, wiki node contracts, templates, and static gates that keep product wiki, code, tests, screenshots, and flow-tree evidence aligned.
+The harness is the reusable operating system for Wiki-Driven Development. It contains playbooks, contracts, templates, and small static tools that keep product wiki, code, tests, screenshots, and flow-tree evidence aligned.
 
 ## Folder Shape
 
 ```txt
 harness/
   AGENTS.md                 agent router
-  skills/
-    work-shaping/           request-to-PRD-issue prompts
-    work-types/             normal and repair lane prompts
-    cadence/                phase-by-phase execution prompts
-    wiki-areas/             node-type authoring prompts
+  playbooks/                how to run work
+  contracts/                rules that must stay true
   templates/                starter wiki nodes and downstream AGENTS.md
-  src/                      thin tools used by the Markdown skills
+  src/                      thin tools used by agents and CI
   tests/                    reusable harness behavior checks
 ```
 
 ## How Agents Use This
 
 1. Read `harness/AGENTS.md`.
-2. Shape a user request into a PRD-like GitHub Issue when no accepted issue exists.
-3. Read the issue's work type to decide which phases are full, light, or skipped.
-4. Select the cadence skill for the current phase after the issue is accepted.
-5. Select the wiki-area skill for every node type being edited or created.
-6. Perform wiki changes first, then code, then verification.
-7. Run the harness gates and reflect evidence back into the wiki.
+2. Start from an accepted GitHub Issue, or shape one before changing product truth.
+3. Choose one playbook:
+   - `playbooks/change.md`
+   - `playbooks/legacy-migration.md`
+   - `playbooks/repair.md`
+4. Read the contracts that govern the work:
+   - `contracts/wiki-node.md`
+   - `contracts/legacy-map.md`
+   - `contracts/evidence.md`
+   - `contracts/status.md`
+5. Change wiki truth first, then code, then verification evidence.
+6. Run the harness gates and reflect evidence back into the wiki.
 
-The Markdown skills are the readable workflow. The TypeScript in `src/` is only a toolbelt for those skills:
+The Markdown files are the readable workflow. The TypeScript in `src/` is only a small toolbelt:
 
-- work-shaping skills turn user requests into accepted PRD-shaped issues.
-- work-type skills classify the issue as normal product work, wiki maintenance, repair bug fix, evidence refresh, or hotfix.
 - `impact` and `session` find affected nodes and files.
-- `mark` updates hidden `wdd_status` plus the visible `## 상태` summary after a phase finishes.
-- `status`, `drift`, and `ready` check that wiki metadata, code references, screenshots, and flow trees still agree.
-- `screenshots` and `flow-trees` expose the evidence targets that QA automation refreshes.
+- `mark` updates hidden `wdd_status` plus the visible `## 상태` summary.
+- `status`, `drift`, and `ready` check that wiki metadata, code references, screenshots, and flow trees agree.
+- `screenshots` and `flow-trees` expose evidence targets that QA automation refreshes.
+- `legacy init` and `legacy status` manage file-level migration state.
+
+## Legacy Migration
+
+Existing apps begin with code as the source of truth. The legacy playbook moves one slice at a time into wiki truth:
+
+```txt
+code-ssot -> observed -> specified -> spec-frozen -> blind-implemented -> parity-reviewed -> wiki-ssot -> retired
+```
+
+The extractor may inspect legacy code and the live app. The blind implementer may not inspect legacy code for that slice; they work from frozen wiki nodes, screenshots, QA scenarios, event/API specs, product asset metadata, and selected evidence. Only a slice that passes blind implementation and parity review can be marked `wiki-ssot`.
 
 ## Core Idea
 

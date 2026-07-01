@@ -16,8 +16,12 @@ verified_by:
   - <appRoot>/tests/e2e/example-screen.spec.ts
 artifacts:
   - '<appRoot>/src/app/examples/[id]/_components/example-screen.tsx'
+assets:
+  - path: public/images/example-hero.png
+    purpose: Hero image or visual asset used by this screen
+    source: Replace with design handoff, generated asset, or external source
 screenshots:
-  - path: <wikiRoot>/자료/스크린샷/화면/example.png
+  - path: <wikiRoot>/화면/example-screen/스크린샷.png
     alt: Example screen after QA passes
     route: /examples/example-id
 verify:
@@ -33,18 +37,22 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `screens/example-screen`
-- 타입: `screen`
+- 타입: `화면` (`screen`)
 - 의존: [[models/example-model]], [[actions/example-action]]
 - 구현: `<appRoot>/src/app/examples/[id]/page.tsx`
 - 검증 파일: `<appRoot>/tests/e2e/example-screen.spec.ts`
 - 산출물: `<appRoot>/src/app/examples/[id]/_components/example-screen.tsx`
-- 스크린샷: `<wikiRoot>/자료/스크린샷/화면/example.png` (/examples/example-id)
+- 제품 에셋: `public/images/example-hero.png`
+- 스크린샷: `<wikiRoot>/화면/example-screen/스크린샷.png` (/examples/example-id)
 - 검증 명령: `npm run e2e -- example-screen`
 
 </details>
 
 ## Screen Evidence
-![Example screen after QA passes](<relativeScreenshotPathFromThisFile>)
+![Example screen after QA passes](example-screen/스크린샷.png)
+
+## Product Assets
+- `public/images/example-hero.png`: describe where it appears, why it exists, and its source/license if external.
 
 ## Description
 Describe what the user sees and why this screen exists.

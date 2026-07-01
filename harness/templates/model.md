@@ -1,8 +1,8 @@
 <!-- wdd
 id: models/example-model
 type: model
-title: Example Model
-summary: Domain shape and validation rules.
+title: 예시 앱객체
+summary: App-facing data shape and validation rules.
 wdd_status:
   phase: coding
   code: pending
@@ -18,7 +18,7 @@ artifacts:
 verify:
   - npm run test -- example-model
 -->
-# Example Model
+# 예시 앱객체
 
 ## 상태
 
@@ -28,7 +28,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `models/example-model`
-- 타입: `model`
+- 타입: `앱객체` (`model`)
 - 의존: [[entities/example-entity]]
 - 구현: `<appRoot>/src/models/example-model.ts`
 - 검증 파일: `<appRoot>/src/models/example-model.test.ts`
@@ -47,8 +47,8 @@ Explain the domain concept in words a planner can review.
 |---|---|---|---|
 | `name` | string | Human-readable name | Required, trimmed |
 
-## Entity Mapping
-- Maps to [[entities/example-entity]].
+## DB테이블 매핑
+- Derived from [[entities/example-entity]].
 
 ## Validation Cases
 - Valid:

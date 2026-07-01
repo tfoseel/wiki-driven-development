@@ -26,26 +26,26 @@ describe("collectScreenshotTargets", () => {
         type: "screen",
         screenshots: [
           {
-            path: "wiki/자료/스크린샷/화면/service-list.png",
+            path: "wiki/화면/서비스-목록/스크린샷.png",
             alt: "Service list QA pass",
             route: "/services"
           },
           {
-            path: "wiki/자료/스크린샷/화면/manual-only.png"
+            path: "wiki/화면/manual-only/스크린샷.png"
           }
         ]
       }),
       node({
         id: "design/design-system",
         type: "design",
-        screenshots: [{ path: "wiki/자료/스크린샷/디자인/design-system.png", route: "/design" }]
+        screenshots: [{ path: "wiki/디자인/design-system/스크린샷.png", route: "/design" }]
       })
     ]);
 
     expect(collectScreenshotTargets(index)).toEqual([
       {
         nodeId: "screens/service-list",
-        path: "wiki/자료/스크린샷/화면/service-list.png",
+        path: "wiki/화면/서비스-목록/스크린샷.png",
         alt: "Service list QA pass",
         route: "/services"
       }

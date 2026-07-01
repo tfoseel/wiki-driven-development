@@ -17,9 +17,15 @@ depends_on: [models/example-model]
 implemented_by: [app/src/actions/example-action.ts]
 verified_by: [app/tests/e2e/example-action.spec.ts]
 screenshots:
-  - path: wiki/자료/스크린샷/화면/example-screen.png
+  - path: wiki/화면/example-screen/스크린샷.png
     alt: Example screen after QA
     route: /examples/1
+assets:
+  - path: public/images/example-hero.png
+    purpose: Hero illustration
+    source: Product design handoff
+legacy:
+  status: observed
 ---
 # Example Action
 `
@@ -38,11 +44,55 @@ screenshots:
     expect(node.verifiedBy).toEqual(["app/tests/e2e/example-action.spec.ts"]);
     expect(node.screenshots).toEqual([
       {
-        path: "wiki/자료/스크린샷/화면/example-screen.png",
+        path: "wiki/화면/example-screen/스크린샷.png",
         alt: "Example screen after QA",
         route: "/examples/1"
       }
     ]);
+    expect(node.assets).toEqual([
+      {
+        path: "public/images/example-hero.png",
+        purpose: "Hero illustration",
+        source: "Product design handoff"
+      }
+    ]);
+    expect(node.legacy).toEqual({
+      status: "observed"
+    });
+  });
+
+  it("rejects legacy provenance fields inside product wiki metadata", () => {
+    expect(() =>
+      parseWikiMarkdown(
+        "wiki/화면/login.md",
+        `---
+id: screens/login
+type: screen
+title: Login
+legacy_sources:
+  - pages/login/index.tsx
+---
+# Login
+`
+      )
+    ).toThrow(/legacy_sources belongs in legacy-map.json or the GitHub Issue/);
+
+    expect(() =>
+      parseWikiMarkdown(
+        "wiki/화면/login.md",
+        `---
+id: screens/login
+type: screen
+title: Login
+legacy:
+  status: observed
+  sources:
+    - pages/login/index.tsx
+---
+# Login
+`
+      )
+    ).toThrow(/legacy.sources belongs in legacy-map.json or the GitHub Issue/);
   });
 
   it("parses hidden WDD metadata without exposing it as body content", () => {
@@ -57,7 +107,7 @@ wdd_status:
   code: reflected
   verification: passed
 screenshots:
-  - path: wiki/자료/스크린샷/화면/example.png
+  - path: wiki/화면/example/스크린샷.png
     alt: Example screen after QA
     route: /example
 verify:
@@ -65,7 +115,7 @@ verify:
 -->
 # Example Screen
 
-![Example screen after QA](../자료/스크린샷/화면/example.png)
+![Example screen after QA](../화면/example/스크린샷.png)
 `
     );
 
@@ -76,7 +126,7 @@ verify:
     expect(node.body).not.toContain("screenshots:");
     expect(node.screenshots).toEqual([
       {
-        path: "wiki/자료/스크린샷/화면/example.png",
+        path: "wiki/화면/example/스크린샷.png",
         alt: "Example screen after QA",
         route: "/example"
       }

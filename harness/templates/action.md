@@ -31,7 +31,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `actions/example-action`
-- 타입: `action`
+- 타입: `액션` (`action`)
 - 의존: [[models/example-model]], [[entities/example-entity]], [[policies/example-policy]]
 - 구현: `<appRoot>/src/actions/example-action.ts`
 - 검증 파일: `<appRoot>/src/actions/example-action.test.ts`, `<appRoot>/tests/e2e/example-action.spec.ts`

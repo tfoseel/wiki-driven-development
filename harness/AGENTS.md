@@ -1,56 +1,38 @@
 # WDD Harness Agent Router
 
-This folder is the executable playbook for Wiki-Driven Development. Shape user requests into PRD-like GitHub Issues first, then run cadence only after an issue is accepted.
+This folder is the executable playbook for Wiki-Driven Development. Keep the model simple:
 
-## Routing Rule
+- `playbooks/`: how to run work.
+- `contracts/`: what must stay true.
+- `templates/`: files to copy when creating new wiki nodes.
+- `src/`: small tools that check or update the wiki.
 
-Use work-shaping skills before product truth changes:
+## Start Here
 
-1. Clarify the request: `skills/work-shaping/00-grill-request.md`
-2. Write the PRD-shaped issue: `skills/work-shaping/01-write-prd-issue.md`
-3. Split large work: `skills/work-shaping/02-slice-work.md`
-
-After the issue exists, read its work type before choosing cadence depth:
-
-- Normal product change: `skills/work-types/normal/product-change.md`
-- Normal wiki maintenance: `skills/work-types/normal/wiki-maintenance.md`
-- Repair bug fix: `skills/work-types/repair/bug-fix.md`
-- Repair evidence refresh: `skills/work-types/repair/evidence-refresh.md`
-- Repair hotfix: `skills/work-types/repair/hotfix.md`
-
-Use cadence skills in order after an accepted GitHub Issue exists. Do not skip forward because a code change looks obvious.
-
-1. Apply product wiki truth: `skills/cadence/01-wiki-edit-phase.md`
-2. Impact tracing: `skills/cadence/02-impact-phase.md`
-3. Code and wiki status sync: `skills/cadence/03-coding-sync-phase.md`
-4. Verification, QA, screenshots, flow trees: `skills/cadence/04-verification-qa-phase.md`
-5. Ready gate and PR handoff: `skills/cadence/05-ready-pr-phase.md`
-6. Wiki consistency repair: `skills/cadence/06-wiki-consistency.md`
-
-## Wiki Area Skills
-
-Pair the cadence skill with the node type you are editing:
-
-- Entity nodes: `skills/wiki-areas/entity.md`
-- Model nodes: `skills/wiki-areas/model.md`
-- Action nodes: `skills/wiki-areas/action.md`
-- Screen nodes: `skills/wiki-areas/screen.md`
-- Flow nodes: `skills/wiki-areas/flow.md`
-- QA nodes: `skills/wiki-areas/qa.md`
-- Policy nodes: `skills/wiki-areas/policy.md`
-- Design nodes: `skills/wiki-areas/design.md`
-- Root, term, and map nodes: `skills/wiki-areas/term-root.md`
+1. If there is no accepted GitHub Issue, shape one before changing product truth.
+2. Choose one playbook:
+   - Product change or wiki maintenance: `playbooks/change.md`
+   - Legacy code-SSOT migration: `playbooks/legacy-migration.md`
+   - Bug, stale evidence, or hotfix repair: `playbooks/repair.md`
+3. Read the relevant contracts:
+   - Wiki node ownership: `contracts/wiki-node.md`
+   - Legacy provenance: `contracts/legacy-map.md`
+   - Screenshots, flow trees, assets: `contracts/evidence.md`
+   - Workflow status: `contracts/status.md`
+4. Update product wiki before code.
+5. Run impact/session before editing code.
+6. Verify tests, QA, screenshots, flow trees, and `wdd ready`.
 
 ## Hard Rules
 
 - Product wiki Markdown is the SSOT; code, tests, screenshots, flow-tree captures, and PRs are derived evidence.
-- Cadence starts from an accepted GitHub Issue unless the user explicitly asks for a local spike.
 - The issue is the active PRD/work object; product wiki nodes hold merged truth, not loose task intent.
-- Every issue declares one work type. The work type can make phases full, light, or skipped, but it cannot hide ownership, impact, or evidence.
 - Edit the owning wiki node before code. If code ownership is missing, add ownership metadata before editing code.
-- Keep `wdd_status` honest while work is in progress. Do not leave a node verified when code or verification is pending.
-- Do not invent custom status prose. The `## 상태` line must match hidden WDD metadata.
-- Use `wdd mark` after a phase finishes so hidden metadata and the visible status summary move together.
+- `implemented_by` means wiki-derived implementation exists.
+- Legacy source lists and observation provenance belong in `legacy-map.json` or the GitHub Issue, not product wiki metadata.
+- API behavior belongs in 액션 (`action`) nodes; DB and persistence behavior belongs in DB테이블 (`entity`) nodes; payload shape belongs in 앱객체 (`model`) nodes.
+- Unknown behavior is a gap, not a passed check.
+- Keep `wdd_status` honest while work is in progress.
 - User-facing product readers should not need `wdd` commands; agents and CI run the harness.
 
 ## Minimal Command Surface
@@ -63,5 +45,7 @@ npm run wdd -- status wiki
 npm run wdd -- drift wiki .
 npm run wdd -- screenshots wiki
 npm run wdd -- flow-trees wiki .
+npm run wdd -- legacy status
+npm run wdd -- legacy mark <filePath> --status observed --evidence <wiki-or-issue-evidence>
 npm run wdd -- ready
 ```

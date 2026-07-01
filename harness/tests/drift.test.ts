@@ -20,6 +20,7 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">
   implementedBy: [],
   verifiedBy: [],
   artifacts: [],
+  assets: [],
   screenshots: [],
   verifyCommands: [],
   ...input
@@ -65,21 +66,21 @@ describe("findMissingCodeReferences", () => {
   it("reports missing screenshot evidence files", () => {
     const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "wdd-repo-"));
     tempDirs.push(repoRoot);
-    fs.mkdirSync(path.join(repoRoot, "wiki/자료/스크린샷/화면"), { recursive: true });
-    fs.writeFileSync(path.join(repoRoot, "wiki/자료/스크린샷/화면/existing-page.png"), "");
+    fs.mkdirSync(path.join(repoRoot, "wiki/화면/existing-page"), { recursive: true });
+    fs.writeFileSync(path.join(repoRoot, "wiki/화면/existing-page/스크린샷.png"), "");
 
     const index = buildWikiIndex([
       node({
         id: "screens/existing-page",
         type: "screen",
         title: "Existing Page",
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/existing-page.png" }]
+        screenshots: [{ path: "wiki/화면/existing-page/스크린샷.png" }]
       }),
       node({
         id: "screens/missing-page",
         type: "screen",
         title: "Missing Page",
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/missing-page.png" }]
+        screenshots: [{ path: "wiki/화면/missing-page/스크린샷.png" }]
       })
     ]);
 
@@ -87,7 +88,35 @@ describe("findMissingCodeReferences", () => {
       {
         nodeId: "screens/missing-page",
         field: "screenshots",
-        file: "wiki/자료/스크린샷/화면/missing-page.png"
+        file: "wiki/화면/missing-page/스크린샷.png"
+      }
+    ]);
+  });
+
+  it("reports missing local product asset files", () => {
+    const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "wdd-repo-"));
+    tempDirs.push(repoRoot);
+    fs.mkdirSync(path.join(repoRoot, "public/images"), { recursive: true });
+    fs.writeFileSync(path.join(repoRoot, "public/images/existing.png"), "");
+
+    const index = buildWikiIndex([
+      node({
+        id: "screens/home",
+        type: "screen",
+        title: "Home",
+        assets: [
+          { path: "public/images/existing.png", purpose: "Existing hero" },
+          { path: "public/images/missing.png", purpose: "Missing hero" },
+          { path: "https://cdn.example.com/remote.png", purpose: "Remote CDN asset" }
+        ]
+      })
+    ]);
+
+    expect(findMissingCodeReferences(index, repoRoot)).toEqual([
+      {
+        nodeId: "screens/home",
+        field: "assets",
+        file: "public/images/missing.png"
       }
     ]);
   });

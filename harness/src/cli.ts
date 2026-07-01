@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { calculateImpact } from "./impact.js";
 import { loadWiki } from "./load-wiki.js";
 import { formatSessionContext } from "./session.js";
@@ -10,6 +11,16 @@ import { collectFlowTreeTargets } from "./flow-trees.js";
 import { markWikiStatus, type WikiStatusUpdate } from "./mark.js";
 import { findWddConfig, resolveWddProject } from "./config.js";
 import { checkReady, formatReadyReport } from "./ready.js";
+import {
+  createLegacyMapFromFiles,
+  listGitTrackedFiles,
+  markLegacyFileStatus,
+  readLegacyMap,
+  resolveLegacyMapPath,
+  summarizeLegacyMap,
+  validateLegacyMap,
+  writeLegacyMap
+} from "./legacy.js";
 
 const [, , command = "help", ...args] = process.argv;
 
@@ -23,6 +34,31 @@ const readFlag = (items: string[], name: string): string | undefined => {
 
 const hasFlag = (items: string[], name: string): boolean => items.includes(name);
 
+const readRepeatedFlag = (items: string[], name: string): string[] => {
+  const values: string[] = [];
+  for (let index = 0; index < items.length; index += 1) {
+    if (items[index] !== name) continue;
+    const value = items[index + 1];
+    if (!value || value.startsWith("--")) throw new Error(`Missing value for ${name}`);
+    values.push(value);
+  }
+  return values;
+};
+
+const positionalArgs = (items: string[], valueFlags: string[], booleanFlags: string[] = []): string[] => {
+  const values: string[] = [];
+  for (let index = 0; index < items.length; index += 1) {
+    const item = items[index];
+    if (valueFlags.includes(item)) {
+      index += 1;
+      continue;
+    }
+    if (booleanFlags.includes(item)) continue;
+    values.push(item);
+  }
+  return values;
+};
+
 if (command === "help") {
   console.log(`wdd commands:
   index <wikiRoot>
@@ -34,6 +70,9 @@ if (command === "help") {
   mark <wikiRoot> <nodeId> --phase <phase> --code <status> --verification <status> [--note <note>] [--clear-note] [--with-impact]
   screenshots <wikiRoot> [--json]
   flow-trees <wikiRoot> [repoRoot] [--json]
+  legacy init [repoRoot] [mapPath]
+  legacy status [repoRoot] [mapPath] [--json]
+  legacy mark <filePath> --status <status> [repoRoot] [mapPath] [--covered-by <nodeId>] [--evidence <path>] [--gap <gap>] [--clear-gaps] [--note <note>] [--force]
   ready [wikiRoot] [repoRoot]`);
 } else if (command === "index") {
   const [wikiRoot] = args;
@@ -139,6 +178,67 @@ if (command === "help") {
   } else {
     console.log("flow tree targets:");
     for (const target of targets) console.log(`  - ${target.nodeId} -> ${target.path}`);
+  }
+} else if (command === "legacy") {
+  const format = hasFlag(args, "--json") ? "--json" : undefined;
+  const legacyArgs = args.filter((arg) => arg !== "--json");
+  const [legacyCommand = "status", ...legacyRest] = legacyArgs;
+  const readMapContext = (items: string[]): { repoRoot: string; mapPath: string } => {
+    const [repoRootArg = process.cwd(), mapPathArg] = items;
+    const repoRoot = resolveCliPath(repoRootArg);
+    return { repoRoot, mapPath: resolveLegacyMapPath(repoRoot, mapPathArg) };
+  };
+
+  if (legacyCommand === "init") {
+    const { repoRoot, mapPath } = readMapContext(legacyRest);
+    const map = createLegacyMapFromFiles(listGitTrackedFiles(repoRoot));
+    writeLegacyMap(mapPath, map);
+    console.log(`legacy-map initialized: ${mapPath}`);
+    console.log(`files: ${map.files.length}`);
+  } else if (legacyCommand === "status") {
+    const { mapPath } = readMapContext(legacyRest);
+    if (!fs.existsSync(mapPath)) throw new Error(`Missing legacy map: ${mapPath}`);
+    const map = readLegacyMap(mapPath);
+    const issues = validateLegacyMap(map);
+    const summary = summarizeLegacyMap(map);
+    if (format === "--json") {
+      console.log(JSON.stringify({ ok: issues.length === 0, summary, issues }, null, 2));
+    } else {
+      console.log("legacy-map status:");
+      console.log(`  ok: ${issues.length === 0 ? "yes" : "no"}`);
+      console.log(`  files: ${map.files.length}`);
+      for (const [status, count] of Object.entries(summary)) {
+        if (count) console.log(`  ${status}: ${count}`);
+      }
+      for (const issue of issues) console.log(`  - ${issue}`);
+    }
+    if (issues.length) process.exitCode = 1;
+  } else if (legacyCommand === "mark") {
+    const positions = positionalArgs(legacyRest, ["--status", "--covered-by", "--evidence", "--gap", "--note"], ["--force", "--clear-gaps"]);
+    const [filePath, ...contextArgs] = positions;
+    const status = readFlag(legacyRest, "--status");
+    if (!filePath || !status) {
+      throw new Error(
+        "Usage: wdd legacy mark <filePath> --status <status> [repoRoot] [mapPath] [--covered-by <nodeId>] [--evidence <path>] [--gap <gap>] [--clear-gaps] [--note <note>] [--force]"
+      );
+    }
+    const { mapPath } = readMapContext(contextArgs);
+    if (!fs.existsSync(mapPath)) throw new Error(`Missing legacy map: ${mapPath}`);
+    const map = markLegacyFileStatus(readLegacyMap(mapPath), filePath, {
+      status: status as Parameters<typeof markLegacyFileStatus>[2]["status"],
+      coveredBy: readRepeatedFlag(legacyRest, "--covered-by"),
+      evidence: readRepeatedFlag(legacyRest, "--evidence"),
+      gaps: hasFlag(legacyRest, "--clear-gaps") ? [] : legacyRest.includes("--gap") ? readRepeatedFlag(legacyRest, "--gap") : undefined,
+      note: readFlag(legacyRest, "--note"),
+      force: hasFlag(legacyRest, "--force")
+    });
+    writeLegacyMap(mapPath, map);
+    const entry = map.files.find((file) => file.path.replaceAll("\\", "/") === filePath.replaceAll("\\", "/"));
+    console.log(`legacy-map marked: ${filePath} -> ${entry?.status ?? status}`);
+  } else {
+    throw new Error(
+      "Usage: wdd legacy init [repoRoot] [mapPath] | wdd legacy status [repoRoot] [mapPath] [--json] | wdd legacy mark <filePath> --status <status> [repoRoot] [mapPath]"
+    );
   }
 } else if (command === "ready") {
   const [wikiRootArg, repoRootArg] = args;

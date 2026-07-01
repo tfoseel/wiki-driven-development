@@ -14,3 +14,4 @@ export * from "./flow-trees.js";
 export * from "./mark.js";
 export * from "./config.js";
 export * from "./ready.js";
+export * from "./legacy.js";

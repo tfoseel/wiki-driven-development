@@ -17,7 +17,7 @@ verified_by:
   - <appRoot>/tests/e2e/example-flow.spec.ts
 artifacts:
   - <appRoot>/tests/e2e/example-flow.spec.ts
-  - <wikiRoot>/자료/흐름/example-flow-screen-tree.png
+  - <wikiRoot>/흐름/example-flow/화면트리.png
 verify:
   - npm run e2e -- example-flow
 -->
@@ -31,19 +31,19 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `flows/example-flow`
-- 타입: `flow`
+- 타입: `흐름` (`flow`)
 - 의존: [[screens/example-screen]], [[screens/other-screen]], [[actions/example-action]]
 - 구현: `<appRoot>/tests/e2e/example-flow.spec.ts`
 - 검증 파일: `<appRoot>/tests/e2e/example-flow.spec.ts`
-- 산출물: `<appRoot>/tests/e2e/example-flow.spec.ts`, `<wikiRoot>/자료/흐름/example-flow-screen-tree.png`
-- 스크린샷: `<wikiRoot>/자료/흐름/example-flow-screen-tree.png`
+- 산출물: `<appRoot>/tests/e2e/example-flow.spec.ts`, `<wikiRoot>/흐름/example-flow/화면트리.png`
+- 스크린샷: `<wikiRoot>/흐름/example-flow/화면트리.png`
 - 검증 명령: `npm run e2e -- example-flow`
 
 </details>
 
 ## Screen Tree
 
-![Example flow screen tree](<relativeFlowTreeCapturePathFromThisFile>)
+![Example flow screen tree](example-flow/화면트리.png)
 
 <details>
 <summary>Mermaid source</summary>

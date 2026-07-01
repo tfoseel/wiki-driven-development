@@ -28,6 +28,17 @@ export interface WikiScreenshot {
   capturedAt?: string;
 }
 
+export interface WikiAsset {
+  path: string;
+  purpose?: string;
+  source?: string;
+  license?: string;
+}
+
+export interface WikiLegacyState {
+  status: string;
+}
+
 export interface WikiNode {
   id: string;
   type: WikiNodeType;
@@ -41,6 +52,8 @@ export interface WikiNode {
   implementedBy: string[];
   verifiedBy: string[];
   artifacts: string[];
+  assets: WikiAsset[];
   screenshots: WikiScreenshot[];
+  legacy?: WikiLegacyState;
   verifyCommands: string[];
 }

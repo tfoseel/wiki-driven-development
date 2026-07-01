@@ -1,8 +1,8 @@
 <!-- wdd
 id: entities/example-entity
 type: entity
-title: Example Entity
-summary: Persistent domain data owned by the product.
+title: 예시 DB테이블
+summary: Persisted product data owned by the product.
 wdd_status:
   phase: coding
   code: pending
@@ -18,7 +18,7 @@ artifacts:
 verify:
   - npm run test -- example-entity
 -->
-# Example Entity
+# 예시 DB테이블
 
 ## 상태
 
@@ -28,7 +28,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `entities/example-entity`
-- 타입: `entity`
+- 타입: `DB테이블` (`entity`)
 - 의존: [[policies/example-policy]]
 - 구현: `<appRoot>/supabase/migrations/00000000000000_example.sql`
 - 검증 파일: `<appRoot>/tests/models/example-entity.test.ts`
@@ -39,7 +39,7 @@ verify:
 </details>
 
 ## Meaning
-Describe what this data represents in product language before listing fields.
+Describe what this DB테이블 stores in product language before listing fields.
 
 ## Fields
 
@@ -50,7 +50,7 @@ Describe what this data represents in product language before listing fields.
 ## Relationships
 - Link to related [[models/example-model]] or [[entities/other-entity]] pages.
 
-## Persistence Rules
+## DB Rules
 - Explain uniqueness, lifecycle, retention, and migration expectations.
 
 ## Examples

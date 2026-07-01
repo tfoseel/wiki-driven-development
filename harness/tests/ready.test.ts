@@ -15,7 +15,9 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type">): WikiNod
   implementedBy: input.implementedBy ?? [],
   verifiedBy: input.verifiedBy ?? [],
   artifacts: input.artifacts ?? [],
+  assets: input.assets ?? [],
   screenshots: input.screenshots ?? [],
+  legacy: input.legacy,
   verifyCommands: input.verifyCommands ?? ["npm test"]
 });
 
@@ -26,13 +28,13 @@ describe("checkReady", () => {
         id: "screens/example",
         type: "screen",
         filePath: "wiki/화면/example.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](example/스크린샷.png)"].join("\n"),
         implementedBy: ["app/page.tsx"],
         verifiedBy: ["app/page.test.ts"],
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+        screenshots: [{ path: "wiki/화면/example/스크린샷.png", route: "/example" }]
       })
     ]);
-    const existing = new Set(["app/page.tsx", "app/page.test.ts", "wiki/자료/스크린샷/화면/example.png"]);
+    const existing = new Set(["app/page.tsx", "app/page.test.ts", "wiki/화면/example/스크린샷.png"]);
 
     expect(checkReady(index, "/repo", (file) => existing.has(file)).ok).toBe(true);
   });
@@ -57,7 +59,7 @@ describe("checkReady", () => {
       node({
         id: "screens/example",
         type: "screen",
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png" }]
+        screenshots: [{ path: "wiki/화면/example/스크린샷.png" }]
       })
     ]);
 
@@ -67,7 +69,28 @@ describe("checkReady", () => {
     expect(result.issues).toContainEqual({
       kind: "screenshot",
       nodeId: "screens/example",
-      message: "Screen screenshots must declare route: wiki/자료/스크린샷/화면/example.png"
+      message: "Screen screenshots must declare route: wiki/화면/example/스크린샷.png"
+    });
+  });
+
+  it("fails when wiki evidence creates a reader-facing top-level folder", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "screens/example",
+        type: "screen",
+        filePath: "wiki/화면/example.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
+        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "asset-path",
+      nodeId: "screens/example",
+      message: "screenshots under wiki/ must live next to the owning wiki node: expected wiki/화면/example/"
     });
   });
 
@@ -77,7 +100,7 @@ describe("checkReady", () => {
         id: "screens/missing-inline-screenshot",
         type: "screen",
         filePath: "wiki/화면/missing-inline-screenshot.md",
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/missing-inline-screenshot.png", route: "/missing" }]
+        screenshots: [{ path: "wiki/화면/missing-inline-screenshot/스크린샷.png", route: "/missing" }]
       })
     ]);
 
@@ -87,7 +110,7 @@ describe("checkReady", () => {
     expect(result.issues).toContainEqual({
       kind: "screenshot",
       nodeId: "screens/missing-inline-screenshot",
-      message: "Screen screenshot must be embedded inline in markdown: wiki/자료/스크린샷/화면/missing-inline-screenshot.png"
+      message: "Screen screenshot must be embedded inline in markdown: wiki/화면/missing-inline-screenshot/스크린샷.png"
     });
   });
 
@@ -98,8 +121,8 @@ describe("checkReady", () => {
         type: "screen",
         metadataFormat: "frontmatter",
         filePath: "wiki/화면/visible-frontmatter.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Visible](../자료/스크린샷/화면/visible.png)"].join("\n"),
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/visible.png", route: "/visible" }]
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Visible](visible-frontmatter/스크린샷.png)"].join("\n"),
+        screenshots: [{ path: "wiki/화면/visible-frontmatter/스크린샷.png", route: "/visible" }]
       })
     ]);
 
@@ -126,8 +149,8 @@ describe("checkReady", () => {
         id: "screens/example",
         type: "screen",
         filePath: "wiki/화면/example.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](example/스크린샷.png)"].join("\n"),
+        screenshots: [{ path: "wiki/화면/example/스크린샷.png", route: "/example" }]
       })
     ]);
 
@@ -137,7 +160,7 @@ describe("checkReady", () => {
     expect(result.issues).toContainEqual({
       kind: "screenshot",
       nodeId: "flows/create-example",
-      message: "Flow screen tree must embed dependent screen screenshot: wiki/자료/스크린샷/화면/example.png"
+      message: "Flow screen tree must embed dependent screen screenshot: wiki/화면/example/스크린샷.png"
     });
   });
 
@@ -159,7 +182,7 @@ describe("checkReady", () => {
           "",
           "```mermaid",
           "flowchart TD",
-          "  example[\"Example<br/><img src='../자료/스크린샷/화면/example.png' width='160' />\"]",
+          "  example[\"Example<br/><img src='../화면/example/스크린샷.png' width='160' />\"]",
           "```",
           "",
           "</details>"
@@ -170,8 +193,8 @@ describe("checkReady", () => {
         id: "screens/example",
         type: "screen",
         filePath: "wiki/화면/example.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](example/스크린샷.png)"].join("\n"),
+        screenshots: [{ path: "wiki/화면/example/스크린샷.png", route: "/example" }]
       })
     ]);
 
@@ -198,14 +221,14 @@ describe("checkReady", () => {
           "",
           "## 화면 트리",
           "",
-          "![Create example screen tree](../자료/흐름/create-example-screen-tree.png)",
+          "![Create example screen tree](create-example/화면트리.png)",
           "",
           "<details>",
           "<summary>Mermaid source</summary>",
           "",
           "```mermaid",
           "flowchart TD",
-          "  example[\"Example<br/><img src='../자료/스크린샷/화면/example.png' width='160' />\"]",
+          "  example[\"Example<br/><img src='../화면/example/스크린샷.png' width='160' />\"]",
           "```",
           "",
           "</details>"
@@ -216,18 +239,18 @@ describe("checkReady", () => {
         id: "screens/example",
         type: "screen",
         filePath: "wiki/화면/example.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](example/스크린샷.png)"].join("\n"),
+        screenshots: [{ path: "wiki/화면/example/스크린샷.png", route: "/example" }]
       })
     ]);
 
-    const result = checkReady(index, "/repo", (file) => file !== "wiki/자료/흐름/create-example-screen-tree.png");
+    const result = checkReady(index, "/repo", (file) => file !== "wiki/흐름/create-example/화면트리.png");
 
     expect(result.ok).toBe(false);
     expect(result.issues).toContainEqual({
       kind: "flow-tree",
       nodeId: "flows/create-example",
-      message: "Missing generated flow tree capture: wiki/자료/흐름/create-example-screen-tree.png"
+      message: "Missing generated flow tree capture: wiki/흐름/create-example/화면트리.png"
     });
   });
 
@@ -286,4 +309,56 @@ describe("checkReady", () => {
       message: "Status summary must be exactly: 상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과"
     });
   });
+
+  it("fails when legacy-observed nodes claim wiki-derived code reflection", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "screens/legacy-home",
+        type: "screen",
+        filePath: "wiki/화면/legacy-home.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Legacy](legacy-home/스크린샷.png)"].join("\n"),
+        wddStatus: { phase: "verified", code: "reflected", verification: "passed" },
+        screenshots: [{ path: "wiki/화면/legacy-home/스크린샷.png", route: "/" }],
+        legacy: {
+          status: "observed"
+        }
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "legacy",
+      nodeId: "screens/legacy-home",
+      message: "Legacy observed/spec/frozen nodes must not claim wiki-derived code reflection."
+    });
+  });
+
+  it("fails when pre-implementation legacy nodes list legacy code as implemented_by", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "screens/legacy-login",
+        type: "screen",
+        filePath: "wiki/화면/legacy-login.md",
+        body: ["## 상태", "", "상태: 📝 위키 작성 중 · 코드 대기 · 검증 대기"].join("\n"),
+        wddStatus: { phase: "wiki", code: "pending", verification: "pending" },
+        implementedBy: ["pages/login/index.tsx"],
+        legacy: {
+          status: "observed"
+        },
+        verifyCommands: []
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "legacy",
+      nodeId: "screens/legacy-login",
+      message: "Legacy observed/spec/frozen nodes must keep implemented_by empty until wiki-derived code exists."
+    });
+  });
+
 });

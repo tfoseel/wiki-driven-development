@@ -28,7 +28,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `policies/example-policy`
-- 타입: `policy`
+- 타입: `정책` (`policy`)
 - 의존: [[terms/example-term]]
 - 구현: `<appRoot>/src/lib/policies/example-policy.ts`
 - 검증 파일: `<appRoot>/src/lib/policies/example-policy.test.ts`

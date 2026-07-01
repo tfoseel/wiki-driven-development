@@ -34,15 +34,15 @@ describe("collectFlowTreeTargets", () => {
           "",
           "## 화면 트리",
           "",
-          "![Create example screen tree](../자료/흐름/create-example-screen-tree.png)",
+          "![Create example screen tree](create-example/화면트리.png)",
           "",
           "<details>",
           "<summary>Mermaid source</summary>",
           "",
           "```mermaid",
           "flowchart TD",
-          "  start[\"Start<br/><img src='../자료/스크린샷/화면/start.png' width='160' />\"]",
-          "  end[\"End<br/><img src='../자료/스크린샷/화면/end.png' width='160' />\"]",
+          "  start[\"Start<br/><img src='../화면/start/스크린샷.png' width='160' />\"]",
+          "  end[\"End<br/><img src='../화면/end/스크린샷.png' width='160' />\"]",
           "  start -->|Continue| end",
           "```",
           "",
@@ -55,16 +55,16 @@ describe("collectFlowTreeTargets", () => {
         type: "screen",
         title: "Start",
         filePath: "wiki/화면/start.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Start](../자료/스크린샷/화면/start.png)"].join("\n"),
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/start.png", route: "/start", alt: "Start screen" }]
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Start](../화면/start/스크린샷.png)"].join("\n"),
+        screenshots: [{ path: "wiki/화면/start/스크린샷.png", route: "/start", alt: "Start screen" }]
       }),
       node({
         id: "screens/end",
         type: "screen",
         title: "End",
         filePath: "wiki/화면/end.md",
-        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![End](../자료/스크린샷/화면/end.png)"].join("\n"),
-        screenshots: [{ path: "wiki/자료/스크린샷/화면/end.png", route: "/end", alt: "End screen" }]
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![End](../화면/end/스크린샷.png)"].join("\n"),
+        screenshots: [{ path: "wiki/화면/end/스크린샷.png", route: "/end", alt: "End screen" }]
       })
     ]);
 
@@ -72,24 +72,24 @@ describe("collectFlowTreeTargets", () => {
       {
         nodeId: "flows/create-example",
         title: "Create Example",
-        path: "wiki/자료/흐름/create-example-screen-tree.png",
+        path: "wiki/흐름/create-example/화면트리.png",
         source: [
           "flowchart TD",
-          "  start[\"Start<br/><img src='../자료/스크린샷/화면/start.png' width='160' />\"]",
-          "  end[\"End<br/><img src='../자료/스크린샷/화면/end.png' width='160' />\"]",
+          "  start[\"Start<br/><img src='../화면/start/스크린샷.png' width='160' />\"]",
+          "  end[\"End<br/><img src='../화면/end/스크린샷.png' width='160' />\"]",
           "  start -->|Continue| end"
         ].join("\n"),
         screens: [
           {
             nodeId: "screens/start",
             title: "Start",
-            screenshotPath: "wiki/자료/스크린샷/화면/start.png",
+            screenshotPath: "wiki/화면/start/스크린샷.png",
             alt: "Start screen"
           },
           {
             nodeId: "screens/end",
             title: "End",
-            screenshotPath: "wiki/자료/스크린샷/화면/end.png",
+            screenshotPath: "wiki/화면/end/스크린샷.png",
             alt: "End screen"
           }
         ]

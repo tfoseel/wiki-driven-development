@@ -34,7 +34,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `qa/create-booking-e2e`
-- 타입: `qa`
+- 타입: `QA` (`qa`)
 - 의존: [[flows/create-booking-flow]], [[screens/service-list]], [[screens/booking-new]], [[screens/booking-complete]], [[actions/create-booking]]
 - 구현: `src/app/bookings/new/page.tsx`, `tests/e2e/create-booking.spec.ts`
 - 검증 파일: `tests/e2e/create-booking.spec.ts`
@@ -46,7 +46,7 @@ verify:
 
 이 문서는 [[flows/create-booking-flow]]의 화면 트리와 전달 계약을 반복 설명하지 않고, 실제로 검증해야 할 커버리지와 엣지 케이스만 기록한다.
 
-## 커버리지 모델
+## 커버리지 관점
 - 성공 경로.
 - 반복 실행을 위해 mutation 시나리오 전에 `/bookings/new?wddSeed=reset`으로 seed store를 초기화한다.
 - 예약 가능한 슬롯 없음.

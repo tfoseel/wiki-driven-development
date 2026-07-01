@@ -7,6 +7,8 @@ import type {
   WddWorkflowPhase,
   WikiNode,
   WikiNodeType,
+  WikiAsset,
+  WikiLegacyState,
   WikiScreenshot
 } from "./node.js";
 
@@ -101,10 +103,58 @@ function parseScreenshots(filePath: string, value: unknown): WikiScreenshot[] {
   });
 }
 
+function parseAssets(filePath: string, value: unknown): WikiAsset[] {
+  if (!value) return [];
+  const items = Array.isArray(value) ? value : [value];
+
+  return items.map((item) => {
+    if (typeof item === "string") return { path: item };
+    const asset = asRecord(item);
+    if (!asset?.path) throw new Error(`${filePath}: asset entry missing path`);
+    return {
+      path: String(asset.path),
+      purpose: asset.purpose ? String(asset.purpose) : undefined,
+      source: asset.source ? String(asset.source) : undefined,
+      license: asset.license ? String(asset.license) : undefined
+    };
+  });
+}
+
+function parseLegacy(value: unknown): WikiLegacyState | undefined {
+  const legacy = asRecord(value);
+  if (!legacy?.status) return undefined;
+
+  if ("sources" in legacy) throw new Error("legacy.sources belongs in legacy-map.json or the GitHub Issue, not product wiki metadata");
+  if ("evidence" in legacy) throw new Error("legacy.evidence belongs in legacy-map.json or the GitHub Issue, not product wiki metadata");
+  if ("note" in legacy) throw new Error("legacy.note belongs in legacy-map.json or the GitHub Issue, not product wiki metadata");
+
+  return {
+    status: String(legacy.status)
+  };
+}
+
+function rejectMigrationProvenanceFields(filePath: string, data: Record<string, unknown>): void {
+  const forbiddenFields = [
+    "legacy_sources",
+    "legacySources",
+    "implementation_targets",
+    "implementationTargets",
+    "target_implementation",
+    "targetImplementation"
+  ];
+
+  for (const field of forbiddenFields) {
+    if (field in data) {
+      throw new Error(`${filePath}: ${field} belongs in legacy-map.json or the GitHub Issue, not product wiki metadata`);
+    }
+  }
+}
+
 export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
   const hiddenMetadata = parseHiddenWddMetadata(raw);
   const parsed = hiddenMetadata ?? matter(raw);
   const data = parsed.data;
+  rejectMigrationProvenanceFields(filePath, data);
   if (!data.id) throw new Error(`${filePath}: missing id`);
   if (!data.type) throw new Error(`${filePath}: missing type`);
   if (!NODE_TYPES.has(data.type)) throw new Error(`${filePath}: invalid type ${data.type}`);
@@ -124,7 +174,9 @@ export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
     implementedBy: asList(data.implemented_by),
     verifiedBy: asList(data.verified_by),
     artifacts: asList(data.artifacts),
+    assets: parseAssets(filePath, data.assets),
     screenshots: parseScreenshots(filePath, data.screenshots),
+    legacy: parseLegacy(data.legacy),
     verifyCommands: asList(data.verify)
   };
 }

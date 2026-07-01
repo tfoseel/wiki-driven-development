@@ -6,7 +6,16 @@ import { collectScreenshotTargets } from "./screenshots.js";
 import { collectFlowTreeTargets } from "./flow-trees.js";
 import { findStatusSummaryIssues, findWorkflowAttention } from "./workflow.js";
 
-export type ReadyIssueKind = "workflow" | "reference" | "screenshot" | "flow-tree" | "verify" | "status" | "metadata";
+export type ReadyIssueKind =
+  | "workflow"
+  | "reference"
+  | "screenshot"
+  | "flow-tree"
+  | "verify"
+  | "status"
+  | "metadata"
+  | "asset-path"
+  | "legacy";
 
 export interface ReadyIssue {
   kind: ReadyIssueKind;
@@ -44,6 +53,33 @@ function hasInlineMarkdownImage(body: string, candidates: string[]): boolean {
       normalizedBody.includes(`src='${candidate}'`)
   );
 }
+
+function isWikiLocalNonMarkdownPath(file: string): boolean {
+  const normalized = normalizePathForMarkdown(file);
+  return normalized.startsWith("wiki/") && !normalized.endsWith(".md");
+}
+
+function sidecarPrefixForNode(nodeFilePath: string, repoRoot: string): string | undefined {
+  const normalized = normalizePathForMarkdown(path.isAbsolute(nodeFilePath) ? path.relative(repoRoot, nodeFilePath) : nodeFilePath);
+  if (!normalized.startsWith("wiki/") || !normalized.endsWith(".md")) return undefined;
+  return normalized.slice(0, -".md".length) + "/";
+}
+
+function pushWikiEvidencePathIssue(issues: ReadyIssue[], nodeId: string, nodeFilePath: string, repoRoot: string, field: string, file: string): void {
+  if (!isWikiLocalNonMarkdownPath(file)) return;
+
+  const normalized = normalizePathForMarkdown(file);
+  const sidecarPrefix = sidecarPrefixForNode(nodeFilePath, repoRoot);
+  if (sidecarPrefix && normalized.startsWith(sidecarPrefix)) return;
+
+  issues.push({
+    kind: "asset-path",
+    nodeId,
+    message: `${field} under wiki/ must live next to the owning wiki node: expected ${sidecarPrefix ?? "a node sidecar folder"}`
+  });
+}
+
+const LEGACY_PRE_IMPLEMENTATION_STATUSES = new Set(["code-ssot", "observed", "specified", "spec-frozen"]);
 
 export function checkReady(
   index: WikiIndex,
@@ -87,6 +123,34 @@ export function checkReady(
   }
 
   for (const node of index.nodes) {
+    if (
+      node.legacy &&
+      LEGACY_PRE_IMPLEMENTATION_STATUSES.has(node.legacy.status) &&
+      (node.wddStatus.code === "reflected" || node.wddStatus.phase === "verified" || node.wddStatus.verification === "passed")
+    ) {
+      issues.push({
+        kind: "legacy",
+        nodeId: node.id,
+        message: "Legacy observed/spec/frozen nodes must not claim wiki-derived code reflection."
+      });
+    }
+
+    if (node.legacy && LEGACY_PRE_IMPLEMENTATION_STATUSES.has(node.legacy.status) && node.implementedBy.length) {
+      issues.push({
+        kind: "legacy",
+        nodeId: node.id,
+        message: "Legacy observed/spec/frozen nodes must keep implemented_by empty until wiki-derived code exists."
+      });
+    }
+
+    for (const artifact of node.artifacts) {
+      pushWikiEvidencePathIssue(issues, node.id, node.filePath, repoRoot, "artifacts", artifact);
+    }
+
+    for (const screenshot of node.screenshots) {
+      pushWikiEvidencePathIssue(issues, node.id, node.filePath, repoRoot, "screenshots", screenshot.path);
+    }
+
     if (node.wddStatus.verification === "passed" && node.type !== "root" && !node.verifyCommands.length) {
       issues.push({
         kind: "verify",
@@ -134,6 +198,8 @@ export function checkReady(
       }
 
       for (const flowTreeTarget of flowTreeTargets) {
+        pushWikiEvidencePathIssue(issues, node.id, node.filePath, repoRoot, "flow tree captures", flowTreeTarget.path);
+
         if (!fileExists(flowTreeTarget.path)) {
           issues.push({
             kind: "flow-tree",

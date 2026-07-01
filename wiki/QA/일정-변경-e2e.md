@@ -31,7 +31,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `qa/reschedule-booking-e2e`
-- 타입: `qa`
+- 타입: `QA` (`qa`)
 - 의존: [[flows/manage-booking-flow]], [[screens/booking-detail]], [[actions/reschedule-booking]], [[policies/cancellation-policy]]
 - 구현: `tests/e2e/reschedule-booking.spec.ts`
 - 검증 파일: `tests/e2e/reschedule-booking.spec.ts`
@@ -43,7 +43,7 @@ verify:
 
 이 문서는 [[flows/manage-booking-flow]]의 화면 트리와 전달 계약을 반복 설명하지 않고, 일정 변경에서 실제로 검증해야 할 커버리지와 엣지 케이스만 기록한다.
 
-## 커버리지 모델
+## 커버리지 관점
 - 성공 경로.
 - 대상 슬롯 예약 불가.
 - 이미 취소된 예약.

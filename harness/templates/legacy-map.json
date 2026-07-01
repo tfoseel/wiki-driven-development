@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "purpose": "Track migration from code-SSOT legacy files to wiki-SSOT slices.",
+  "statuses": {
+    "code-ssot": "Existing code currently defines behavior.",
+    "observed": "The running app and legacy code were observed; wiki candidates and evidence exist.",
+    "specified": "Visible and hidden behavior are specified in wiki, but the spec is not frozen.",
+    "spec-frozen": "The wiki is frozen as the only implementation input for this slice.",
+    "blind-implemented": "A wiki-only implementation exists without legacy-code access.",
+    "parity-reviewed": "The wiki-derived implementation passed parity review against legacy evidence.",
+    "wiki-ssot": "The wiki is the proven SSOT for this slice.",
+    "adapter": "A thin compatibility layer connects legacy entrypoints to wiki-derived implementation.",
+    "retired": "The legacy file or branch is no longer used."
+  },
+  "files": []
+}

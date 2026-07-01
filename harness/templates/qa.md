@@ -30,7 +30,7 @@ verify:
 <summary>영향 범위와 구현 메타</summary>
 
 - 노드: `qa/example-e2e`
-- 타입: `qa`
+- 타입: `QA` (`qa`)
 - 의존: [[screens/example-screen]], [[actions/example-action]], [[policies/example-policy]]
 - 구현: `<appRoot>/tests/e2e/example-e2e.spec.ts`
 - 검증 파일: `<appRoot>/tests/e2e/example-e2e.spec.ts`
