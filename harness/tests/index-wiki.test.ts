@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildWikiIndex } from "./index-wiki.js";
+import { buildWikiIndex } from "../src/index-wiki.js";
 
 describe("buildWikiIndex", () => {
   it("indexes nodes and dependents", () => {

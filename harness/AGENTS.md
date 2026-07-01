@@ -1,34 +1,52 @@
-# WDD Harness Agent Runbook
+# WDD Harness Agent Router
 
-This project uses Wiki-Driven Development.
+This folder is the executable playbook for Wiki-Driven Development. Before changing product truth, read the cadence skill for the current phase and the wiki-area skill for every node type you touch.
 
-## Required Cadence
+## Routing Rule
 
-1. Start from a GitHub Issue or create one before changing product truth.
-2. Edit the owning `wiki/` Markdown file first, then any impacted wiki nodes.
-3. Check impact before coding.
-4. Edit only code referenced by the impacted wiki nodes. If code ownership is missing, update wiki metadata first.
-5. Run declared tests, E2E, screenshot capture, and the ready gate.
-6. Mark wiki nodes verified only after code and verification evidence are reflected.
+Use cadence skills in order. Do not skip forward because a code change looks obvious.
+
+1. Request or issue intake: `skills/cadence/00-github-issue-intake.md`
+2. Product wiki edit: `skills/cadence/01-wiki-edit-phase.md`
+3. Impact tracing: `skills/cadence/02-impact-phase.md`
+4. Code and wiki status sync: `skills/cadence/03-coding-sync-phase.md`
+5. Verification, QA, screenshots, flow trees: `skills/cadence/04-verification-qa-phase.md`
+6. Ready gate and PR handoff: `skills/cadence/05-ready-pr-phase.md`
+7. Wiki consistency repair: `skills/cadence/06-wiki-consistency.md`
+
+## Wiki Area Skills
+
+Pair the cadence skill with the node type you are editing:
+
+- Entity nodes: `skills/wiki-areas/entity.md`
+- Model nodes: `skills/wiki-areas/model.md`
+- Action nodes: `skills/wiki-areas/action.md`
+- Screen nodes: `skills/wiki-areas/screen.md`
+- Flow nodes: `skills/wiki-areas/flow.md`
+- QA nodes: `skills/wiki-areas/qa.md`
+- Policy nodes: `skills/wiki-areas/policy.md`
+- Design nodes: `skills/wiki-areas/design.md`
+- Root, term, and map nodes: `skills/wiki-areas/term-root.md`
 
 ## Hard Rules
 
-- Product code is derived work; `wiki/` is the SSOT.
-- GitHub Markdown rendering of `wiki/*.md` is the default reading surface.
-- HTML output is optional derived output, not source truth.
-- Do not invent human status prose. `## 상태` must match the canonical line derived from `wdd_status`.
-- Do not treat temporary plans as durable truth.
-- Work-in-progress intent belongs in GitHub Issues and PRs.
-- Durable decisions belong in `wiki/`, this `harness/` folder, templates, tests, or README.
-- Reflected screen nodes must have route-backed screenshots.
+- Product wiki Markdown is the SSOT; code, tests, screenshots, flow-tree captures, and PRs are derived evidence.
+- Product truth changes start from a GitHub Issue unless the user explicitly asks for a local spike.
+- Edit the owning wiki node before code. If code ownership is missing, add ownership metadata before editing code.
+- Keep `wdd_status` honest while work is in progress. Do not leave a node verified when code or verification is pending.
+- Do not invent custom status prose. The `## 상태` line must match hidden WDD metadata.
+- Use `wdd mark` after a phase finishes so hidden metadata and the visible status summary move together.
+- User-facing product readers should not need `wdd` commands; agents and CI run the harness.
 
-## Useful Commands
+## Minimal Command Surface
 
 ```bash
 npm run wdd -- impact wiki <nodeId>
 npm run wdd -- session wiki <nodeId>
+npm run wdd -- mark wiki <nodeId> --phase coding --code pending --verification pending --with-impact
 npm run wdd -- status wiki
 npm run wdd -- drift wiki .
 npm run wdd -- screenshots wiki
+npm run wdd -- flow-trees wiki .
 npm run wdd -- ready
 ```

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buildWikiIndex } from "./index-wiki.js";
-import type { WikiNode } from "./node.js";
-import { getVerifyCommands } from "./verify.js";
+import { buildWikiIndex } from "../src/index-wiki.js";
+import type { WikiNode } from "../src/node.js";
+import { getVerifyCommands } from "../src/verify.js";
 
 const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type" | "title">): WikiNode => ({
   filePath: `${input.id}.md`,

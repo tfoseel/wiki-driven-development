@@ -11,5 +11,6 @@ export * from "./verify.js";
 export * from "./workflow.js";
 export * from "./screenshots.js";
 export * from "./flow-trees.js";
+export * from "./mark.js";
 export * from "./config.js";
 export * from "./ready.js";

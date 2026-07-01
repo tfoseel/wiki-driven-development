@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseWikiMarkdown } from "./parse.js";
+import { parseWikiMarkdown } from "../src/parse.js";
 
 describe("parseWikiMarkdown", () => {
   it("parses required node frontmatter and body", () => {

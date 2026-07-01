@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buildWikiIndex } from "./index-wiki.js";
-import { calculateImpact } from "./impact.js";
-import type { WikiNode, WikiNodeType } from "./node.js";
+import { buildWikiIndex } from "../src/index-wiki.js";
+import { calculateImpact } from "../src/impact.js";
+import type { WikiNode, WikiNodeType } from "../src/node.js";
 
 const typeForId = (id: string): WikiNodeType => {
   const [group] = id.split("/");

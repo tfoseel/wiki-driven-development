@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { collectScreenshotTargets } from "./screenshots.js";
-import { buildWikiIndex } from "./index-wiki.js";
-import type { WikiNode } from "./node.js";
+import { collectScreenshotTargets } from "../src/screenshots.js";
+import { buildWikiIndex } from "../src/index-wiki.js";
+import type { WikiNode } from "../src/node.js";
 
 const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type">): WikiNode => ({
   id: input.id,

@@ -2,9 +2,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { findMissingCodeReferences } from "./drift.js";
-import { buildWikiIndex } from "./index-wiki.js";
-import type { WikiNode } from "./node.js";
+import { findMissingCodeReferences } from "../src/drift.js";
+import { buildWikiIndex } from "../src/index-wiki.js";
+import type { WikiNode } from "../src/node.js";
 
 const tempDirs: string[] = [];
 

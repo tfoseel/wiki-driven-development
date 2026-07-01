@@ -6,7 +6,7 @@ Wiki-Driven Development (WDD) treats the product wiki as the SSOT. The Next.js a
 
 ```txt
 wiki/        product SSOT Markdown in downstream projects
-harness/     WDD lint, impact, workflow, screenshot, and ready checks
+harness/     WDD cadence skills, node skills, templates, lint, impact, screenshot, and ready checks
 AGENTS.md    agent entry point that forces the wiki-first cadence
 ```
 
@@ -20,9 +20,10 @@ Every product change follows the same order:
 2. **Impact phase:** run `wdd impact` or read dependencies to find affected screens and files.
 3. **Coding phase:** edit only the referenced code or update the wiki if ownership metadata was wrong.
 4. **Verification phase:** run declared tests, E2E, QA screenshots, `wdd status`, and `wdd drift`.
-5. **Verified state:** mark impacted nodes as `phase: verified`, `code: reflected`, `verification: passed`.
+5. **Verified state:** use `wdd mark` to mark impacted nodes as `phase: verified`, `code: reflected`, `verification: passed`, then run `wdd ready`.
 
 If work stops mid-cadence, leave `wdd_status` in the current phase. A reader should be able to see whether the wiki is implemented and verified.
+Agents and CI should update that status with `wdd mark` so hidden metadata and the human `## 상태` line stay synchronized.
 
 ## User Experience
 
@@ -165,6 +166,7 @@ npm run dev        # product app on http://127.0.0.1:3001
 npm run wdd -- index wiki
 npm run wdd -- impact wiki actions/create-booking
 npm run wdd -- session wiki actions/create-booking
+npm run wdd -- mark wiki actions/create-booking --phase verification --code reflected --verification pending --with-impact
 npm run wdd -- status wiki
 npm run wdd -- drift wiki .
 npm run wdd -- screenshots wiki
@@ -197,7 +199,7 @@ Minimum setup:
 
 1. Start from a normal Next.js project. Keep its `app/` or `src/app/` choice.
 2. Create `wiki/` and copy `harness/templates/*.md` into it. Rename each template file to real product nodes.
-3. Keep the WDD tool package, runbooks, and templates in `harness/`.
+3. Keep the WDD tool package, cadence skills, wiki-area skills, runbooks, and templates in `harness/`.
 4. Copy `harness/templates/AGENTS.md` to the repo root and keep `harness/AGENTS.md` inside the harness folder.
 5. Add harness configuration under `harness/` or wire it through package scripts, setting `wikiRoot`, `repoRoot`, and `appRoot`.
 6. Put real repo-relative paths in hidden WDD metadata. Use block YAML lists for paths with brackets such as `app/src/app/items/[id]/page.tsx`.

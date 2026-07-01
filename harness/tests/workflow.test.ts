@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buildWikiIndex } from "./index-wiki.js";
-import type { WikiNode, WddStatus } from "./node.js";
-import { findStatusSummaryIssues, findWorkflowAttention, formatStatusSummary, formatWorkflowStatus } from "./workflow.js";
+import { buildWikiIndex } from "../src/index-wiki.js";
+import type { WikiNode, WddStatus } from "../src/node.js";
+import { findStatusSummaryIssues, findWorkflowAttention, formatStatusSummary, formatWorkflowStatus } from "../src/workflow.js";
 
 const status = (input: Partial<WddStatus>): WddStatus => ({
   phase: "verified",

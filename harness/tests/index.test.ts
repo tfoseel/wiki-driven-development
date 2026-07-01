@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { version } from "./index.js";
+import { version } from "../src/index.js";
 
 describe("wdd harness package", () => {
   it("exposes the initial package version", () => {

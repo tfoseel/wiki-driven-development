@@ -7,10 +7,21 @@ import { resolveCliPath } from "./cli-paths.js";
 import { findWorkflowAttention, formatWorkflowStatus } from "./workflow.js";
 import { collectScreenshotTargets } from "./screenshots.js";
 import { collectFlowTreeTargets } from "./flow-trees.js";
+import { markWikiStatus, type WikiStatusUpdate } from "./mark.js";
 import { findWddConfig, resolveWddProject } from "./config.js";
 import { checkReady, formatReadyReport } from "./ready.js";
 
 const [, , command = "help", ...args] = process.argv;
+
+const readFlag = (items: string[], name: string): string | undefined => {
+  const index = items.indexOf(name);
+  if (index < 0) return undefined;
+  const value = items[index + 1];
+  if (!value || value.startsWith("--")) throw new Error(`Missing value for ${name}`);
+  return value;
+};
+
+const hasFlag = (items: string[], name: string): boolean => items.includes(name);
 
 if (command === "help") {
   console.log(`wdd commands:
@@ -20,6 +31,7 @@ if (command === "help") {
   drift <wikiRoot>
   verify <wikiRoot> <nodeId>
   status <wikiRoot> [nodeId]
+  mark <wikiRoot> <nodeId> --phase <phase> --code <status> --verification <status> [--note <note>] [--clear-note] [--with-impact]
   screenshots <wikiRoot> [--json]
   flow-trees <wikiRoot> [repoRoot] [--json]
   ready [wikiRoot] [repoRoot]`);
@@ -73,6 +85,35 @@ if (command === "help") {
   const index = loadWiki(resolveCliPath(wikiRoot));
   console.log(formatWorkflowStatus(index, nodeId));
   if (findWorkflowAttention(index, nodeId).length) process.exitCode = 1;
+} else if (command === "mark") {
+  const [wikiRoot, nodeId, ...markArgs] = args;
+  if (!wikiRoot || !nodeId) {
+    throw new Error(
+      "Usage: wdd mark <wikiRoot> <nodeId> --phase <phase> --code <status> --verification <status> [--note <note>] [--clear-note] [--with-impact]"
+    );
+  }
+
+  const update: WikiStatusUpdate = {
+    phase: readFlag(markArgs, "--phase") as WikiStatusUpdate["phase"],
+    code: readFlag(markArgs, "--code") as WikiStatusUpdate["code"],
+    verification: readFlag(markArgs, "--verification") as WikiStatusUpdate["verification"],
+    note: readFlag(markArgs, "--note"),
+    clearNote: hasFlag(markArgs, "--clear-note")
+  };
+
+  if (!update.phase && !update.code && !update.verification && update.note === undefined && !update.clearNote) {
+    throw new Error("wdd mark requires at least one status update flag.");
+  }
+
+  const results = markWikiStatus(loadWiki(resolveCliPath(wikiRoot)), nodeId, update, {
+    withImpact: hasFlag(markArgs, "--with-impact")
+  });
+  console.log("marked wiki status:");
+  for (const result of results) {
+    console.log(
+      `  - ${result.nodeId}: ${result.status.phase}, code=${result.status.code}, verification=${result.status.verification}`
+    );
+  }
 } else if (command === "screenshots") {
   const [wikiRoot, format] = args;
   if (!wikiRoot) throw new Error("Usage: wdd screenshots <wikiRoot> [--json]");
