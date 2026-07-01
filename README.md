@@ -14,7 +14,15 @@ This repository currently dogfoods the harness with the mini booking pilot, but 
 
 ## Core Cadence
 
-Every product change starts with work shaping unless an accepted GitHub Issue already exists. Work shaping turns the user's request into a PRD-shaped issue with target wiki nodes, new wiki nodes, acceptance criteria, QA expectations, and evidence needs.
+Every product change starts with work shaping unless an accepted GitHub Issue already exists. Work shaping turns the user's request into a PRD-shaped issue with a declared work type, target wiki nodes, new wiki nodes, acceptance criteria, QA expectations, and evidence needs.
+
+Work types keep small or repair work lightweight without losing traceability:
+
+- `normal/product-change`: new or changed product behavior.
+- `normal/wiki-maintenance`: wording, navigation, or terminology without product meaning changes.
+- `repair/bug-fix`: shipped behavior does not match wiki truth.
+- `repair/evidence-refresh`: screenshots, flow trees, or QA evidence are stale.
+- `repair/hotfix`: urgent fix with mandatory post-fix WDD reconciliation.
 
 Cadence starts only after that issue is accepted:
 

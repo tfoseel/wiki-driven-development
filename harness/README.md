@@ -9,6 +9,7 @@ harness/
   AGENTS.md                 agent router
   skills/
     work-shaping/           request-to-PRD-issue prompts
+    work-types/             normal and repair lane prompts
     cadence/                phase-by-phase execution prompts
     wiki-areas/             node-type authoring prompts
   templates/                starter wiki nodes and downstream AGENTS.md
@@ -20,14 +21,16 @@ harness/
 
 1. Read `harness/AGENTS.md`.
 2. Shape a user request into a PRD-like GitHub Issue when no accepted issue exists.
-3. Select the cadence skill for the current phase after the issue is accepted.
-4. Select the wiki-area skill for every node type being edited or created.
-5. Perform wiki changes first, then code, then verification.
-6. Run the harness gates and reflect evidence back into the wiki.
+3. Read the issue's work type to decide which phases are full, light, or skipped.
+4. Select the cadence skill for the current phase after the issue is accepted.
+5. Select the wiki-area skill for every node type being edited or created.
+6. Perform wiki changes first, then code, then verification.
+7. Run the harness gates and reflect evidence back into the wiki.
 
 The Markdown skills are the readable workflow. The TypeScript in `src/` is only a toolbelt for those skills:
 
 - work-shaping skills turn user requests into accepted PRD-shaped issues.
+- work-type skills classify the issue as normal product work, wiki maintenance, repair bug fix, evidence refresh, or hotfix.
 - `impact` and `session` find affected nodes and files.
 - `mark` updates hidden `wdd_status` plus the visible `## 상태` summary after a phase finishes.
 - `status`, `drift`, and `ready` check that wiki metadata, code references, screenshots, and flow trees still agree.

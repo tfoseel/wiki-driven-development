@@ -10,6 +10,14 @@ Use work-shaping skills before product truth changes:
 2. Write the PRD-shaped issue: `skills/work-shaping/01-write-prd-issue.md`
 3. Split large work: `skills/work-shaping/02-slice-work.md`
 
+After the issue exists, read its work type before choosing cadence depth:
+
+- Normal product change: `skills/work-types/normal/product-change.md`
+- Normal wiki maintenance: `skills/work-types/normal/wiki-maintenance.md`
+- Repair bug fix: `skills/work-types/repair/bug-fix.md`
+- Repair evidence refresh: `skills/work-types/repair/evidence-refresh.md`
+- Repair hotfix: `skills/work-types/repair/hotfix.md`
+
 Use cadence skills in order after an accepted GitHub Issue exists. Do not skip forward because a code change looks obvious.
 
 1. Apply product wiki truth: `skills/cadence/01-wiki-edit-phase.md`
@@ -38,6 +46,7 @@ Pair the cadence skill with the node type you are editing:
 - Product wiki Markdown is the SSOT; code, tests, screenshots, flow-tree captures, and PRs are derived evidence.
 - Cadence starts from an accepted GitHub Issue unless the user explicitly asks for a local spike.
 - The issue is the active PRD/work object; product wiki nodes hold merged truth, not loose task intent.
+- Every issue declares one work type. The work type can make phases full, light, or skipped, but it cannot hide ownership, impact, or evidence.
 - Edit the owning wiki node before code. If code ownership is missing, add ownership metadata before editing code.
 - Keep `wdd_status` honest while work is in progress. Do not leave a node verified when code or verification is pending.
 - Do not invent custom status prose. The `## 상태` line must match hidden WDD metadata.

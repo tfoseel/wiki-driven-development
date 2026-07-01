@@ -6,6 +6,14 @@ const harnessRoot = path.resolve(__dirname, "..");
 
 const workShapingSkills = ["00-grill-request.md", "01-write-prd-issue.md", "02-slice-work.md"];
 
+const workTypeSkills = [
+  "normal/product-change.md",
+  "normal/wiki-maintenance.md",
+  "repair/bug-fix.md",
+  "repair/evidence-refresh.md",
+  "repair/hotfix.md"
+];
+
 const cadenceSkills = [
   "01-wiki-edit-phase.md",
   "02-impact-phase.md",
@@ -28,6 +36,16 @@ describe("harness skill docs", () => {
       const fullPath = path.join(harnessRoot, relativePath);
       expect(fs.existsSync(fullPath), `${relativePath} should exist`).toBe(true);
       expect(fs.readFileSync(fullPath, "utf8")).toContain("## When to use");
+      expect(agents).toContain(relativePath);
+    }
+
+    for (const file of workTypeSkills) {
+      const relativePath = `skills/work-types/${file}`;
+      const fullPath = path.join(harnessRoot, relativePath);
+      expect(fs.existsSync(fullPath), `${relativePath} should exist`).toBe(true);
+      const content = fs.readFileSync(fullPath, "utf8");
+      expect(content).toContain("## Meaning");
+      expect(content).toContain("## Cadence");
       expect(agents).toContain(relativePath);
     }
 
