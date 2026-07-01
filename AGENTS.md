@@ -1,53 +1,11 @@
-# WDD Agent Runbook
+# WDD Agent Entry
 
-This repository uses Wiki-Driven Development.
+This repository uses Wiki-Driven Development. Keep this file short; detailed workflow lives in `harness/AGENTS.md`.
 
-## Required Cadence
-
-For product or domain changes:
-
-1. **Wiki phase first.** Edit the owning wiki node Markdown file and impacted wiki nodes before code.
-2. Set impacted nodes to the current `wdd_status` phase while work is in progress.
-3. Run impact/session helpers yourself to identify affected code:
-   - `npm run wdd -- impact <wikiRoot> <nodeId>`
-   - `npm run wdd -- session <wikiRoot> <nodeId>`
-4. **Coding phase second.** Edit referenced code files. If a needed file is not referenced, update the wiki metadata first.
-5. **Verification phase third.** Run declared tests, QA, screenshot capture, flow tree capture, `wdd status`, and `wdd drift`.
-6. Only mark nodes `phase: verified`, `code: reflected`, `verification: passed` after verification succeeds.
-
-Do not leave a wiki change as verified when code or verification is still pending.
-
-## User-Facing Rule
-
-- Do not require product users to know or run `wdd` commands.
-- Treat `wdd` commands as agent/CI harness tools.
-- Treat GitHub Markdown rendering of `wiki/*.md` as the default user-facing reading surface.
-- Treat any HTML rendering output as an optional derived artifact, not as product truth.
-- Do not add `/wiki` routes back into product apps unless the project explicitly chooses to serve a derived reading surface.
-- When reporting work, translate command results into wiki-visible status: current phase, code reflection, verification state, impacted wiki nodes, impacted code files, QA screenshots, and generated flow tree captures.
-- Do not invent human status prose. The `## 상태` line must match the canonical text derived from `wdd_status`.
-- If a user asks what to do next, point them to the wiki node status and screenshots first; mention commands only for developers or CI maintainers.
-
-## GitHub Issue Entry Point
-
-- Treat product wiki nodes as the current product SSOT, not as an active task board.
-- For user-requested changes, capture the request in a GitHub issue using `.github/ISSUE_TEMPLATE/wdd-change.md`.
-- If the user points at a product wiki node and asks to modify it, the issue should name the target wiki nodes and proposed wiki patch before product wiki files change.
-- When picking up an issue, assign it or mark it in GitHub, create a branch/worktree, then follow the required cadence: product wiki patch -> coding -> verification -> PR.
-- The PR must contain the product wiki changes, code changes, verification evidence, refreshed screenshots for reflected screen nodes, and refreshed flow tree captures for verified flow nodes.
-- For large requests, split the issue into dependency-aware child issues or checklist items. Parallel work happens on independent branches/worktrees and merges through PRs.
-
-## Project-Neutral Harness Rules
-
-- `harness` must not depend on the booking domain.
-- `harness/templates/` must use placeholders such as `<appRoot>` and `<wikiRoot>`, not pilot-specific paths.
-- Historical implementation plans should not become durable truth. Keep reusable decisions in README, AGENTS, templates, wiki metadata, harness tests, or GitHub issue/PR templates.
-- The pilot app is a dogfood project, not a special case.
-- Temporary debugging tests or routes should not be committed. Permanent tests must verify wiki-backed behavior.
-
-## Visual Evidence
-
-- Reflected screen nodes must declare `screenshots`.
-- A screenshot is QA evidence, not decoration.
-- After E2E passes, refresh screen screenshots and flow tree captures through the project QA command.
-- `wdd drift` and `wdd ready` should catch missing screenshot files.
+1. Read `harness/AGENTS.md` before changing product, wiki, or harness behavior.
+2. Start product changes from an accepted GitHub Issue unless the user explicitly asks for a local spike.
+3. Read the issue work type under `harness/skills/work-types/`, then the needed cadence and wiki-area skills.
+4. Update wiki truth before code; create missing wiki nodes from `harness/templates/`.
+5. Run impact/session before coding and edit only wiki-referenced files.
+6. Verify declared tests, QA, screenshots, and flow-tree evidence.
+7. Use `wdd mark` and `wdd ready` before claiming completion or opening a PR.
