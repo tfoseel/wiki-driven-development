@@ -6,6 +6,7 @@ import { getVerifyCommands } from "./verify.js";
 import { resolveCliPath } from "./cli-paths.js";
 import { findWorkflowAttention, formatWorkflowStatus } from "./workflow.js";
 import { collectScreenshotTargets } from "./screenshots.js";
+import { collectFlowTreeTargets } from "./flow-trees.js";
 import { findWddConfig, resolveWddProject } from "./config.js";
 import { checkReady, formatReadyReport } from "./ready.js";
 
@@ -20,6 +21,7 @@ if (command === "help") {
   verify <wikiRoot> <nodeId>
   status <wikiRoot> [nodeId]
   screenshots <wikiRoot> [--json]
+  flow-trees <wikiRoot> [repoRoot] [--json]
   ready [wikiRoot] [repoRoot]`);
 } else if (command === "index") {
   const [wikiRoot] = args;
@@ -82,6 +84,20 @@ if (command === "help") {
   } else {
     console.log("screenshot targets:");
     for (const target of targets) console.log(`  - ${target.nodeId} ${target.route} -> ${target.path}`);
+  }
+} else if (command === "flow-trees") {
+  const [wikiRootArg, repoRootOrFormat, maybeFormat] = args;
+  if (!wikiRootArg) throw new Error("Usage: wdd flow-trees <wikiRoot> [repoRoot] [--json]");
+  const format = repoRootOrFormat === "--json" ? repoRootOrFormat : maybeFormat;
+  const repoRoot = repoRootOrFormat && repoRootOrFormat !== "--json" ? resolveCliPath(repoRootOrFormat) : process.cwd();
+  const targets = collectFlowTreeTargets(loadWiki(resolveCliPath(wikiRootArg)), repoRoot);
+  if (format === "--json") {
+    console.log(JSON.stringify(targets, null, 2));
+  } else if (!targets.length) {
+    console.log("No flow tree targets declared.");
+  } else {
+    console.log("flow tree targets:");
+    for (const target of targets) console.log(`  - ${target.nodeId} -> ${target.path}`);
   }
 } else if (command === "ready") {
   const [wikiRootArg, repoRootArg] = args;

@@ -69,7 +69,7 @@ gh pr create --fill
 - `model`: domain validation and typed shape.
 - `action`: mutation/write API contract.
 - `screen`: route, visible states, user actions, screenshots.
-- `flow`: branching screen tree and cross-screen handoff contract.
+- `flow`: generated screen tree capture, Mermaid source, and cross-screen handoff contract.
 - `policy`: cross-cutting business rule.
 - `qa`: executable scenarios and edge cases.
 - `design`: product UI tokens and state expression.
@@ -137,17 +137,25 @@ Screen-owning nodes must also show shipped visual evidence inline in the body:
 ![Example screen after QA passes](../자료/스크린샷/화면/example.png)
 ```
 
-Flow nodes should show dependent screen evidence as a branching screen tree. `wdd ready` fails when a flow depends on a screen node but does not embed that screen's screenshot:
+Flow nodes should show a generated screen tree capture first, then keep the Mermaid source in a collapsible section. During QA, agents and CI refresh screen screenshots first and then regenerate flow tree captures from that Mermaid source plus the referenced screen screenshots. `wdd ready` fails when a verified flow is missing the generated capture, when that capture file is missing, or when the Mermaid source does not reference dependent screen screenshots:
 
 ```md
 ## 화면 트리
-- [[screens/start]]
 
-  ![Start screen after QA passes](../자료/스크린샷/화면/start.png)
+![Create flow screen tree](../자료/흐름/create-flow-screen-tree.png)
 
-  - Primary choice -> [[screens/next]]
+<details>
+<summary>Mermaid source</summary>
 
-    ![Next screen after QA passes](../자료/스크린샷/화면/next.png)
+```mermaid
+flowchart TD
+  start["Start<br/><img src='../자료/스크린샷/화면/start.png' width='160' />"]
+  next["Next<br/><img src='../자료/스크린샷/화면/next.png' width='160' />"]
+
+  start -->|Primary choice| next
+```
+
+</details>
 ```
 
 ## Agent/CI Commands
@@ -160,6 +168,7 @@ npm run wdd -- session wiki actions/create-booking
 npm run wdd -- status wiki
 npm run wdd -- drift wiki .
 npm run wdd -- screenshots wiki
+npm run wdd -- flow-trees wiki . --json
 npm run wdd -- ready
 ```
 
@@ -167,7 +176,7 @@ These commands are not the product-user interface. They are the harness controls
 
 `wdd ready` is the project-neutral static gate. It checks workflow status, canonical Markdown status summaries, referenced files, screenshot contracts, and verify-command declarations.
 
-`npm run ready` is this repository's full dogfood gate. It runs harness tests, product app tests, builds, product QA, screenshot capture, and then `wdd ready`.
+`npm run ready` is this repository's full dogfood gate. It runs harness tests, product app tests, builds, product QA, screen screenshot capture, flow tree capture, and then `wdd ready`.
 
 ## Starting Another Next.js App
 
@@ -194,8 +203,9 @@ Minimum setup:
 6. Put real repo-relative paths in hidden WDD metadata. Use block YAML lists for paths with brackets such as `app/src/app/items/[id]/page.tsx`.
 7. Keep `## 상태` lines generated from hidden WDD metadata. Do not invent custom status prose.
 8. For screen-owning nodes, keep screenshot paths repo-relative in metadata, for example `wiki/자료/스크린샷/화면/example.png`, set `screenshots.route` to a route the product app can render during QA, and embed the screenshot as a Markdown image in the body.
-9. Route user changes through GitHub Issues and PRs. Issues hold work-in-progress intent; merged product wiki nodes hold truth.
-10. Keep historical plans out of the repo unless they are active issues or PR notes. Durable decisions belong in `wiki/`, `harness/`, templates, tests, or README.
+9. For flow nodes, embed a generated capture such as `wiki/자료/흐름/example-flow-screen-tree.png`, keep Mermaid source below it, and reference dependent screen screenshots through `<img src='...'>` inside that Mermaid source.
+10. Route user changes through GitHub Issues and PRs. Issues hold work-in-progress intent; merged product wiki nodes hold truth.
+11. Keep historical plans out of the repo unless they are active issues or PR notes. Durable decisions belong in `wiki/`, `harness/`, templates, tests, or README.
 
 Recommended Next.js scripts:
 
@@ -207,7 +217,8 @@ Recommended Next.js scripts:
     "test": "vitest run",
     "e2e": "playwright test",
     "wiki:screenshots": "node scripts/capture-wiki-screenshots.mjs",
-    "qa": "npm run e2e && npm run wiki:screenshots"
+    "wiki:flow-trees": "node scripts/capture-wiki-flow-trees.mjs",
+    "qa": "npm run e2e && npm run wiki:screenshots && npm run wiki:flow-trees"
   }
 }
 ```

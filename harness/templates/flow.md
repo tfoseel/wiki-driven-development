@@ -17,6 +17,7 @@ verified_by:
   - <appRoot>/tests/e2e/example-flow.spec.ts
 artifacts:
   - <appRoot>/tests/e2e/example-flow.spec.ts
+  - <wikiRoot>/자료/흐름/example-flow-screen-tree.png
 verify:
   - npm run e2e -- example-flow
 -->
@@ -34,22 +35,30 @@ verify:
 - 의존: [[screens/example-screen]], [[screens/other-screen]], [[actions/example-action]]
 - 구현: `<appRoot>/tests/e2e/example-flow.spec.ts`
 - 검증 파일: `<appRoot>/tests/e2e/example-flow.spec.ts`
-- 산출물: `<appRoot>/tests/e2e/example-flow.spec.ts`
-- 스크린샷: 화면 트리에서 의존 화면의 QA 스크린샷을 인라인으로 표시
+- 산출물: `<appRoot>/tests/e2e/example-flow.spec.ts`, `<wikiRoot>/자료/흐름/example-flow-screen-tree.png`
+- 스크린샷: `<wikiRoot>/자료/흐름/example-flow-screen-tree.png`
 - 검증 명령: `npm run e2e -- example-flow`
 
 </details>
 
 ## Screen Tree
-- [[screens/example-screen]]: Entry screen and primary branch point.
 
-  ![Example screen after QA passes](<relativeScreenshotPathFromThisFile>)
+![Example flow screen tree](<relativeFlowTreeCapturePathFromThisFile>)
 
-  - Primary action -> [[screens/other-screen]]: Destination screen.
+<details>
+<summary>Mermaid source</summary>
 
-    ![Other screen after QA passes](<relativeOtherScreenshotPathFromThisFile>)
+```mermaid
+flowchart TD
+  exampleScreen["Example screen<br/><img src='<relativeScreenshotPathFromThisFile>' width='160' />"]
+  otherScreen["Other screen<br/><img src='<relativeOtherScreenshotPathFromThisFile>' width='160' />"]
+  exampleError["Example error state<br/><img src='<relativeScreenshotPathFromThisFile>' width='160' />"]
 
-  - Recoverable failure -> [[screens/example-screen]] error state.
+  exampleScreen -->|Primary action| otherScreen
+  exampleScreen -->|Recoverable failure| exampleError
+```
+
+</details>
 
 ## Intent
 Describe the user journey from start to completion.

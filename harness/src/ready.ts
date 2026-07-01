@@ -3,9 +3,10 @@ import path from "node:path";
 import { findMissingCodeReferences } from "./drift.js";
 import type { WikiIndex } from "./index-wiki.js";
 import { collectScreenshotTargets } from "./screenshots.js";
+import { collectFlowTreeTargets } from "./flow-trees.js";
 import { findStatusSummaryIssues, findWorkflowAttention } from "./workflow.js";
 
-export type ReadyIssueKind = "workflow" | "reference" | "screenshot" | "verify" | "status" | "metadata";
+export type ReadyIssueKind = "workflow" | "reference" | "screenshot" | "flow-tree" | "verify" | "status" | "metadata";
 
 export interface ReadyIssue {
   kind: ReadyIssueKind;
@@ -123,6 +124,25 @@ export function checkReady(
     }
 
     if (node.type === "flow") {
+      const flowTreeTargets = collectFlowTreeTargets({ ...index, nodes: [node] }, repoRoot);
+      if (node.wddStatus.verification === "passed" && !flowTreeTargets.length) {
+        issues.push({
+          kind: "flow-tree",
+          nodeId: node.id,
+          message: "Verified flow nodes must embed a generated flow tree capture image."
+        });
+      }
+
+      for (const flowTreeTarget of flowTreeTargets) {
+        if (!fileExists(flowTreeTarget.path)) {
+          issues.push({
+            kind: "flow-tree",
+            nodeId: node.id,
+            message: `Missing generated flow tree capture: ${flowTreeTarget.path}`
+          });
+        }
+      }
+
       for (const dependencyId of node.dependsOn) {
         const dependency = index.byId.get(dependencyId);
         if (dependency?.type !== "screen") continue;

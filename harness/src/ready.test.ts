@@ -141,6 +141,96 @@ describe("checkReady", () => {
     });
   });
 
+  it("fails when a verified flow does not embed a generated flow tree capture", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "flows/create-example",
+        type: "flow",
+        filePath: "wiki/흐름/create-example.md",
+        body: [
+          "## 상태",
+          "",
+          "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과",
+          "",
+          "## 화면 트리",
+          "",
+          "<details>",
+          "<summary>Mermaid source</summary>",
+          "",
+          "```mermaid",
+          "flowchart TD",
+          "  example[\"Example<br/><img src='../자료/스크린샷/화면/example.png' width='160' />\"]",
+          "```",
+          "",
+          "</details>"
+        ].join("\n"),
+        dependsOn: ["screens/example"]
+      }),
+      node({
+        id: "screens/example",
+        type: "screen",
+        filePath: "wiki/화면/example.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
+        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "flow-tree",
+      nodeId: "flows/create-example",
+      message: "Verified flow nodes must embed a generated flow tree capture image."
+    });
+  });
+
+  it("fails when a verified flow tree capture file is missing", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "flows/create-example",
+        type: "flow",
+        filePath: "wiki/흐름/create-example.md",
+        body: [
+          "## 상태",
+          "",
+          "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과",
+          "",
+          "## 화면 트리",
+          "",
+          "![Create example screen tree](../자료/흐름/create-example-screen-tree.png)",
+          "",
+          "<details>",
+          "<summary>Mermaid source</summary>",
+          "",
+          "```mermaid",
+          "flowchart TD",
+          "  example[\"Example<br/><img src='../자료/스크린샷/화면/example.png' width='160' />\"]",
+          "```",
+          "",
+          "</details>"
+        ].join("\n"),
+        dependsOn: ["screens/example"]
+      }),
+      node({
+        id: "screens/example",
+        type: "screen",
+        filePath: "wiki/화면/example.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
+        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", (file) => file !== "wiki/자료/흐름/create-example-screen-tree.png");
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "flow-tree",
+      nodeId: "flows/create-example",
+      message: "Missing generated flow tree capture: wiki/자료/흐름/create-example-screen-tree.png"
+    });
+  });
+
   it("fails when a reflected screen has no screenshot evidence", () => {
     const index = buildWikiIndex([
       node({
