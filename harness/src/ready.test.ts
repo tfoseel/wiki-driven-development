@@ -113,6 +113,34 @@ describe("checkReady", () => {
     });
   });
 
+  it("fails when a flow screen tree does not embed dependent screen screenshots", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "flows/create-example",
+        type: "flow",
+        filePath: "wiki/흐름/create-example.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "## 화면 트리", "- [[screens/example]]"].join("\n"),
+        dependsOn: ["screens/example"]
+      }),
+      node({
+        id: "screens/example",
+        type: "screen",
+        filePath: "wiki/화면/example.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
+        screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "screenshot",
+      nodeId: "flows/create-example",
+      message: "Flow screen tree must embed dependent screen screenshot: wiki/자료/스크린샷/화면/example.png"
+    });
+  });
+
   it("fails when a reflected screen has no screenshot evidence", () => {
     const index = buildWikiIndex([
       node({

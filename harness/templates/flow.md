@@ -35,10 +35,21 @@ verify:
 - 구현: `<appRoot>/tests/e2e/example-flow.spec.ts`
 - 검증 파일: `<appRoot>/tests/e2e/example-flow.spec.ts`
 - 산출물: `<appRoot>/tests/e2e/example-flow.spec.ts`
-- 스크린샷: 없음
+- 스크린샷: 화면 트리에서 의존 화면의 QA 스크린샷을 인라인으로 표시
 - 검증 명령: `npm run e2e -- example-flow`
 
 </details>
+
+## Screen Tree
+- [[screens/example-screen]]: Entry screen and primary branch point.
+
+  ![Example screen after QA passes](<relativeScreenshotPathFromThisFile>)
+
+  - Primary action -> [[screens/other-screen]]: Destination screen.
+
+    ![Other screen after QA passes](<relativeOtherScreenshotPathFromThisFile>)
+
+  - Recoverable failure -> [[screens/example-screen]] error state.
 
 ## Intent
 Describe the user journey from start to completion.

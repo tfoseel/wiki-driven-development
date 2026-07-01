@@ -121,6 +121,23 @@ export function checkReady(
         }
       }
     }
+
+    if (node.type === "flow") {
+      for (const dependencyId of node.dependsOn) {
+        const dependency = index.byId.get(dependencyId);
+        if (dependency?.type !== "screen") continue;
+
+        for (const screenshot of dependency.screenshots) {
+          if (!hasInlineMarkdownImage(node.body, markdownPathCandidates(node.filePath, repoRoot, screenshot.path))) {
+            issues.push({
+              kind: "screenshot",
+              nodeId: node.id,
+              message: `Flow screen tree must embed dependent screen screenshot: ${screenshot.path}`
+            });
+          }
+        }
+      }
+    }
   }
 
   return {

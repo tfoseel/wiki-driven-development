@@ -69,7 +69,7 @@ gh pr create --fill
 - `model`: domain validation and typed shape.
 - `action`: mutation/write API contract.
 - `screen`: route, visible states, user actions, screenshots.
-- `flow`: cross-screen handoff contract.
+- `flow`: branching screen tree and cross-screen handoff contract.
 - `policy`: cross-cutting business rule.
 - `qa`: executable scenarios and edge cases.
 - `design`: product UI tokens and state expression.
@@ -137,6 +137,19 @@ Screen-owning nodes must also show shipped visual evidence inline in the body:
 ![Example screen after QA passes](../자료/스크린샷/화면/example.png)
 ```
 
+Flow nodes should show dependent screen evidence as a branching screen tree. `wdd ready` fails when a flow depends on a screen node but does not embed that screen's screenshot:
+
+```md
+## 화면 트리
+- [[screens/start]]
+
+  ![Start screen after QA passes](../자료/스크린샷/화면/start.png)
+
+  - Primary choice -> [[screens/next]]
+
+    ![Next screen after QA passes](../자료/스크린샷/화면/next.png)
+```
+
 ## Agent/CI Commands
 
 ```bash
@@ -164,6 +177,7 @@ Use the pilot as a dogfood reference, not as a required shape. For an existing N
 app/ or src/app/         existing Next.js App Router product app
 public/                  existing Next.js assets, if present
 wiki/                    product SSOT Markdown
+wiki/QA/                 executable coverage and edge-case proof
 harness/                 WDD rules, scripts, templates, and evidence conventions
 .github/ISSUE_TEMPLATE/  WDD change intake
 .github/PULL_REQUEST_TEMPLATE.md
