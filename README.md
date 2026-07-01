@@ -14,13 +14,15 @@ This repository currently dogfoods the harness with the mini booking pilot, but 
 
 ## Core Cadence
 
-Every product change follows the same order:
+Every product change starts with work shaping unless an accepted GitHub Issue already exists. Work shaping turns the user's request into a PRD-shaped issue with target wiki nodes, new wiki nodes, acceptance criteria, QA expectations, and evidence needs.
+
+Cadence starts only after that issue is accepted:
 
 1. **Wiki phase:** update the wiki node that owns the behavior, plus impacted wiki nodes.
 2. **Impact phase:** run `wdd impact` or read dependencies to find affected screens and files.
 3. **Coding phase:** edit only the referenced code or update the wiki if ownership metadata was wrong.
 4. **Verification phase:** run declared tests, E2E, QA screenshots, `wdd status`, and `wdd drift`.
-5. **Verified state:** use `wdd mark` to mark impacted nodes as `phase: verified`, `code: reflected`, `verification: passed`, then run `wdd ready`.
+5. **PR phase:** use `wdd mark` to mark impacted nodes as `phase: verified`, `code: reflected`, `verification: passed`, run `wdd ready`, and open a PR that links the issue.
 
 If work stops mid-cadence, leave `wdd_status` in the current phase. A reader should be able to see whether the wiki is implemented and verified.
 Agents and CI should update that status with `wdd mark` so hidden metadata and the human `## 상태` line stay synchronized.
@@ -42,7 +44,7 @@ For screen-owning nodes, screenshots are required once the node is reflected in 
 
 For user changes, the product wiki should be read-mostly until work is picked up. New requests enter through GitHub Issues, not through product wiki nodes. An issue names the target product wiki nodes and proposed patch; after an agent applies the patch, updates code, verifies, and refreshes screenshots, the product wiki becomes the final SSOT again through the PR.
 
-A request like "change this wiki node like this" should create or update a GitHub issue first, not edit the product node directly. The issue can include the exact intended product wiki wording or section replacement, then the implementation branch moves that content into the product wiki and continues through coding, verification, screenshots, and PR review.
+A request like "change this wiki node like this" should create or update a GitHub issue first, not edit the product node directly. The issue can include the exact intended product wiki wording, new node list, or section replacement, then the implementation branch moves that content into the product wiki and continues through coding, verification, screenshots, and PR review.
 
 ## GitHub Work Layer
 
@@ -52,6 +54,8 @@ GitHub Issues and PRs are the active work layer:
 - Branch/worktree: isolated execution of one picked-up issue or one independent child issue.
 - PR: the durable change set containing product wiki patch, code patch, tests, screenshots, and evidence.
 - Merge: the point where product wiki truth changes for everyone.
+
+PR descriptions should use `Closes #<issue>` only when the issue acceptance criteria are fully satisfied. Use `Refs #<issue>` for partial or related work. When a parent issue is split into child issues, each PR closes its child issue and updates the parent checklist or links.
 
 Useful `gh` CLI flow:
 

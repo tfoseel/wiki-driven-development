@@ -1,18 +1,23 @@
 # WDD Harness Agent Router
 
-This folder is the executable playbook for Wiki-Driven Development. Before changing product truth, read the cadence skill for the current phase and the wiki-area skill for every node type you touch.
+This folder is the executable playbook for Wiki-Driven Development. Shape user requests into PRD-like GitHub Issues first, then run cadence only after an issue is accepted.
 
 ## Routing Rule
 
-Use cadence skills in order. Do not skip forward because a code change looks obvious.
+Use work-shaping skills before product truth changes:
 
-1. Request or issue intake: `skills/cadence/00-github-issue-intake.md`
-2. Product wiki edit: `skills/cadence/01-wiki-edit-phase.md`
-3. Impact tracing: `skills/cadence/02-impact-phase.md`
-4. Code and wiki status sync: `skills/cadence/03-coding-sync-phase.md`
-5. Verification, QA, screenshots, flow trees: `skills/cadence/04-verification-qa-phase.md`
-6. Ready gate and PR handoff: `skills/cadence/05-ready-pr-phase.md`
-7. Wiki consistency repair: `skills/cadence/06-wiki-consistency.md`
+1. Clarify the request: `skills/work-shaping/00-grill-request.md`
+2. Write the PRD-shaped issue: `skills/work-shaping/01-write-prd-issue.md`
+3. Split large work: `skills/work-shaping/02-slice-work.md`
+
+Use cadence skills in order after an accepted GitHub Issue exists. Do not skip forward because a code change looks obvious.
+
+1. Apply product wiki truth: `skills/cadence/01-wiki-edit-phase.md`
+2. Impact tracing: `skills/cadence/02-impact-phase.md`
+3. Code and wiki status sync: `skills/cadence/03-coding-sync-phase.md`
+4. Verification, QA, screenshots, flow trees: `skills/cadence/04-verification-qa-phase.md`
+5. Ready gate and PR handoff: `skills/cadence/05-ready-pr-phase.md`
+6. Wiki consistency repair: `skills/cadence/06-wiki-consistency.md`
 
 ## Wiki Area Skills
 
@@ -31,7 +36,8 @@ Pair the cadence skill with the node type you are editing:
 ## Hard Rules
 
 - Product wiki Markdown is the SSOT; code, tests, screenshots, flow-tree captures, and PRs are derived evidence.
-- Product truth changes start from a GitHub Issue unless the user explicitly asks for a local spike.
+- Cadence starts from an accepted GitHub Issue unless the user explicitly asks for a local spike.
+- The issue is the active PRD/work object; product wiki nodes hold merged truth, not loose task intent.
 - Edit the owning wiki node before code. If code ownership is missing, add ownership metadata before editing code.
 - Keep `wdd_status` honest while work is in progress. Do not leave a node verified when code or verification is pending.
 - Do not invent custom status prose. The `## 상태` line must match hidden WDD metadata.
