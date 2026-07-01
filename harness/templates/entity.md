@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: entities/example-entity
 type: entity
 title: Example Entity
@@ -17,7 +17,7 @@ artifacts:
   - <appRoot>/src/lib/example-repository.ts
 verify:
   - npm run test -- example-entity
----
+-->
 # Example Entity
 
 ## 상태

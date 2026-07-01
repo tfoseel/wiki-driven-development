@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: qa/reschedule-booking-e2e
 type: qa
 title: 예약 일정 변경 E2E
@@ -20,7 +20,7 @@ artifacts:
   - tests/e2e/reschedule-booking.spec.ts
 verify:
   - npm run e2e -- reschedule-booking
----
+-->
 # 예약 일정 변경 E2E
 
 ## 상태

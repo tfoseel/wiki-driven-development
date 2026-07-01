@@ -1,4 +1,5 @@
 import matter from "gray-matter";
+import { parse as parseYaml } from "yaml";
 import type {
   WddCodeStatus,
   WddStatus,
@@ -34,6 +35,16 @@ const asList = (value: unknown): string[] => {
 
 const asRecord = (value: unknown): Record<string, unknown> | undefined =>
   value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : undefined;
+
+function parseHiddenWddMetadata(raw: string): { data: Record<string, unknown>; content: string } | undefined {
+  const match = raw.match(/^\s*<!--\s*wdd\s*\n([\s\S]*?)\n-->\s*/);
+  if (!match) return undefined;
+  const data = parseYaml(match[1]) as unknown;
+  return {
+    data: asRecord(data) ?? {},
+    content: raw.slice(match[0].length)
+  };
+}
 
 function parseWddStatus(filePath: string, value: unknown): WddStatus {
   const status = asRecord(value);
@@ -91,7 +102,8 @@ function parseScreenshots(filePath: string, value: unknown): WikiScreenshot[] {
 }
 
 export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
-  const parsed = matter(raw);
+  const hiddenMetadata = parseHiddenWddMetadata(raw);
+  const parsed = hiddenMetadata ?? matter(raw);
   const data = parsed.data;
   if (!data.id) throw new Error(`${filePath}: missing id`);
   if (!data.type) throw new Error(`${filePath}: missing type`);
@@ -104,6 +116,7 @@ export function parseWikiMarkdown(filePath: string, raw: string): WikiNode {
     type,
     title: String(data.title),
     summary: data.summary ? String(data.summary) : undefined,
+    metadataFormat: hiddenMetadata ? "hidden-wdd" : "frontmatter",
     wddStatus: data.wdd_status ? parseWddStatus(filePath, data.wdd_status) : defaultWddStatus(),
     filePath,
     body: parsed.content,

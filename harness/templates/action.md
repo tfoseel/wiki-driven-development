@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: actions/example-action
 type: action
 title: Example Action
@@ -20,7 +20,7 @@ artifacts:
   - <appRoot>/src/actions/example-action.ts
 verify:
   - npm run test -- example-action
----
+-->
 # Example Action
 
 ## 상태

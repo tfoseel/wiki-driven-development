@@ -33,6 +33,7 @@ export interface WikiNode {
   type: WikiNodeType;
   title: string;
   summary?: string;
+  metadataFormat?: "frontmatter" | "hidden-wdd";
   wddStatus: WddStatus;
   filePath: string;
   body: string;

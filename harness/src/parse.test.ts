@@ -27,6 +27,7 @@ screenshots:
 
     expect(node.id).toBe("actions/example-action");
     expect(node.type).toBe("action");
+    expect(node.metadataFormat).toBe("frontmatter");
     expect(node.wddStatus).toEqual({
       phase: "coding",
       code: "pending",
@@ -40,6 +41,44 @@ screenshots:
         path: "wiki/자료/스크린샷/화면/example-screen.png",
         alt: "Example screen after QA",
         route: "/examples/1"
+      }
+    ]);
+  });
+
+  it("parses hidden WDD metadata without exposing it as body content", () => {
+    const node = parseWikiMarkdown(
+      "wiki/화면/example.md",
+      `<!-- wdd
+id: screens/example
+type: screen
+title: Example Screen
+wdd_status:
+  phase: verified
+  code: reflected
+  verification: passed
+screenshots:
+  - path: wiki/자료/스크린샷/화면/example.png
+    alt: Example screen after QA
+    route: /example
+verify:
+  - npm run e2e -- example
+-->
+# Example Screen
+
+![Example screen after QA](../자료/스크린샷/화면/example.png)
+`
+    );
+
+    expect(node.id).toBe("screens/example");
+    expect(node.type).toBe("screen");
+    expect(node.metadataFormat).toBe("hidden-wdd");
+    expect(node.body.startsWith("# Example Screen")).toBe(true);
+    expect(node.body).not.toContain("screenshots:");
+    expect(node.screenshots).toEqual([
+      {
+        path: "wiki/자료/스크린샷/화면/example.png",
+        alt: "Example screen after QA",
+        route: "/example"
       }
     ]);
   });

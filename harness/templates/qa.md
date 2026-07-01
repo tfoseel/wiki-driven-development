@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: qa/example-e2e
 type: qa
 title: Example E2E
@@ -19,7 +19,7 @@ artifacts:
   - <appRoot>/tests/e2e/example-e2e.spec.ts
 verify:
   - npm run e2e -- example-e2e
----
+-->
 # Example E2E
 
 ## 상태

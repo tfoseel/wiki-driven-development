@@ -30,7 +30,7 @@ Product users should not need to learn `wdd` commands. Their interface is the Ma
 
 - `wiki/*.md` is the SSOT and GitHub Markdown is the primary reading surface;
 - HTML renderers are optional derived artifacts, not the source of truth;
-- `wdd_status` in frontmatter is the machine-readable status truth;
+- `wdd_status` in hidden WDD metadata is the machine-readable status truth;
 - the `## 상태` line is the human-readable status summary and must match `wdd_status`;
 - impact, implementation metadata, verification files, and commands live in collapsible Markdown `<details>` sections;
 - evidence remains in wiki metadata and screen screenshots.
@@ -75,9 +75,10 @@ gh pr create --fill
 - `design`: product UI tokens and state expression.
 - `term`: glossary and non-generated knowledge.
 
-## Frontmatter Contract
+## Hidden WDD Metadata Contract
 
-```yaml
+```md
+<!-- wdd
 id: screens/example-screen
 type: screen
 title: Example Screen
@@ -99,9 +100,10 @@ screenshots:
     route: /examples/example-id
 verify:
   - npm run e2e -- example-screen
+-->
 ```
 
-Use YAML block lists for paths containing brackets, such as `bookings/[id]/page.tsx`. Inline YAML arrays can misread `[id]`.
+The metadata is ordinary YAML wrapped in `<!-- wdd ... -->` so GitHub Markdown readers start at the title instead of showing a raw metadata table. Use YAML block lists for paths containing brackets, such as `bookings/[id]/page.tsx`. Inline YAML arrays can misread `[id]`.
 
 Every wiki Markdown file also exposes a canonical human status line:
 
@@ -126,6 +128,13 @@ Implementation metadata should stay readable but out of the main narrative:
 - 검증 명령: `npm run e2e -- example-screen`
 
 </details>
+```
+
+Screen-owning nodes must also show shipped visual evidence inline in the body:
+
+```md
+## 화면 증거
+![Example screen after QA passes](../자료/스크린샷/화면/example.png)
 ```
 
 ## Agent/CI Commands
@@ -168,9 +177,9 @@ Minimum setup:
 3. Keep the WDD tool package, runbooks, and templates in `harness/`.
 4. Copy `harness/templates/AGENTS.md` to the repo root and keep `harness/AGENTS.md` inside the harness folder.
 5. Add harness configuration under `harness/` or wire it through package scripts, setting `wikiRoot`, `repoRoot`, and `appRoot`.
-6. Put real repo-relative paths in wiki frontmatter. Use block YAML lists for paths with brackets such as `app/src/app/items/[id]/page.tsx`.
-7. Keep `## 상태` lines generated from frontmatter. Do not invent custom status prose.
-8. For screen-owning nodes, keep screenshot paths repo-relative, for example `wiki/자료/스크린샷/화면/example.png`, and set `screenshots.route` to a route the product app can render during QA.
+6. Put real repo-relative paths in hidden WDD metadata. Use block YAML lists for paths with brackets such as `app/src/app/items/[id]/page.tsx`.
+7. Keep `## 상태` lines generated from hidden WDD metadata. Do not invent custom status prose.
+8. For screen-owning nodes, keep screenshot paths repo-relative in metadata, for example `wiki/자료/스크린샷/화면/example.png`, set `screenshots.route` to a route the product app can render during QA, and embed the screenshot as a Markdown image in the body.
 9. Route user changes through GitHub Issues and PRs. Issues hold work-in-progress intent; merged product wiki nodes hold truth.
 10. Keep historical plans out of the repo unless they are active issues or PR notes. Durable decisions belong in `wiki/`, `harness/`, templates, tests, or README.
 

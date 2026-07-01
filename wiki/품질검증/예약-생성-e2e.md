@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: qa/create-booking-e2e
 type: qa
 title: 예약 생성 E2E
@@ -23,7 +23,7 @@ artifacts:
   - tests/e2e/create-booking.spec.ts
 verify:
   - npm run e2e -- create-booking
----
+-->
 # 예약 생성 E2E
 
 ## 상태

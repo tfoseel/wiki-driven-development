@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: screens/example-screen
 type: screen
 title: Example Screen
@@ -22,7 +22,7 @@ screenshots:
     route: /examples/example-id
 verify:
   - npm run e2e -- example-screen
----
+-->
 # Example Screen
 
 ## 상태
@@ -42,6 +42,9 @@ verify:
 - 검증 명령: `npm run e2e -- example-screen`
 
 </details>
+
+## Screen Evidence
+![Example screen after QA passes](<relativeScreenshotPathFromThisFile>)
 
 ## Description
 Describe what the user sees and why this screen exists.

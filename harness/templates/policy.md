@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: policies/example-policy
 type: policy
 title: Example Policy
@@ -17,7 +17,7 @@ artifacts:
   - <appRoot>/src/lib/policies/example-policy.ts
 verify:
   - npm run test -- example-policy
----
+-->
 # Example Policy
 
 ## 상태

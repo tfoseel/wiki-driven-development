@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: flows/example-flow
 type: flow
 title: Example Flow
@@ -19,7 +19,7 @@ artifacts:
   - <appRoot>/tests/e2e/example-flow.spec.ts
 verify:
   - npm run e2e -- example-flow
----
+-->
 # Example Flow
 
 ## 상태

@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: models/example-model
 type: model
 title: Example Model
@@ -17,7 +17,7 @@ artifacts:
   - <appRoot>/src/models/example-model.ts
 verify:
   - npm run test -- example-model
----
+-->
 # Example Model
 
 ## 상태

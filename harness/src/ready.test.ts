@@ -7,6 +7,7 @@ const node = (input: Partial<WikiNode> & Pick<WikiNode, "id" | "type">): WikiNod
   id: input.id,
   type: input.type,
   title: input.title ?? input.id,
+  metadataFormat: input.metadataFormat,
   wddStatus: input.wddStatus ?? { phase: "verified", code: "reflected", verification: "passed" },
   filePath: input.filePath ?? `${input.id}.md`,
   body: input.body ?? ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과"].join("\n"),
@@ -24,6 +25,8 @@ describe("checkReady", () => {
       node({
         id: "screens/example",
         type: "screen",
+        filePath: "wiki/화면/example.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Example](../자료/스크린샷/화면/example.png)"].join("\n"),
         implementedBy: ["app/page.tsx"],
         verifiedBy: ["app/page.test.ts"],
         screenshots: [{ path: "wiki/자료/스크린샷/화면/example.png", route: "/example" }]
@@ -65,6 +68,48 @@ describe("checkReady", () => {
       kind: "screenshot",
       nodeId: "screens/example",
       message: "Screen screenshots must declare route: wiki/자료/스크린샷/화면/example.png"
+    });
+  });
+
+  it("fails when a screen screenshot is not shown inline in the markdown body", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "screens/missing-inline-screenshot",
+        type: "screen",
+        filePath: "wiki/화면/missing-inline-screenshot.md",
+        screenshots: [{ path: "wiki/자료/스크린샷/화면/missing-inline-screenshot.png", route: "/missing" }]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "screenshot",
+      nodeId: "screens/missing-inline-screenshot",
+      message: "Screen screenshot must be embedded inline in markdown: wiki/자료/스크린샷/화면/missing-inline-screenshot.png"
+    });
+  });
+
+  it("fails when wiki metadata is visible frontmatter", () => {
+    const index = buildWikiIndex([
+      node({
+        id: "screens/visible-frontmatter",
+        type: "screen",
+        metadataFormat: "frontmatter",
+        filePath: "wiki/화면/visible-frontmatter.md",
+        body: ["## 상태", "", "상태: ✅ 검증 완료 · 코드 반영됨 · 검증 통과", "", "![Visible](../자료/스크린샷/화면/visible.png)"].join("\n"),
+        screenshots: [{ path: "wiki/자료/스크린샷/화면/visible.png", route: "/visible" }]
+      })
+    ]);
+
+    const result = checkReady(index, "/repo", () => true);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual({
+      kind: "metadata",
+      nodeId: "screens/visible-frontmatter",
+      message: "WDD metadata must be hidden in an HTML comment: <!-- wdd ... -->"
     });
   });
 

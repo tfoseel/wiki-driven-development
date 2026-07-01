@@ -1,4 +1,4 @@
----
+<!-- wdd
 id: qa/cancel-booking-e2e
 type: qa
 title: 예약 취소 E2E
@@ -20,7 +20,7 @@ artifacts:
   - tests/e2e/cancel-booking.spec.ts
 verify:
   - npm run e2e -- cancel-booking
----
+-->
 # 예약 취소 E2E
 
 ## 상태
